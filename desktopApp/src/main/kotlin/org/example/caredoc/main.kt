@@ -12,7 +12,7 @@ fun main() = application {
 
     Window(
         onCloseRequest = ::exitApplication,
-        title = "caredoc",
+        title = "CareDoc"
     ) {
         MainScreen()
     }
