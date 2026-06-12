@@ -2,6 +2,7 @@ package org.example.caredoc
 
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import org.example.caredoc.ui.MainScreen
 
 fun main() = application {
 
@@ -13,6 +14,6 @@ fun main() = application {
         onCloseRequest = ::exitApplication,
         title = "caredoc",
     ) {
-        App()
+        MainScreen()
     }
 }
