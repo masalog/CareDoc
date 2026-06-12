@@ -12,16 +12,25 @@ Compose Desktop + Kotlin + Apache POI を使用し、Excel テンプレートに
 
 ## 📂 プロジェクト構成
 ```
-desktopApp/
- ├─ build.gradle.kts
- └─ src/
-      └─ main/
-           ├─ kotlin/
-           │    └─ org/
-           │         └─ example/
-           │              └─ caredoc/
-           │                   └─ main.kt
-           └─ resources/
+desktopApp
+├── build
+├── src
+│   └── main
+│       ├── kotlin
+│       │   └── org
+│       │       └── example
+│       │           └── caredoc
+│       │               ├── model
+│       │               ├── pdf
+│       │               ├── ui
+│       │               ├── utility
+│       │               └── main.kt
+│       └── resources
+│           ├── fonts
+│           └── templates
+├── build.gradle.kts
+└── output.pdf
+
 ```
 
 ## 🛠 使用技術
