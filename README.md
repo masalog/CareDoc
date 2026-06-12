@@ -1,7 +1,8 @@
 # CareDoc
 
-CareDoc は、介護保険の「要介護認定・要支援認定 申請書」をプルダウンメニューから作成するためのデスクトップアプリです。  
-Compose Desktop + Kotlin + Apache POI を使用し、Excel テンプレートに自動入力します。
+CareDoc は、介護保険の「要介護認定・要支援認定 申請書」をプルダウンから作成するための
+デスクトップアプリです。  
+Compose Desktop + Kotlin + Apache POI を使用し、PDF テンプレートに自動入力します。
 
 ## ✨ 主な機能
 - 必要な入力項目をプルダウンから選択
