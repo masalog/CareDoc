@@ -41,29 +41,30 @@ class PdfViewer : Application() {
         // ▼ 下部 UI（プルダウン + 出力ボタン）
         // ======================
         val combo = ComboBox<String>()
-        val header = "選択肢"
+        val header = "名前を選択してください"
 
         combo.items.add(header)
-        combo.items.addAll("選択肢A", "選択肢B", "選択肢C")
         combo.value = header
+
+        // ★ Excel からメンバー一覧を読み込む
+        val members = ExcelLoader.loadMembers()
+        combo.items.addAll(members.map { it.name })
 
         combo.setOnAction {
             val selected = combo.value
-            if (selected == header) {
-                combo.value = header
-                return@setOnAction
-            }
+            if (selected == header) return@setOnAction
 
-            val editedFile = editPdf(selected)
-            currentPdfFile = editedFile
-            loadPdf(editedFile)
+            val member = members.firstOrNull { it.name == selected }
+            if (member != null) {
+                val editedFile = editPdf(member)
+                currentPdfFile = editedFile
+                loadPdf(editedFile)
+            }
         }
 
         val exportButton = Button("出力")
         exportButton.setOnAction {
-            if (exportPdf(stage)) {
-                stage.close()
-            }
+            if (exportPdf(stage)) stage.close()
         }
 
         root.bottom = HBox(10.0, combo, exportButton)
