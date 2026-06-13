@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6d771d9a-5039-464c-9766-3f99b721a061" name="変更" comment="feat : PdfViewer.kt テンプレートPDFを編集して出力するクラス">
+    <list default="true" id="6d771d9a-5039-464c-9766-3f99b721a061" name="変更" comment="refactor : PdfViewer.kt PDF読み込み時の例外処理を追加">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/example/pdfconverter/PdfViewer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/example/pdfconverter/PdfViewer.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -57,6 +56,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Kotlin.Launcher (1).executor": "Run",
     "Kotlin.Launcher.executor": "Run",
     "Kotlin.PdfViewerKt.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
@@ -196,7 +196,87 @@
       <option name="project" value="LOCAL" />
       <updated>1781326157599</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="fix : README.md フォルダ構成図を微修正">
+      <option name="closed" value="true" />
+      <created>1781328913534</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1781328913534</updated>
+    </task>
+    <task id="LOCAL-00011" summary="refactor : pom.xml JavaFXが認識するメインクラスをLauncherに指定">
+      <option name="closed" value="true" />
+      <created>1781328972741</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1781328972741</updated>
+    </task>
+    <task id="LOCAL-00012" summary="fix : workspace.xml 自動修正">
+      <option name="closed" value="true" />
+      <created>1781329049000</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1781329049000</updated>
+    </task>
+    <task id="LOCAL-00013" summary="refactor : PdfViewer.kt インポートの追加">
+      <option name="closed" value="true" />
+      <created>1781329138337</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1781329138337</updated>
+    </task>
+    <task id="LOCAL-00014" summary="refactor : PdfViewer.kt .applyを導入してコード量を削除">
+      <option name="closed" value="true" />
+      <created>1781329419531</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1781329419531</updated>
+    </task>
+    <task id="LOCAL-00015" summary="fix : PdfViewer.kt コメント削除">
+      <option name="closed" value="true" />
+      <created>1781329531891</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1781329531891</updated>
+    </task>
+    <task id="LOCAL-00016" summary="fix : PdfViewer.kt コメント変更">
+      <option name="closed" value="true" />
+      <created>1781329570469</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1781329570469</updated>
+    </task>
+    <task id="LOCAL-00017" summary="refactor : PdfViewer.kt 将来、JARを使う可能性を考えて、JAR内のファイルを読み込めるInputStream（）を使用">
+      <option name="closed" value="true" />
+      <created>1781329861717</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1781329861717</updated>
+    </task>
+    <task id="LOCAL-00018" summary="refactor : PdfViewer.kt inputStream()で取得したリソースを、outputstream()で利用可能なファイルに変換して出力">
+      <option name="closed" value="true" />
+      <created>1781330206911</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1781330206911</updated>
+    </task>
+    <task id="LOCAL-00019" summary="refactor : PdfViewer.kt PDF読み込み時の例外処理を追加">
+      <option name="closed" value="true" />
+      <created>1781330282794</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1781330282794</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -209,6 +289,16 @@
     <MESSAGE value="feat : PdfSizeChecker.kt PDFサイズを測定するユーティリティクラス" />
     <MESSAGE value="feat : PdfPositionConverter.kt 画像の座標からPDF上の座標位置を取得するユーティリティクラス" />
     <MESSAGE value="feat : PdfViewer.kt テンプレートPDFを編集して出力するクラス" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat : PdfViewer.kt テンプレートPDFを編集して出力するクラス" />
+    <MESSAGE value="fix : README.md フォルダ構成図を微修正" />
+    <MESSAGE value="refactor : pom.xml JavaFXが認識するメインクラスをLauncherに指定" />
+    <MESSAGE value="fix : workspace.xml 自動修正" />
+    <MESSAGE value="refactor : PdfViewer.kt インポートの追加" />
+    <MESSAGE value="refactor : PdfViewer.kt .applyを導入してコード量を削除" />
+    <MESSAGE value="fix : PdfViewer.kt コメント削除" />
+    <MESSAGE value="fix : PdfViewer.kt コメント変更" />
+    <MESSAGE value="refactor : PdfViewer.kt 将来、JARを使う可能性を考えて、JAR内のファイルを読み込めるInputStream（）を使用" />
+    <MESSAGE value="refactor : PdfViewer.kt inputStream()で取得したリソースを、outputstream()で利用可能なファイルに変換して出力" />
+    <MESSAGE value="refactor : PdfViewer.kt PDF読み込み時の例外処理を追加" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor : PdfViewer.kt PDF読み込み時の例外処理を追加" />
   </component>
 </project>
