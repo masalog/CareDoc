@@ -43,43 +43,32 @@ class PdfViewer : Application() {
         // ▼ 下部 UI（プルダウン + 出力ボタン）
         // ======================
         val combo = ComboBox<String>()
-
-        // ▼ 最初の見出し（選択不可）
         val header = "選択肢"
+
         combo.items.add(header)
-
-        // ▼ 実際の選択肢
         combo.items.addAll("選択肢A", "選択肢B", "選択肢C")
-
-        // ▼ 初期表示は「選択肢」
         combo.value = header
 
-        // ▼ 選択不可ロジック
         combo.setOnAction {
             val selected = combo.value
-
             if (selected == header) {
-                // 見出しを選ばせない
                 combo.value = header
                 return@setOnAction
             }
 
-            // ▼ 有効な選択肢なら PDF を編集
             val editedFile = editPdf(selected)
             currentPdfFile = editedFile
             loadPdf(editedFile)
         }
 
-        // ▼ 出力ボタン
         val exportButton = Button("出力")
         exportButton.setOnAction {
             if (exportPdf(stage)) {
-                stage.close()   // 保存成功後にウィンドウを閉じる
+                stage.close()
             }
         }
 
-        val bottomBox = HBox(10.0, combo, exportButton)
-        root.bottom = bottomBox
+        root.bottom = HBox(10.0, combo, exportButton)
 
         // ======================
         // ▼ ウィンドウ設定
