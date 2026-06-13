@@ -27,17 +27,16 @@ class PdfViewer : Application() {
         val root = BorderPane()
 
         // ======================
-        // ▼ PDF表示エリア（実寸 + スクロール）
+        // ▼ PDF表示エリア（スクロール対応）
         // ======================
         imageView = ImageView()
-
-        val scrollPane = ScrollPane(imageView)
-        scrollPane.isPannable = true
-        scrollPane.hbarPolicy = ScrollPane.ScrollBarPolicy.AS_NEEDED
-        scrollPane.vbarPolicy = ScrollPane.ScrollBarPolicy.AS_NEEDED
-        scrollPane.isFitToWidth = false
-        scrollPane.isFitToHeight = false
-
+        val scrollPane = ScrollPane(imageView).apply {
+            isPannable = true
+            hbarPolicy = ScrollPane.ScrollBarPolicy.AS_NEEDED
+            vbarPolicy = ScrollPane.ScrollBarPolicy.AS_NEEDED
+            isFitToWidth = false
+            isFitToHeight = false
+        }
         root.center = scrollPane
 
         // ======================
