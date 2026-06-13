@@ -48,14 +48,14 @@ object ExcelLoader {
 
                 members.add(
                     Member(
-                        name,
-                        furigana,
-                        birthYear,
-                        birthMonth,
-                        birthDay,
-                        gender,
-                        address,
-                        phone
+                        name = name,
+                        furigana = furigana,
+                        birthYear = birthYear,
+                        birthMonth = birthMonth,
+                        birthDay = birthDay,
+                        gender = gender,
+                        address = address,
+                        phone = phone
                     )
                 )
             }
