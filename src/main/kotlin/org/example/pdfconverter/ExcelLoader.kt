@@ -28,9 +28,12 @@ object ExcelLoader {
         val members = mutableListOf<Member>()
 
         WorkbookFactory.create(file).use { workbook ->
+            if (workbook.numberOfSheets == 0) {
+                throw IllegalArgumentException("Excel ファイルにシートが含まれていません: $filePath")
+            }
+
             val sheet = workbook.getSheetAt(0)
 
-            // 1行目はヘッダーなので 1 から開始
             for (rowIndex in 1..sheet.lastRowNum) {
                 val row = sheet.getRow(rowIndex) ?: continue
 
