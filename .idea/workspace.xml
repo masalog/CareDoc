@@ -4,26 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6d771d9a-5039-464c-9766-3f99b721a061" name="変更" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/AndroidProjectSystem.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mvnw" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mvnw.cmd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/org/example/pdfconverter/Launcher.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/org/example/pdfconverter/PdfViewer.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/org/example/pdfconverter/utility/PdfPositionConverter.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/org/example/pdfconverter/utility/PdfSizeChecker.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/fonts/NotoSansJP-Regular.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/template.pdf" afterDir="false" />
+    <list default="true" id="6d771d9a-5039-464c-9766-3f99b721a061" name="変更" comment="feat : PdfViewer.kt テンプレートPDFを編集して出力するクラス">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/org/example/pdfconverter/PdfViewer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/org/example/pdfconverter/PdfViewer.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,6 +22,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -78,7 +67,7 @@
     "RunOnceActivity.readMode.enableVisualFormatting": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "feature/issue-3-javafx-migration",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/dghy1/IdeaProjects/CareDoc"
@@ -90,7 +79,14 @@
       <recent name="C:\Users\dghy1\IdeaProjects\CareDoc\src" />
     </key>
   </component>
-  <component name="RunManager" selected="Kotlin.PdfViewerKt">
+  <component name="RunManager" selected="Kotlin.Launcher (1)">
+    <configuration name="Launcher (1)" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.example.pdfconverter.Launcher" />
+      <module name="PdfConverter" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Launcher" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.example.pdfconverter.Launcher" />
       <module name="CareDoc" />
@@ -107,6 +103,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Kotlin.Launcher (1)" />
         <item itemvalue="Kotlin.PdfViewerKt" />
         <item itemvalue="Kotlin.Launcher" />
       </list>
@@ -127,6 +124,91 @@
       <option name="presentableId" value="Default" />
       <updated>1781311104668</updated>
     </task>
+    <task id="LOCAL-00001" summary="feat : CareDoc .xmlを中心に設定ファイル群を追加">
+      <option name="closed" value="true" />
+      <created>1781325619615</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1781325619616</updated>
+    </task>
+    <task id="LOCAL-00002" summary="feat : template.pdf 東京都中央区の介護認定申請書を追加">
+      <option name="closed" value="true" />
+      <created>1781325775490</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1781325775490</updated>
+    </task>
+    <task id="LOCAL-00003" summary="feat : README.md 新規作成">
+      <option name="closed" value="true" />
+      <created>1781325819783</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1781325819783</updated>
+    </task>
+    <task id="LOCAL-00004" summary="feat : pom.xml 依存関係を整理">
+      <option name="closed" value="true" />
+      <created>1781325865701</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1781325865701</updated>
+    </task>
+    <task id="LOCAL-00005" summary="feat : NotoSansJP-Regular.ttf PDF編集に必要な日本語フォント">
+      <option name="closed" value="true" />
+      <created>1781325919446</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1781325919446</updated>
+    </task>
+    <task id="LOCAL-00006" summary="feat : Launcher.kt 起動クラス">
+      <option name="closed" value="true" />
+      <created>1781325960697</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1781325960697</updated>
+    </task>
+    <task id="LOCAL-00007" summary="feat : PdfSizeChecker.kt PDFサイズを測定するユーティリティクラス">
+      <option name="closed" value="true" />
+      <created>1781326011615</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1781326011615</updated>
+    </task>
+    <task id="LOCAL-00008" summary="feat : PdfPositionConverter.kt 画像の座標からPDF上の座標位置を取得するユーティリティクラス">
+      <option name="closed" value="true" />
+      <created>1781326077735</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1781326077735</updated>
+    </task>
+    <task id="LOCAL-00009" summary="feat : PdfViewer.kt テンプレートPDFを編集して出力するクラス">
+      <option name="closed" value="true" />
+      <created>1781326157599</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1781326157599</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="feat : CareDoc .xmlを中心に設定ファイル群を追加" />
+    <MESSAGE value="feat : template.pdf 東京都中央区の介護認定申請書を追加" />
+    <MESSAGE value="feat : README.md 新規作成" />
+    <MESSAGE value="feat : pom.xml 依存関係を整理" />
+    <MESSAGE value="feat : NotoSansJP-Regular.ttf PDF編集に必要な日本語フォント" />
+    <MESSAGE value="feat : Launcher.kt 起動クラス" />
+    <MESSAGE value="feat : PdfSizeChecker.kt PDFサイズを測定するユーティリティクラス" />
+    <MESSAGE value="feat : PdfPositionConverter.kt 画像の座標からPDF上の座標位置を取得するユーティリティクラス" />
+    <MESSAGE value="feat : PdfViewer.kt テンプレートPDFを編集して出力するクラス" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat : PdfViewer.kt テンプレートPDFを編集して出力するクラス" />
   </component>
 </project>
