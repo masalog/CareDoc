@@ -47,8 +47,17 @@ class PdfViewer : Application() {
         combo.value = header
 
         // ★ Excel からメンバー一覧を読み込む
-        val members = ExcelLoader.loadMembers()
-        combo.items.addAll(members.map { it.name })
+        val members = try {
+            ExcelLoader.loadMembers()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            showError("Excel ファイルの読み込みに失敗しました: ${e.message}")
+            emptyList()
+        }
+
+        if (members.isNotEmpty()) {
+            combo.items.addAll(members.map { it.name })
+        }
 
         combo.setOnAction {
             val selected = combo.value
