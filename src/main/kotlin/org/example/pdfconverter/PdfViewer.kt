@@ -77,8 +77,8 @@ class PdfViewer : Application() {
         stage.title = "PDF Viewer"
         stage.show()
 
-        // 起動時に元PDFを表示
-        val template = getTemplateFile()
+        // 起動時にテンプレート表示
+        val template = extractTemplateToTempFile()
         currentPdfFile = template
         loadPdf(template)
 
