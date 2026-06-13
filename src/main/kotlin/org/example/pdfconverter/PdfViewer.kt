@@ -130,9 +130,9 @@ class PdfViewer : Application() {
     }
 
     // ======================
-    // ▼ PDF 編集処理
+    // ▼ PDF 編集処理（Member 対応）
     // ======================
-    private fun editPdf(selectedText: String): File {
+    private fun editPdf(member: Member): File {
 
         val outputFile = File("edited.pdf")
 
@@ -149,11 +149,14 @@ class PdfViewer : Application() {
                     true
                 ).use { content ->
 
+                    // ★ 氏名を書き込む（座標は例）
                     content.beginText()
                     content.setFont(font, 16f)
                     content.newLineAtOffset(150f, 450f)
-                    content.showText(selectedText)
+                    content.showText(member.name)
                     content.endText()
+
+                    // ★ 必要なら住所・生年月日も追加可能
                 }
 
                 document.save(outputFile)
