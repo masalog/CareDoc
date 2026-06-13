@@ -111,16 +111,24 @@ class PdfViewer : Application() {
         return temp
     }
 
+    // ======================
+    // ▼ PDF 読み込み（例外処理付き）
+    // ======================
     private fun loadPdf(file: File) {
+        try {
+            pdf?.close()
+            pdf = PDDocument.load(file)
 
-        pdf?.close()
-        pdf = PDDocument.load(file)
+            val renderer = PDFRenderer(pdf)
+            val image = renderer.renderImageWithDPI(0, 150f)
 
-        val renderer = PDFRenderer(pdf)
-        val image = renderer.renderImageWithDPI(0, 150f)
+            val fxImage = SwingFXUtils.toFXImage(image, null)
+            imageView.image = fxImage
 
-        val fxImage = SwingFXUtils.toFXImage(image, null)
-        imageView.image = fxImage
+        } catch (e: Exception) {
+            e.printStackTrace()
+            showError("PDF の読み込みに失敗しました。\nファイルが壊れている可能性があります。")
+        }
     }
 
     /**
