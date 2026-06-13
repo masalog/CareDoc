@@ -165,20 +165,28 @@ class PdfViewer : Application() {
         return outputFile
     }
 
-    /**
-     * ▼ PDF 出力処理
-     */
+    // ======================
+    // ▼ PDF 出力処理（例外処理付き）
+    // ======================
     private fun exportPdf(stage: Stage): Boolean {
 
-        val chooser = FileChooser()
-        chooser.title = "PDF を保存"
-        chooser.extensionFilters.add(FileChooser.ExtensionFilter("PDF Files", "*.pdf"))
-        chooser.initialFileName = "output.pdf"
+        val chooser = FileChooser().apply {
+            title = "PDF を保存"
+            extensionFilters.add(FileChooser.ExtensionFilter("PDF Files", "*.pdf"))
+            initialFileName = "output.pdf"
+        }
 
         val saveFile = chooser.showSaveDialog(stage) ?: return false
 
-        currentPdfFile.copyTo(saveFile, overwrite = true)
-        return true
+        return try {
+            currentPdfFile.copyTo(saveFile, overwrite = true)
+            true
+        } catch (e: Exception) {
+            e.printStackTrace()
+            showError("PDF の保存に失敗しました。\n保存先に書き込みできない可能性があります。")
+            false
+        }
+    }
     }
 }
 
