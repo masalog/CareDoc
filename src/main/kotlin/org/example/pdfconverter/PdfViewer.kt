@@ -34,8 +34,6 @@ class PdfViewer : Application() {
             isPannable = true
             hbarPolicy = ScrollPane.ScrollBarPolicy.AS_NEEDED
             vbarPolicy = ScrollPane.ScrollBarPolicy.AS_NEEDED
-            isFitToWidth = false
-            isFitToHeight = false
         }
         root.center = scrollPane
 
