@@ -1,5 +1,6 @@
 package org.example.pdfconverter
 
+import org.apache.poi.ss.usermodel.DataFormatter
 import org.apache.poi.ss.usermodel.WorkbookFactory
 import java.io.File
 
@@ -16,6 +17,8 @@ data class Member(
 
 object ExcelLoader {
 
+    private val formatter = DataFormatter()
+
     fun loadMembers(filePath: String = "members.xlsx"): List<Member> {
         val file = File(filePath)
         if (!file.exists()) {
@@ -31,14 +34,14 @@ object ExcelLoader {
             for (rowIndex in 1..sheet.lastRowNum) {
                 val row = sheet.getRow(rowIndex) ?: continue
 
-                val name = row.getCell(0)?.stringCellValue ?: ""
-                val furigana = row.getCell(1)?.stringCellValue ?: ""
-                val birthYear = row.getCell(2)?.numericCellValue?.toInt() ?: 0
-                val birthMonth = row.getCell(3)?.numericCellValue?.toInt() ?: 0
-                val birthDay = row.getCell(4)?.numericCellValue?.toInt() ?: 0
-                val gender = row.getCell(5)?.stringCellValue ?: ""
-                val address = row.getCell(6)?.stringCellValue ?: ""
-                val phone = row.getCell(7)?.stringCellValue ?: ""
+                val name = formatter.formatCellValue(row.getCell(0))
+                val furigana = formatter.formatCellValue(row.getCell(1))
+                val birthYear = formatter.formatCellValue(row.getCell(2)).toIntOrNull() ?: 0
+                val birthMonth = formatter.formatCellValue(row.getCell(3)).toIntOrNull() ?: 0
+                val birthDay = formatter.formatCellValue(row.getCell(4)).toIntOrNull() ?: 0
+                val gender = formatter.formatCellValue(row.getCell(5))
+                val address = formatter.formatCellValue(row.getCell(6))
+                val phone = formatter.formatCellValue(row.getCell(7))
 
                 members.add(
                     Member(
