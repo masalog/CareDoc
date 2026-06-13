@@ -121,12 +121,11 @@ class PdfViewer : Application() {
             val renderer = PDFRenderer(pdf)
             val image = renderer.renderImageWithDPI(0, 150f)
 
-            val fxImage = SwingFXUtils.toFXImage(image, null)
-            imageView.image = fxImage
+            imageView.image = SwingFXUtils.toFXImage(image, null)
 
         } catch (e: Exception) {
             e.printStackTrace()
-            showError("PDF の読み込みに失敗しました。\nファイルが壊れている可能性があります。")
+            showError("PDF の読み込みに失敗しました。")
         }
     }
 
