@@ -131,37 +131,35 @@ class PdfViewer : Application() {
         }
     }
 
-    /**
-     * ▼ PDF を編集して保存
-     */
+    // ======================
+    // ▼ PDF 編集処理
+    // ======================
     private fun editPdf(selectedText: String): File {
 
-        val inputFile = getTemplateFile()
         val outputFile = File("edited.pdf")
 
-        PDDocument.load(inputFile).use { document ->
+        getTemplateStream().use { input ->
+            PDDocument.load(input).use { document ->
 
-            val page = document.getPage(0)
-            val font = PDType0Font.load(document, getFontFile())
+                val page = document.getPage(0)
+                val font = PDType0Font.load(document, getFontStream())
 
-            PDPageContentStream(
-                document,
-                page,
-                PDPageContentStream.AppendMode.APPEND,
-                true
-            ).use { content ->
+                PDPageContentStream(
+                    document,
+                    page,
+                    PDPageContentStream.AppendMode.APPEND,
+                    true
+                ).use { content ->
 
-                content.beginText()
-                content.setFont(font, 16f)
+                    content.beginText()
+                    content.setFont(font, 16f)
+                    content.newLineAtOffset(150f, 450f)
+                    content.showText(selectedText)
+                    content.endText()
+                }
 
-                // ▼ 特定座標に書き込む
-                content.newLineAtOffset(150f, 450f)
-                content.showText(selectedText)
-
-                content.endText()
+                document.save(outputFile)
             }
-
-            document.save(outputFile)
         }
 
         return outputFile
