@@ -1,26 +1,20 @@
 package org.example.pdfconverter
 
-// JavaFX関連
 import javafx.application.Application
 import javafx.embed.swing.SwingFXUtils
 import javafx.scene.Scene
-import javafx.scene.control.Button
-import javafx.scene.control.ComboBox
+import javafx.scene.control.*
 import javafx.scene.image.ImageView
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.HBox
-import javafx.scene.control.ScrollPane
 import javafx.stage.FileChooser
 import javafx.stage.Stage
-
-// PDFBox関連
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.PDPageContentStream
 import org.apache.pdfbox.pdmodel.font.PDType0Font
 import org.apache.pdfbox.rendering.PDFRenderer
-
-// ファイル操作
 import java.io.File
+import java.io.InputStream
 
 class PdfViewer : Application() {
 
