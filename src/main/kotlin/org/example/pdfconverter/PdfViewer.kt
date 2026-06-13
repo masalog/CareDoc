@@ -167,7 +167,7 @@ class PdfViewer : Application() {
     }
 
     // ======================
-    // ▼ PDF 出力処理（例外処理付き）
+    // ▼ PDF 出力処理
     // ======================
     private fun exportPdf(stage: Stage): Boolean {
 
@@ -184,7 +184,7 @@ class PdfViewer : Application() {
             true
         } catch (e: Exception) {
             e.printStackTrace()
-            showError("PDF の保存に失敗しました。\n保存先に書き込みできない可能性があります。")
+            showError("PDF の保存に失敗しました。")
             false
         }
     }
