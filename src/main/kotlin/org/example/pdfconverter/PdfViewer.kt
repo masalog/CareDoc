@@ -97,7 +97,18 @@ class PdfViewer : Application() {
     private fun getFontStream(): InputStream =
         PdfViewer::class.java.getResourceAsStream("/fonts/NotoSansJP-Regular.ttf")
             ?: throw IllegalStateException("フォントが見つかりません: /fonts/NotoSansJP-Regular.ttf")
-        return File(url.toURI())
+
+    // ======================
+    // ▼ JAR 内リソースは File にできないため、一時ファイルに展開
+    // ======================
+    private fun extractTemplateToTempFile(): File {
+        val temp = File.createTempFile("template", ".pdf")
+        temp.outputStream().use { out ->
+            getTemplateStream().use { input ->
+                input.copyTo(out)
+            }
+        }
+        return temp
     }
 
     private fun loadPdf(file: File) {
