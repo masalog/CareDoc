@@ -109,7 +109,7 @@
         <artifactId>javafx-maven-plugin</artifactId>
         <version>0.0.8</version>
         <configuration>
-          <mainClass>org.example.pdfconverter.PdfViewer</mainClass>
+          <mainClass>org.example.pdfconverter.Launcher</mainClass>
         </configuration>
       </plugin>
 
