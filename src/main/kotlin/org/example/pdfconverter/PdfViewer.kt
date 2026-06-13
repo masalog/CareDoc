@@ -87,14 +87,15 @@ class PdfViewer : Application() {
         }
     }
 
-    private fun getTemplateFile(): File {
-        val url = PdfViewer::class.java.getResource("/templates/template.pdf")
+    // ======================
+    // ▼ JAR 内リソースを InputStream で取得
+    // ======================
+    private fun getTemplateStream(): InputStream =
+        PdfViewer::class.java.getResourceAsStream("/templates/template.pdf")
             ?: throw IllegalStateException("PDF が見つかりません: /templates/template.pdf")
-        return File(url.toURI())
-    }
 
-    private fun getFontFile(): File {
-        val url = PdfViewer::class.java.getResource("/fonts/NotoSansJP-Regular.ttf")
+    private fun getFontStream(): InputStream =
+        PdfViewer::class.java.getResourceAsStream("/fonts/NotoSansJP-Regular.ttf")
             ?: throw IllegalStateException("フォントが見つかりません: /fonts/NotoSansJP-Regular.ttf")
         return File(url.toURI())
     }
