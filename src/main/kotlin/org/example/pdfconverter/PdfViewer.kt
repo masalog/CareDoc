@@ -34,8 +34,6 @@ class PdfViewer : Application() {
             isPannable = true
             hbarPolicy = ScrollPane.ScrollBarPolicy.AS_NEEDED
             vbarPolicy = ScrollPane.ScrollBarPolicy.AS_NEEDED
-            isFitToWidth = false
-            isFitToHeight = false
         }
         root.center = scrollPane
 
@@ -43,29 +41,39 @@ class PdfViewer : Application() {
         // ▼ 下部 UI（プルダウン + 出力ボタン）
         // ======================
         val combo = ComboBox<String>()
-        val header = "選択肢"
+        val header = "名前を選択してください"
 
         combo.items.add(header)
-        combo.items.addAll("選択肢A", "選択肢B", "選択肢C")
         combo.value = header
+
+        // ★ Excel からメンバー一覧を読み込む
+        val members = try {
+            ExcelLoader.loadMembers()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            showError("Excel ファイルの読み込みに失敗しました: ${e.message}")
+            emptyList()
+        }
+
+        if (members.isNotEmpty()) {
+            combo.items.addAll(members.map { it.name })
+        }
 
         combo.setOnAction {
             val selected = combo.value
-            if (selected == header) {
-                combo.value = header
-                return@setOnAction
-            }
+            if (selected == header) return@setOnAction
 
-            val editedFile = editPdf(selected)
-            currentPdfFile = editedFile
-            loadPdf(editedFile)
+            val member = members.firstOrNull { it.name == selected }
+            if (member != null) {
+                val editedFile = editPdf(member)
+                currentPdfFile = editedFile
+                loadPdf(editedFile)
+            }
         }
 
         val exportButton = Button("出力")
         exportButton.setOnAction {
-            if (exportPdf(stage)) {
-                stage.close()
-            }
+            if (exportPdf(stage)) stage.close()
         }
 
         root.bottom = HBox(10.0, combo, exportButton)
@@ -88,7 +96,7 @@ class PdfViewer : Application() {
     }
 
     // ======================
-    // ▼ JAR 内リソースを InputStream で取得
+    // ▼ JAR 内リソース取得
     // ======================
     private fun getTemplateStream(): InputStream =
         PdfViewer::class.java.getResourceAsStream("/templates/template.pdf")
@@ -99,7 +107,7 @@ class PdfViewer : Application() {
             ?: throw IllegalStateException("フォントが見つかりません: /fonts/NotoSansJP-Regular.ttf")
 
     // ======================
-    // ▼ JAR 内リソースは File にできないため、一時ファイルに展開
+    // ▼ テンプレートを一時ファイルに展開
     // ======================
     private fun extractTemplateToTempFile(): File {
         val temp = File.createTempFile("template", ".pdf")
@@ -112,7 +120,7 @@ class PdfViewer : Application() {
     }
 
     // ======================
-    // ▼ PDF 読み込み（例外処理付き）
+    // ▼ PDF 読み込み
     // ======================
     private fun loadPdf(file: File) {
         try {
@@ -122,19 +130,18 @@ class PdfViewer : Application() {
             val renderer = PDFRenderer(pdf)
             val image = renderer.renderImageWithDPI(0, 150f)
 
-            val fxImage = SwingFXUtils.toFXImage(image, null)
-            imageView.image = fxImage
+            imageView.image = SwingFXUtils.toFXImage(image, null)
 
         } catch (e: Exception) {
             e.printStackTrace()
-            showError("PDF の読み込みに失敗しました。\nファイルが壊れている可能性があります。")
+            showError("PDF の読み込みに失敗しました。")
         }
     }
 
     // ======================
-    // ▼ PDF 編集処理
+    // ▼ PDF 編集処理（Member 対応）
     // ======================
-    private fun editPdf(selectedText: String): File {
+    private fun editPdf(member: Member): File {
 
         val outputFile = File("edited.pdf")
 
@@ -151,11 +158,14 @@ class PdfViewer : Application() {
                     true
                 ).use { content ->
 
+                    // ★ 氏名を書き込む（座標は例）
                     content.beginText()
                     content.setFont(font, 16f)
                     content.newLineAtOffset(150f, 450f)
-                    content.showText(selectedText)
+                    content.showText(member.name)
                     content.endText()
+
+                    // ★ 必要なら住所・生年月日も追加可能
                 }
 
                 document.save(outputFile)
@@ -166,7 +176,7 @@ class PdfViewer : Application() {
     }
 
     // ======================
-    // ▼ PDF 出力処理（例外処理付き）
+    // ▼ PDF 出力処理
     // ======================
     private fun exportPdf(stage: Stage): Boolean {
 
@@ -183,7 +193,7 @@ class PdfViewer : Application() {
             true
         } catch (e: Exception) {
             e.printStackTrace()
-            showError("PDF の保存に失敗しました。\n保存先に書き込みできない可能性があります。")
+            showError("PDF の保存に失敗しました。")
             false
         }
     }
