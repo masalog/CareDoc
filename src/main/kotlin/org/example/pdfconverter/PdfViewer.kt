@@ -189,8 +189,15 @@ class PdfViewer : Application() {
                     }
 
                     // ▼ 性別の丸印
-                    val genderKey = if (member.gender == "男") "genderMale" else "genderFemale"
-                    layout.fields[genderKey]?.let { pos ->
+                    val genderKey = when (member.gender) {
+                        "男" -> "genderMale"
+                        "女" -> "genderFemale"
+                        else -> null
+                        }
+                    genderKey?.let { key ->
+                        val pos = requireNotNull(layout.fields[key]) {
+                            "Missing layout coordinate for field: $key"
+                            }
                         content.beginText()
                         content.setFont(font, pos.fontSize)
                         content.newLineAtOffset(pos.x, pos.y)
