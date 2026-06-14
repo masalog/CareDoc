@@ -23,7 +23,6 @@ src/
     │               ├── YamlLoader.kt
     │               ├── ExcelLoader.kt
     │               ├── Launcher.kt
-    │               ├── PdfSizeChecker.kt
     │               └── utility/
     │                   ├── PdfPositionConverter.kt
     │                   └── PdfSizeChecker.kt
