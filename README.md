@@ -49,8 +49,12 @@ src/
 - プルダウンメニューの追加
 
 ## 📄 テンプレート
-- 編集用ファイル：`template.pdf`
-- 出力用ファイル：`output.pdf`
+- 入力用PDF:`template.pdf`
+- 編集用PDF:`edited.pdf`
+- 出力用PDF:`output.pdf`
+- 画像座標YAML:`raw_positions.yaml`
+- PDF座標YAML:`converted_positions.yaml`
+- データストアExcel:`members.xlsx`
 
 ## 🧑‍💻 留意点
 本テンプレートは、東京都中央区が公開している介護認定申請書の様式を参考に、学習目的で作成したものです。
