@@ -12,7 +12,7 @@ Kotlin + JavaFX + PDFBox を使用し、PDF テンプレートに自動入力し
 - Windows / macOS 対応
 
 ## 📂 プロジェクト構成図
-```
+```text
 src/
 └── main/
     ├── kotlin/
