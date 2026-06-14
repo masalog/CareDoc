@@ -144,6 +144,19 @@ class PdfViewer : Application() {
     private fun editPdf(member: Member): File {
 
         val outputFile = File("edited.pdf")
+        val layout = LayoutLoader.loadLayout()
+
+        // Member の値を Map にまとめる
+        val values = mapOf(
+            "name" to member.name,
+            "furigana" to member.furigana,
+            "birthYear" to member.birthYear.toString(),
+            "birthMonth" to member.birthMonth.toString(),
+            "birthDay" to member.birthDay.toString(),
+            "gender" to member.gender,
+            "address" to member.address,
+            "phone" to member.phone
+        )
 
         getTemplateStream().use { input ->
             PDDocument.load(input).use { document ->
@@ -158,14 +171,39 @@ class PdfViewer : Application() {
                     true
                 ).use { content ->
 
-                    // ★ 氏名を書き込む（座標は例）
-                    content.beginText()
-                    content.setFont(font, 16f)
-                    content.newLineAtOffset(150f, 450f)
-                    content.showText(member.name)
-                    content.endText()
+                    // ▼ 通常項目の書き込み
+                    for ((key, value) in values) {
 
-                    // ★ 必要なら住所・生年月日も追加可能
+                        // 性別はスキップ（後で特別処理）
+                        if (key == "gender") continue
+
+                        val pos = requireNotNull(layout.fields[key]) {
+                            "Missing layout coordinate for field: $key"
+                        }
+
+                        content.beginText()
+                        content.setFont(font, pos.fontSize)
+                        content.newLineAtOffset(pos.x, pos.y)
+                        content.showText(value)
+                        content.endText()
+                    }
+
+                    // ▼ 性別の丸印
+                    val genderKey = when (member.gender) {
+                        "男" -> "genderMale"
+                        "女" -> "genderFemale"
+                        else -> null
+                        }
+                    genderKey?.let { key ->
+                        val pos = requireNotNull(layout.fields[key]) {
+                            "Missing layout coordinate for field: $key"
+                            }
+                        content.beginText()
+                        content.setFont(font, pos.fontSize)
+                        content.newLineAtOffset(pos.x, pos.y)
+                        content.showText("〇")
+                        content.endText()
+                    }
                 }
 
                 document.save(outputFile)
