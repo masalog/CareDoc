@@ -1,13 +1,34 @@
 package org.example.pdfconverter.utility
 
-/**
- * 画像座標(px) → PDF座標(pt) に変換するユーティリティクラス
- *
- * @param pdfWidth PDF の幅（pt）
- * @param pdfHeight PDF の高さ（pt）
- * @param imageWidth 画像の幅（px）
- * @param imageHeight 画像の高さ（px）
- */
+import org.yaml.snakeyaml.Yaml
+import java.io.File
+
+// ==============================
+// ▼ データクラス
+// ==============================
+data class RawFieldPosition(
+    val x: Int,
+    val y: Int,
+    val fontSize: Int
+)
+
+data class RawLayout(
+    val fields: Map<String, RawFieldPosition>
+)
+
+data class ConvertedFieldPosition(
+    val x: Float,
+    val y: Float,
+    val fontSize: Int
+)
+
+data class ConvertedLayout(
+    val fields: Map<String, ConvertedFieldPosition>
+)
+
+// ==============================
+// ▼ 座標変換クラス
+// ==============================
 class PdfPositionConverter(
     private val pdfWidth: Float,
     private val pdfHeight: Float,
@@ -15,25 +36,79 @@ class PdfPositionConverter(
     private val imageHeight: Int
 ) {
 
-    /** X座標(px) → PDF X座標(pt) */
     fun toPdfX(imageX: Int): Float =
         imageX * (pdfWidth / imageWidth)
 
-    /** Y座標(px) → PDF Y座標(pt)（PDF は左下が原点なので上下反転） */
     fun toPdfY(imageY: Int): Float =
         (imageHeight - imageY) * (pdfHeight / imageHeight)
 
-    /** (x, y) のセットを PDF 座標に変換 */
     fun toPdfPoint(imageX: Int, imageY: Int): Pair<Float, Float> =
         Pair(toPdfX(imageX), toPdfY(imageY))
 }
 
-/**
- * 動作確認用の main()（標準出力）
- */
+// ==============================
+// ▼ YAML 読み込み（fontSize 付き）
+// ==============================
+fun loadRawLayout(path: String): RawLayout {
+    val yaml = Yaml()
+    val input = File(path).inputStream()
+
+    val map = yaml.load<Map<String, Any>>(input)
+
+    val fields = (map["fields"] as Map<String, Map<String, Any>>).mapValues { (_, v) ->
+        RawFieldPosition(
+            x = (v["x"] as Number).toInt(),
+            y = (v["y"] as Number).toInt(),
+            fontSize = (v["fontSize"] as Number).toInt()
+        )
+    }
+
+    return RawLayout(fields)
+}
+
+// ==============================
+// ▼ 座標変換（fontSize はそのままコピー）
+// ==============================
+fun convertLayout(raw: RawLayout, converter: PdfPositionConverter): ConvertedLayout {
+
+    val converted = raw.fields.mapValues { (_, pos) ->
+        val (pdfX, pdfY) = converter.toPdfPoint(pos.x, pos.y)
+        ConvertedFieldPosition(
+            x = pdfX,
+            y = pdfY,
+            fontSize = pos.fontSize
+        )
+    }
+
+    return ConvertedLayout(converted)
+}
+
+// ==============================
+// ▼ YAML 出力（fontSize を含める）
+// ==============================
+fun saveConvertedYaml(layout: ConvertedLayout, outputFile: File) {
+    val yaml = Yaml()
+
+    val data = mapOf(
+        "fields" to layout.fields.mapValues { (_, pos) ->
+            mapOf(
+                "x" to pos.x,
+                "y" to pos.y,
+                "fontSize" to pos.fontSize
+            )
+        }
+    )
+
+    outputFile.writer().use { writer ->
+        yaml.dump(data, writer)
+    }
+}
+
+// ==============================
+// ▼ main()：一括処理
+// ==============================
 fun main() {
 
-    // PDF と画像のサイズ（あなたの環境に合わせた値）
     val converter = PdfPositionConverter(
         pdfWidth = 595.32f,
         pdfHeight = 842.04f,
@@ -41,12 +116,13 @@ fun main() {
         imageHeight = 1755
     )
 
-    // テスト用の画像座標（例：x=300, y=500）
-    val imageX = 872
-    val imageY = 256
+    val raw = loadRawLayout("src/main/resources/positions/raw_positions.yaml")
 
-    val (pdfX, pdfY) = converter.toPdfPoint(imageX, imageY)
+    val converted = convertLayout(raw, converter)
 
-    println("PDF X = $pdfX")
-    println("PDF Y = $pdfY")
+    val output = File("src/main/resources/positions/converted_positions.yaml")
+
+    saveConvertedYaml(converted, output)
+
+    println("変換完了 → ${output.absolutePath}")
 }
