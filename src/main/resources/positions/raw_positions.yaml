@@ -1,0 +1,45 @@
+fields:
+  name:
+    x: 440
+    y: 490
+    fontSize: 16
+
+  furigana:
+    x: 421
+    y: 427
+    fontSize: 12
+
+  birthYear:
+    x: 882
+    y: 467
+    fontSize: 12
+
+  birthMonth:
+    x: 990
+    y: 467
+    fontSize: 12
+
+  birthDay:
+    x: 1047
+    y: 467
+    fontSize: 12
+
+  genderMale:
+    x: 911
+    y: 507
+    fontSize: 14
+
+  genderFemale:
+    x: 1022
+    y: 507
+    fontSize: 14
+
+  address:
+    x: 400
+    y: 555
+    fontSize: 12
+
+  phone:
+    x: 900
+    y: 555
+    fontSize: 12
