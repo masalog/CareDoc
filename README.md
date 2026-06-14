@@ -13,23 +13,26 @@ Kotlin + JavaFX + PDFBox を使用し、PDF テンプレートに自動入力し
 
 ## 📂 プロジェクト構成図
 ```
-src
-├── main
-│   ├── kotlin
-│   │   └── org
-│   │       └── example
-│   │           └── pdfconverter
-│   │               ├── Launcher.kt
-│   │               ├── PdfViewer.kt
-│   │               └── utility
-│   │                   ├── PdfSizeChecker.kt
-│   │                   └── PdfPositionConverter.kt
-│   │
-│   └── resources
-│       ├── fonts
-│       └── templates
-│
-└── test
+src/
+└── main/
+    ├── kotlin/
+    │   └── org/
+    │       └── example/
+    │           └── pdfconverter/
+    │               ├── PdfViewer.kt
+    │               ├── YamlLoader.kt
+    │               ├── ExcelLoader.kt
+    │               ├── Launcher.kt
+    │               ├── PdfSizeChecker.kt
+    │               └── utility/
+    │                   ├── PdfPositionConverter.kt
+    │                   └── PdfSizeChecker.kt
+    └── resources/
+        ├── fonts/
+        ├── positions/
+        │   ├── converted_positions.yaml
+        │   └── raw_positions.yaml
+        └── templates/
 ```
 
 ## 🛠 使用技術
