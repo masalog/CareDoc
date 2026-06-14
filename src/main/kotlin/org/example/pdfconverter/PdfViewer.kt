@@ -177,7 +177,9 @@ class PdfViewer : Application() {
                         // 性別はスキップ（後で特別処理）
                         if (key == "gender") continue
 
-                        val pos = layout.fields[key] ?: continue
+                        val pos = requireNotNull(layout.fields[key]) {
+                            "Missing layout coordinate for field: $key"
+                        }
 
                         content.beginText()
                         content.setFont(font, pos.fontSize)
