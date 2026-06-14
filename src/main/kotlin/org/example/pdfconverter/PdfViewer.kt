@@ -144,6 +144,19 @@ class PdfViewer : Application() {
     private fun editPdf(member: Member): File {
 
         val outputFile = File("edited.pdf")
+        val layout = LayoutLoader.loadLayout()
+
+        // Member の値を Map にまとめる
+        val values = mapOf(
+            "name" to member.name,
+            "furigana" to member.furigana,
+            "birthYear" to member.birthYear.toString(),
+            "birthMonth" to member.birthMonth.toString(),
+            "birthDay" to member.birthDay.toString(),
+            "gender" to member.gender,
+            "address" to member.address,
+            "phone" to member.phone
+        )
 
         getTemplateStream().use { input ->
             PDDocument.load(input).use { document ->
