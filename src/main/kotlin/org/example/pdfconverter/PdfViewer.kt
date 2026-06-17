@@ -45,11 +45,10 @@ class PdfViewer : Application() {
         combo.items.add(header)
         combo.value = header
 
-        // ★ 個別データ読み込み
-        val members = ExcelLoader.loadMembers()
+        // ★ 個別 + 共通データをまとめて読み込み
+        val (members, commonList) = ExcelLoader.loadAll()
 
-        // ★ 共通データ読み込み（複数行 → 今は 0 行目を使用）
-        val commonList = ExcelLoader.loadCommon()
+        // ★ 共通データ（複数行 → 今は 0 行目を使用）
         val common = commonList.firstOrNull()
             ?: throw IllegalStateException("共通シートにデータがありません")
 
