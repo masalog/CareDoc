@@ -1,10 +1,33 @@
 fields:
-  name: {x: 211.07237, y: 606.9405, fontSize: 16}
+  name: {x: 211.55208, y: 606.9405, fontSize: 16}
   furigana: {x: 201.95787, y: 637.1676, fontSize: 12}
   birthYear: {x: 423.10416, y: 617.97577, fontSize: 12}
   birthMonth: {x: 474.9128, y: 617.97577, fontSize: 12}
   birthDay: {x: 502.2563, y: 617.97577, fontSize: 12}
-  genderMale: {x: 437.01575, y: 598.784, fontSize: 14}
-  genderFemale: {x: 490.26355, y: 598.784, fontSize: 14}
-  address: {x: 191.88397, y: 575.75385, fontSize: 12}
-  phone: {x: 431.73892, y: 575.75385, fontSize: 12}
+  genderMale: {x: 437.01575, y: 598.784, fontSize: 16}
+  genderFemale: {x: 488.3447, y: 597.3446, fontSize: 16}
+  address: {x: 191.88397, y: 573.83466, fontSize: 12}
+  phone: {x: 431.73892, y: 573.83466, fontSize: 12}
+  Insurance ID Number: {x: 211.55208, y: 713.93475, fontSize: 12}
+  Long-term Care Level 1: {x: 253.28683, y: 503.3048, fontSize: 16}
+  Long-term Care Level 2: {x: 272.47525, y: 503.3048, fontSize: 16}
+  Long-term Care Level 3: {x: 291.66364, y: 503.3048, fontSize: 16}
+  Long-term Care Level 4: {x: 310.85202, y: 503.3048, fontSize: 16}
+  Long-term Care Level 5: {x: 330.04044, y: 503.3048, fontSize: 16}
+  Support Level 1: {x: 439.894, y: 500.42603, fontSize: 16}
+  Support Level 2: {x: 454.2853, y: 503.3048, fontSize: 16}
+  facilityName: {x: 211.07237, y: 525.85516, fontSize: 12}
+  facilityPhone: {x: 431.73892, y: 522.0168, fontSize: 12}
+  isFacility: {x: 103.137634, y: 326.2605, fontSize: 16}
+  institutionName: {x: 238.41583, y: 409.265, fontSize: 8}
+  institutionAddress: {x: 238.41583, y: 397.27014, fontSize: 8}
+  agentCategory: {x: 308.4535, y: 303.71014, fontSize: 8}
+  agentName: {x: 211.07237, y: 285.47794, fontSize: 12}
+  agentPostal: {x: 143.91298, y: 271.0841, fontSize: 8}
+  agentAddress: {x: 143.91298, y: 256.69025, fontSize: 8}
+  agentPhone: {x: 441.33313, y: 256.69025, fontSize: 12}
+  doctorName: {x: 238.41583, y: 224.54399, fontSize: 12}
+  clinicName: {x: 417.34763, y: 226.46318, fontSize: 8}
+  clinicPostal: {x: 227.86221, y: 211.10974, fontSize: 8}
+  clinicAddress: {x: 227.86221, y: 199.59467, fontSize: 8}
+  clinicPhone: {x: 441.33313, y: 199.59467, fontSize: 12}

@@ -1,6 +1,6 @@
 fields:
   name:
-    x: 440
+    x: 441
     y: 490
     fontSize: 16
 
@@ -27,19 +27,138 @@ fields:
   genderMale:
     x: 911
     y: 507
-    fontSize: 14
+    fontSize: 16
 
   genderFemale:
-    x: 1022
-    y: 507
-    fontSize: 14
+    x: 1018
+    y: 510
+    fontSize: 16
 
   address:
     x: 400
-    y: 555
+    y: 559
     fontSize: 12
 
   phone:
     x: 900
-    y: 555
+    y: 559
+    fontSize: 12
+
+  "Insurance ID Number":
+    x: 441
+    y: 267
+    fontSize: 12
+
+  "Long-term Care Level 1":
+    x: 528
+    y: 706
+    fontSize: 16
+
+  "Long-term Care Level 2":
+    x: 568
+    y: 706
+    fontSize: 16
+
+  "Long-term Care Level 3":
+    x: 608
+    y: 706
+    fontSize: 16
+
+  "Long-term Care Level 4":
+    x: 648
+    y: 706
+    fontSize: 16
+
+  "Long-term Care Level 5":
+    x: 688
+    y: 706
+    fontSize: 16
+
+  "Support Level 1":
+    x: 917
+    y: 712
+    fontSize: 16
+
+  "Support Level 2":
+    x: 947
+    y: 706
+    fontSize: 16
+
+  # -------------------------
+  # CommonData 追加項目
+  # -------------------------
+
+  facilityName:
+    x: 440
+    y: 659
+    fontSize: 12
+
+  facilityPhone:
+    x: 900
+    y: 667
+    fontSize: 12
+
+  isFacility:
+    x: 215
+    y: 1075
+    fontSize: 16
+
+  institutionName:
+    x: 497
+    y: 902
+    fontSize: 8
+
+  institutionAddress:
+    x: 497
+    y: 927
+    fontSize: 8
+
+  agentCategory:
+    x: 643
+    y: 1122
+    fontSize: 8
+
+  agentName:
+    x: 440
+    y: 1160
+    fontSize: 12
+
+  agentPostal:
+    x: 300
+    y: 1190
+    fontSize: 8
+
+  agentAddress:
+    x: 300
+    y: 1220
+    fontSize: 8
+
+  agentPhone:
+    x: 920
+    y: 1220
+    fontSize: 12
+
+  doctorName:
+    x: 497
+    y: 1287
+    fontSize: 12
+
+  clinicName:
+    x: 870
+    y: 1283
+    fontSize: 8
+
+  clinicPostal:
+    x: 475
+    y: 1315
+    fontSize: 8
+
+  clinicAddress:
+    x: 475
+    y: 1339
+    fontSize: 8
+
+  clinicPhone:
+    x: 920
+    y: 1339
     fontSize: 12

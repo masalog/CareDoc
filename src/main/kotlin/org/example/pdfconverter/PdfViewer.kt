@@ -1,6 +1,7 @@
 package org.example.pdfconverter
 
 import javafx.application.Application
+import javafx.application.Platform
 import javafx.embed.swing.SwingFXUtils
 import javafx.scene.Scene
 import javafx.scene.control.*
@@ -14,6 +15,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream
 import org.apache.pdfbox.pdmodel.font.PDType0Font
 import org.apache.pdfbox.rendering.PDFRenderer
 import java.io.File
+import java.io.IOException
 import java.io.InputStream
 
 class PdfViewer : Application() {
@@ -27,33 +29,29 @@ class PdfViewer : Application() {
         val root = BorderPane()
 
         // ======================
-        // ▼ PDF表示エリア（スクロール対応）
+        // ▼ PDF表示エリア
         // ======================
         imageView = ImageView()
         val scrollPane = ScrollPane(imageView).apply {
             isPannable = true
-            hbarPolicy = ScrollPane.ScrollBarPolicy.AS_NEEDED
-            vbarPolicy = ScrollPane.ScrollBarPolicy.AS_NEEDED
         }
         root.center = scrollPane
 
         // ======================
-        // ▼ 下部 UI（プルダウン + 出力ボタン）
+        // ▼ 下部 UI
         // ======================
         val combo = ComboBox<String>()
         val header = "名前を選択してください"
-
         combo.items.add(header)
         combo.value = header
 
-        // ★ Excel からメンバー一覧を読み込む
-        val members = try {
-            ExcelLoader.loadMembers()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            showError("Excel ファイルの読み込みに失敗しました: ${e.message}")
-            emptyList()
-        }
+        // ★ 個別データ読み込み
+        val members = ExcelLoader.loadMembers()
+
+        // ★ 共通データ読み込み（複数行 → 今は 0 行目を使用）
+        val commonList = ExcelLoader.loadCommon()
+        val common = commonList.firstOrNull()
+            ?: throw IllegalStateException("共通シートにデータがありません")
 
         if (members.isNotEmpty()) {
             combo.items.addAll(members.map { it.name })
@@ -65,7 +63,7 @@ class PdfViewer : Application() {
 
             val member = members.firstOrNull { it.name == selected }
             if (member != null) {
-                val editedFile = editPdf(member)
+                val editedFile = editPdf(member, common)
                 currentPdfFile = editedFile
                 loadPdf(editedFile)
             }
@@ -90,31 +88,27 @@ class PdfViewer : Application() {
         currentPdfFile = template
         loadPdf(template)
 
-        stage.setOnCloseRequest {
-            pdf?.close()
-        }
+        stage.setOnCloseRequest { pdf?.close() }
     }
 
     // ======================
-    // ▼ JAR 内リソース取得
+    // ▼ リソース取得
     // ======================
     private fun getTemplateStream(): InputStream =
         PdfViewer::class.java.getResourceAsStream("/templates/template.pdf")
-            ?: throw IllegalStateException("PDF が見つかりません: /templates/template.pdf")
+            ?: throw IllegalStateException("PDF が見つかりません")
 
     private fun getFontStream(): InputStream =
         PdfViewer::class.java.getResourceAsStream("/fonts/NotoSansJP-Regular.ttf")
-            ?: throw IllegalStateException("フォントが見つかりません: /fonts/NotoSansJP-Regular.ttf")
+            ?: throw IllegalStateException("フォントが見つかりません")
 
     // ======================
-    // ▼ テンプレートを一時ファイルに展開
+    // ▼ テンプレート展開
     // ======================
     private fun extractTemplateToTempFile(): File {
         val temp = File.createTempFile("template", ".pdf")
         temp.outputStream().use { out ->
-            getTemplateStream().use { input ->
-                input.copyTo(out)
-            }
+            getTemplateStream().use { input -> input.copyTo(out) }
         }
         return temp
     }
@@ -125,38 +119,59 @@ class PdfViewer : Application() {
     private fun loadPdf(file: File) {
         try {
             pdf?.close()
-            pdf = PDDocument.load(file)
 
+            pdf = PDDocument.load(file)
             val renderer = PDFRenderer(pdf)
             val image = renderer.renderImageWithDPI(0, 150f)
 
             imageView.image = SwingFXUtils.toFXImage(image, null)
 
+        } catch (e: IOException) {
+            e.printStackTrace()
+            showError("PDF の読み込みに失敗しました: ${e.message}")
+
         } catch (e: Exception) {
             e.printStackTrace()
-            showError("PDF の読み込みに失敗しました。")
+            showError("予期しないエラーが発生しました: ${e.message}")
         }
     }
 
+
     // ======================
-    // ▼ PDF 編集処理（Member 対応）
+    // ▼ PDF 編集処理（Member + CommonData）
     // ======================
-    private fun editPdf(member: Member): File {
+    private fun editPdf(member: Member, common: CommonData): File {
 
         val outputFile = File("edited.pdf")
         val layout = LayoutLoader.loadLayout()
 
-        // Member の値を Map にまとめる
-        val values = mapOf(
-            "name" to member.name,
-            "furigana" to member.furigana,
-            "birthYear" to member.birthYear.toString(),
-            "birthMonth" to member.birthMonth.toString(),
-            "birthDay" to member.birthDay.toString(),
-            "gender" to member.gender,
-            "address" to member.address,
-            "phone" to member.phone
-        )
+        // ▼ 個別 + 共通データ
+        val values =
+            mapOf(
+                "name" to member.name,
+                "furigana" to member.furigana,
+                "birthYear" to member.birthYear.toString(),
+                "birthMonth" to member.birthMonth.toString(),
+                "birthDay" to member.birthDay.toString(),
+                "gender" to member.gender,
+                "address" to member.address,
+                "phone" to member.phone,
+                "Insurance ID Number" to member.insuranceIdNumber
+            ) + mapOf(
+                "facilityName" to common.facilityName,
+                "facilityPhone" to common.facilityPhone,
+                "institutionName" to common.institutionName,
+                "institutionAddress" to common.institutionAddress,
+                "agentName" to common.agentName,
+                "agentPostal" to common.agentPostal,
+                "agentAddress" to common.agentAddress,
+                "agentPhone" to common.agentPhone,
+                "doctorName" to common.doctorName,
+                "clinicName" to common.clinicName,
+                "clinicPostal" to common.clinicPostal,
+                "clinicAddress" to common.clinicAddress,
+                "clinicPhone" to common.clinicPhone
+            )
 
         getTemplateStream().use { input ->
             PDDocument.load(input).use { document ->
@@ -171,39 +186,57 @@ class PdfViewer : Application() {
                     true
                 ).use { content ->
 
-                    // ▼ 通常項目の書き込み
+                    // ============================
+                    // ▼ editPdf() 内の共通関数
+                    // ============================
+                    fun drawText(key: String, value: String) {
+                        layout.fields[key]?.let { pos ->
+                            content.beginText()
+                            content.setFont(font, pos.fontSize)
+                            content.newLineAtOffset(pos.x, pos.y)
+                            content.showText(value)
+                            content.endText()
+                        }
+                    }
+
+                    fun drawCircle(key: String) {
+                        layout.fields[key]?.let { pos ->
+                            content.beginText()
+                            content.setFont(font, pos.fontSize)
+                            content.newLineAtOffset(pos.x, pos.y)
+                            content.showText("〇")
+                            content.endText()
+                        }
+                    }
+
+                    // ▼ 通常項目
                     for ((key, value) in values) {
-
-                        // 性別はスキップ（後で特別処理）
                         if (key == "gender") continue
-
-                        val pos = requireNotNull(layout.fields[key]) {
-                            "Missing layout coordinate for field: $key"
-                        }
-
-                        content.beginText()
-                        content.setFont(font, pos.fontSize)
-                        content.newLineAtOffset(pos.x, pos.y)
-                        content.showText(value)
-                        content.endText()
+                        drawText(key, value)
                     }
 
-                    // ▼ 性別の丸印
-                    val genderKey = when (member.gender) {
-                        "男" -> "genderMale"
-                        "女" -> "genderFemale"
+                    // ▼ 性別丸印
+                    when (member.gender) {
+                        "男" -> drawCircle("genderMale")
+                        "女" -> drawCircle("genderFemale")
+                    }
+
+                    // ▼ 要介護区分丸印
+                    val careKey = when (member.careLevel) {
+                        "要介護1" -> "Long-term Care Level 1"
+                        "要介護2" -> "Long-term Care Level 2"
+                        "要介護3" -> "Long-term Care Level 3"
+                        "要介護4" -> "Long-term Care Level 4"
+                        "要介護5" -> "Long-term Care Level 5"
+                        "要支援1" -> "Support Level 1"
+                        "要支援2" -> "Support Level 2"
                         else -> null
-                        }
-                    genderKey?.let { key ->
-                        val pos = requireNotNull(layout.fields[key]) {
-                            "Missing layout coordinate for field: $key"
-                            }
-                        content.beginText()
-                        content.setFont(font, pos.fontSize)
-                        content.newLineAtOffset(pos.x, pos.y)
-                        content.showText("〇")
-                        content.endText()
                     }
+                    careKey?.let { drawCircle(it) }
+
+                    // ▼ 無条件丸印
+                    drawCircle("isFacility")
+                    drawCircle("agentCategory")
                 }
 
                 document.save(outputFile)
@@ -231,18 +264,16 @@ class PdfViewer : Application() {
             true
         } catch (e: Exception) {
             e.printStackTrace()
-            showError("PDF の保存に失敗しました。")
+            Platform.runLater {
+                showError("PDF の保存に失敗しました。")
+            }
             false
         }
     }
 
-    // ======================
-    // ▼ エラーダイアログ
-    // ======================
     private fun showError(message: String) {
         Alert(Alert.AlertType.ERROR).apply {
             title = "エラー"
-            headerText = null
             contentText = message
         }.showAndWait()
     }
