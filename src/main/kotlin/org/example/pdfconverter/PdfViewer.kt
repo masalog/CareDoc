@@ -1,6 +1,7 @@
 package org.example.pdfconverter
 
 import javafx.application.Application
+import javafx.application.Platform
 import javafx.embed.swing.SwingFXUtils
 import javafx.scene.Scene
 import javafx.scene.control.*
@@ -14,6 +15,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream
 import org.apache.pdfbox.pdmodel.font.PDType0Font
 import org.apache.pdfbox.rendering.PDFRenderer
 import java.io.File
+import java.io.IOException
 import java.io.InputStream
 
 class PdfViewer : Application() {
@@ -117,18 +119,23 @@ class PdfViewer : Application() {
     private fun loadPdf(file: File) {
         try {
             pdf?.close()
-            pdf = PDDocument.load(file)
 
+            pdf = PDDocument.load(file)
             val renderer = PDFRenderer(pdf)
             val image = renderer.renderImageWithDPI(0, 150f)
 
             imageView.image = SwingFXUtils.toFXImage(image, null)
 
+        } catch (e: IOException) {
+            e.printStackTrace()
+            showError("PDF の読み込みに失敗しました: ${e.message}")
+
         } catch (e: Exception) {
             e.printStackTrace()
-            showError("PDF の読み込みに失敗しました。")
+            showError("予期しないエラーが発生しました: ${e.message}")
         }
     }
+
 
     // ======================
     // ▼ PDF 編集処理（Member 対応）
