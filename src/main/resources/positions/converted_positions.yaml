@@ -21,3 +21,8 @@ fields:
   isFacility: {x: 103.137634, y: 326.2605, fontSize: 16}
   institutionName: {x: 238.41583, y: 409.265, fontSize: 8}
   institutionAddress: {x: 238.41583, y: 397.27014, fontSize: 8}
+  agentCategory: {x: 308.4535, y: 303.71014, fontSize: 8}
+  agentName: {x: 211.07237, y: 285.47794, fontSize: 12}
+  agentPostal: {x: 143.91298, y: 271.0841, fontSize: 8}
+  agentAddress: {x: 143.91298, y: 256.69025, fontSize: 8}
+  agentPhone: {x: 441.33313, y: 256.69025, fontSize: 12}
