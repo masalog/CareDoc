@@ -86,9 +86,7 @@ class PdfViewer : Application() {
         currentPdfFile = template
         loadPdf(template)
 
-        stage.setOnCloseRequest {
-            pdf?.close()
-        }
+        stage.setOnCloseRequest { pdf?.close() }
     }
 
     // ======================
