@@ -19,3 +19,5 @@ fields:
   facilityName: {x: 211.07237, y: 525.85516, fontSize: 12}
   facilityPhone: {x: 431.73892, y: 522.0168, fontSize: 12}
   isFacility: {x: 103.137634, y: 326.2605, fontSize: 16}
+  institutionName: {x: 238.41583, y: 409.265, fontSize: 8}
+  institutionAddress: {x: 238.41583, y: 397.27014, fontSize: 8}
