@@ -271,13 +271,9 @@ class PdfViewer : Application() {
         }
     }
 
-    // ======================
-    // ▼ エラーダイアログ
-    // ======================
     private fun showError(message: String) {
         Alert(Alert.AlertType.ERROR).apply {
             title = "エラー"
-            headerText = null
             contentText = message
         }.showAndWait()
     }
