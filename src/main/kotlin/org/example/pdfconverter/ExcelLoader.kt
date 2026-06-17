@@ -4,6 +4,9 @@ import org.apache.poi.ss.usermodel.DataFormatter
 import org.apache.poi.ss.usermodel.WorkbookFactory
 import java.io.File
 
+// -------------------------
+// 個別データ
+// -------------------------
 data class Member(
     val name: String,
     val furigana: String,
@@ -24,6 +27,9 @@ object ExcelLoader {
 
     private val formatter = DataFormatter()
 
+    // -------------------------
+    // 個別シート読み込み
+    // -------------------------
     fun loadMembers(filePath: String = "members.xlsx"): List<Member> {
         val file = File(filePath)
         if (!file.exists()) {
@@ -33,12 +39,10 @@ object ExcelLoader {
         val members = mutableListOf<Member>()
 
         WorkbookFactory.create(file).use { workbook ->
-            if (workbook.numberOfSheets == 0) {
-                throw IllegalArgumentException("Excel ファイルにシートが含まれていません: $filePath")
-            }
+            val sheet = workbook.getSheet("個別")
+                ?: throw IllegalArgumentException("「個別」シートが見つかりません: $filePath")
 
-            val sheet = workbook.getSheetAt(0)
-
+            // 1行目はヘッダーなので 2行目から
             for (rowIndex in 1..sheet.lastRowNum) {
                 val row = sheet.getRow(rowIndex) ?: continue
 
