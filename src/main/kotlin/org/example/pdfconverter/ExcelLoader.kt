@@ -15,7 +15,6 @@ data class Member(
     val birthDay: Int,
     val gender: String,
     val address: String,
-    val phone: String
     val phone: String,
     val insuranceIdNumber: String,
     val careLevel: String
