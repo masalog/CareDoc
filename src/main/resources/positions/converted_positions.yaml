@@ -8,3 +8,4 @@ fields:
   genderFemale: {x: 488.3447, y: 597.3446, fontSize: 16}
   address: {x: 191.88397, y: 573.83466, fontSize: 12}
   phone: {x: 431.73892, y: 573.83466, fontSize: 12}
+  Insurance ID Number: {x: 211.55208, y: 713.93475, fontSize: 12}
