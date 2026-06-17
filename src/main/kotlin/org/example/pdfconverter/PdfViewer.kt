@@ -1,7 +1,6 @@
 package org.example.pdfconverter
 
 import javafx.application.Application
-import javafx.application.Platform
 import javafx.embed.swing.SwingFXUtils
 import javafx.scene.Scene
 import javafx.scene.control.*
@@ -45,11 +44,10 @@ class PdfViewer : Application() {
         combo.items.add(header)
         combo.value = header
 
-        // ★ 個別データ読み込み
-        val members = ExcelLoader.loadMembers()
+        // ★ 個別 + 共通データをまとめて読み込み
+        val (members, commonList) = ExcelLoader.loadAll()
 
-        // ★ 共通データ読み込み（複数行 → 今は 0 行目を使用）
-        val commonList = ExcelLoader.loadCommon()
+        // ★ 共通データ（複数行 → 今は 0 行目を使用）
         val common = commonList.firstOrNull()
             ?: throw IllegalStateException("共通シートにデータがありません")
 
@@ -264,9 +262,7 @@ class PdfViewer : Application() {
             true
         } catch (e: Exception) {
             e.printStackTrace()
-            Platform.runLater {
-                showError("PDF の保存に失敗しました。")
-            }
+            showError("PDF の保存に失敗しました。")
             false
         }
     }
