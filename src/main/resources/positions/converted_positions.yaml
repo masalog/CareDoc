@@ -9,3 +9,8 @@ fields:
   address: {x: 191.88397, y: 573.83466, fontSize: 12}
   phone: {x: 431.73892, y: 573.83466, fontSize: 12}
   Insurance ID Number: {x: 211.55208, y: 713.93475, fontSize: 12}
+  Long-term Care Level 1: {x: 253.28683, y: 503.3048, fontSize: 16}
+  Long-term Care Level 2: {x: 272.47525, y: 503.3048, fontSize: 16}
+  Long-term Care Level 3: {x: 291.66364, y: 503.3048, fontSize: 16}
+  Long-term Care Level 4: {x: 310.85202, y: 503.3048, fontSize: 16}
+  Long-term Care Level 5: {x: 330.04044, y: 503.3048, fontSize: 16}
