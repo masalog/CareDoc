@@ -13,6 +13,11 @@ data class Member(
     val gender: String,
     val address: String,
     val phone: String
+    val phone: String,
+    val insuranceIdNumber: String,
+    val careLevel: String
+)
+
 )
 
 object ExcelLoader {
@@ -37,25 +42,18 @@ object ExcelLoader {
             for (rowIndex in 1..sheet.lastRowNum) {
                 val row = sheet.getRow(rowIndex) ?: continue
 
-                val name = formatter.formatCellValue(row.getCell(0))
-                val furigana = formatter.formatCellValue(row.getCell(1))
-                val birthYear = formatter.formatCellValue(row.getCell(2)).toIntOrNull() ?: 0
-                val birthMonth = formatter.formatCellValue(row.getCell(3)).toIntOrNull() ?: 0
-                val birthDay = formatter.formatCellValue(row.getCell(4)).toIntOrNull() ?: 0
-                val gender = formatter.formatCellValue(row.getCell(5))
-                val address = formatter.formatCellValue(row.getCell(6))
-                val phone = formatter.formatCellValue(row.getCell(7))
-
                 members.add(
                     Member(
-                        name = name,
-                        furigana = furigana,
-                        birthYear = birthYear,
-                        birthMonth = birthMonth,
-                        birthDay = birthDay,
-                        gender = gender,
-                        address = address,
-                        phone = phone
+                        name = formatter.formatCellValue(row.getCell(0)),
+                        furigana = formatter.formatCellValue(row.getCell(1)),
+                        birthYear = formatter.formatCellValue(row.getCell(2)).toIntOrNull() ?: 0,
+                        birthMonth = formatter.formatCellValue(row.getCell(3)).toIntOrNull() ?: 0,
+                        birthDay = formatter.formatCellValue(row.getCell(4)).toIntOrNull() ?: 0,
+                        gender = formatter.formatCellValue(row.getCell(5)),
+                        address = formatter.formatCellValue(row.getCell(6)),
+                        phone = formatter.formatCellValue(row.getCell(7)),
+                        insuranceIdNumber = formatter.formatCellValue(row.getCell(8)),
+                        careLevel = formatter.formatCellValue(row.getCell(9))
                     )
                 )
             }
