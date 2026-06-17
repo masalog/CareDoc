@@ -4,10 +4,6 @@ fields:
   birthYear: {x: 423.10416, y: 617.97577, fontSize: 12}
   birthMonth: {x: 474.9128, y: 617.97577, fontSize: 12}
   birthDay: {x: 502.2563, y: 617.97577, fontSize: 12}
-  genderMale: {x: 437.01575, y: 598.784, fontSize: 14}
-  genderFemale: {x: 490.26355, y: 598.784, fontSize: 14}
-  address: {x: 191.88397, y: 575.75385, fontSize: 12}
-  phone: {x: 431.73892, y: 575.75385, fontSize: 12}
   genderMale: {x: 437.01575, y: 598.784, fontSize: 16}
   genderFemale: {x: 488.3447, y: 597.3446, fontSize: 16}
   address: {x: 191.88397, y: 573.83466, fontSize: 12}
