@@ -1,7 +1,6 @@
 package org.example.pdfconverter
 
 import javafx.application.Application
-import javafx.application.Platform
 import javafx.embed.swing.SwingFXUtils
 import javafx.scene.Scene
 import javafx.scene.control.*
@@ -263,9 +262,7 @@ class PdfViewer : Application() {
             true
         } catch (e: Exception) {
             e.printStackTrace()
-            Platform.runLater {
-                showError("PDF の保存に失敗しました。")
-            }
+            showError("PDF の保存に失敗しました。")
             false
         }
     }
