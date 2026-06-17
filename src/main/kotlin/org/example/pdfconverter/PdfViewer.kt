@@ -36,22 +36,20 @@ class PdfViewer : Application() {
         root.center = scrollPane
 
         // ======================
-        // ▼ 下部 UI（プルダウン + 出力ボタン）
+        // ▼ 下部 UI
         // ======================
         val combo = ComboBox<String>()
         val header = "名前を選択してください"
-
         combo.items.add(header)
         combo.value = header
 
-        // ★ Excel からメンバー一覧を読み込む
-        val members = try {
-            ExcelLoader.loadMembers()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            showError("Excel ファイルの読み込みに失敗しました: ${e.message}")
-            emptyList()
-        }
+        // ★ 個別データ読み込み
+        val members = ExcelLoader.loadMembers()
+
+        // ★ 共通データ読み込み（複数行 → 今は 0 行目を使用）
+        val commonList = ExcelLoader.loadCommon()
+        val common = commonList.firstOrNull()
+            ?: throw IllegalStateException("共通シートにデータがありません")
 
         if (members.isNotEmpty()) {
             combo.items.addAll(members.map { it.name })
@@ -63,7 +61,7 @@ class PdfViewer : Application() {
 
             val member = members.firstOrNull { it.name == selected }
             if (member != null) {
-                val editedFile = editPdf(member)
+                val editedFile = editPdf(member, common)
                 currentPdfFile = editedFile
                 loadPdf(editedFile)
             }
