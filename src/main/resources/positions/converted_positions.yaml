@@ -26,3 +26,8 @@ fields:
   agentPostal: {x: 143.91298, y: 271.0841, fontSize: 8}
   agentAddress: {x: 143.91298, y: 256.69025, fontSize: 8}
   agentPhone: {x: 441.33313, y: 256.69025, fontSize: 12}
+  doctorName: {x: 238.41583, y: 224.54399, fontSize: 12}
+  clinicName: {x: 417.34763, y: 226.46318, fontSize: 8}
+  clinicPostal: {x: 227.86221, y: 211.10974, fontSize: 8}
+  clinicAddress: {x: 227.86221, y: 199.59467, fontSize: 8}
+  clinicPhone: {x: 441.33313, y: 199.59467, fontSize: 12}
