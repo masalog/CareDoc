@@ -138,24 +138,40 @@ class PdfViewer : Application() {
 
 
     // ======================
-    // ▼ PDF 編集処理（Member 対応）
+    // ▼ PDF 編集処理（Member + CommonData）
     // ======================
-    private fun editPdf(member: Member): File {
+    private fun editPdf(member: Member, common: CommonData): File {
 
         val outputFile = File("edited.pdf")
         val layout = LayoutLoader.loadLayout()
 
-        // Member の値を Map にまとめる
-        val values = mapOf(
-            "name" to member.name,
-            "furigana" to member.furigana,
-            "birthYear" to member.birthYear.toString(),
-            "birthMonth" to member.birthMonth.toString(),
-            "birthDay" to member.birthDay.toString(),
-            "gender" to member.gender,
-            "address" to member.address,
-            "phone" to member.phone
-        )
+        // ▼ 個別 + 共通データ
+        val values =
+            mapOf(
+                "name" to member.name,
+                "furigana" to member.furigana,
+                "birthYear" to member.birthYear.toString(),
+                "birthMonth" to member.birthMonth.toString(),
+                "birthDay" to member.birthDay.toString(),
+                "gender" to member.gender,
+                "address" to member.address,
+                "phone" to member.phone,
+                "Insurance ID Number" to member.insuranceIdNumber
+            ) + mapOf(
+                "facilityName" to common.facilityName,
+                "facilityPhone" to common.facilityPhone,
+                "institutionName" to common.institutionName,
+                "institutionAddress" to common.institutionAddress,
+                "agentName" to common.agentName,
+                "agentPostal" to common.agentPostal,
+                "agentAddress" to common.agentAddress,
+                "agentPhone" to common.agentPhone,
+                "doctorName" to common.doctorName,
+                "clinicName" to common.clinicName,
+                "clinicPostal" to common.clinicPostal,
+                "clinicAddress" to common.clinicAddress,
+                "clinicPhone" to common.clinicPhone
+            )
 
         getTemplateStream().use { input ->
             PDDocument.load(input).use { document ->
@@ -170,39 +186,57 @@ class PdfViewer : Application() {
                     true
                 ).use { content ->
 
-                    // ▼ 通常項目の書き込み
+                    // ============================
+                    // ▼ editPdf() 内の共通関数
+                    // ============================
+                    fun drawText(key: String, value: String) {
+                        layout.fields[key]?.let { pos ->
+                            content.beginText()
+                            content.setFont(font, pos.fontSize)
+                            content.newLineAtOffset(pos.x, pos.y)
+                            content.showText(value)
+                            content.endText()
+                        }
+                    }
+
+                    fun drawCircle(key: String) {
+                        layout.fields[key]?.let { pos ->
+                            content.beginText()
+                            content.setFont(font, pos.fontSize)
+                            content.newLineAtOffset(pos.x, pos.y)
+                            content.showText("〇")
+                            content.endText()
+                        }
+                    }
+
+                    // ▼ 通常項目
                     for ((key, value) in values) {
-
-                        // 性別はスキップ（後で特別処理）
                         if (key == "gender") continue
-
-                        val pos = requireNotNull(layout.fields[key]) {
-                            "Missing layout coordinate for field: $key"
-                        }
-
-                        content.beginText()
-                        content.setFont(font, pos.fontSize)
-                        content.newLineAtOffset(pos.x, pos.y)
-                        content.showText(value)
-                        content.endText()
+                        drawText(key, value)
                     }
 
-                    // ▼ 性別の丸印
-                    val genderKey = when (member.gender) {
-                        "男" -> "genderMale"
-                        "女" -> "genderFemale"
+                    // ▼ 性別丸印
+                    when (member.gender) {
+                        "男" -> drawCircle("genderMale")
+                        "女" -> drawCircle("genderFemale")
+                    }
+
+                    // ▼ 要介護区分丸印
+                    val careKey = when (member.careLevel) {
+                        "要介護1" -> "Long-term Care Level 1"
+                        "要介護2" -> "Long-term Care Level 2"
+                        "要介護3" -> "Long-term Care Level 3"
+                        "要介護4" -> "Long-term Care Level 4"
+                        "要介護5" -> "Long-term Care Level 5"
+                        "要支援1" -> "Support Level 1"
+                        "要支援2" -> "Support Level 2"
                         else -> null
-                        }
-                    genderKey?.let { key ->
-                        val pos = requireNotNull(layout.fields[key]) {
-                            "Missing layout coordinate for field: $key"
-                            }
-                        content.beginText()
-                        content.setFont(font, pos.fontSize)
-                        content.newLineAtOffset(pos.x, pos.y)
-                        content.showText("〇")
-                        content.endText()
                     }
+                    careKey?.let { drawCircle(it) }
+
+                    // ▼ 無条件丸印
+                    drawCircle("isFacility")
+                    drawCircle("agentCategory")
                 }
 
                 document.save(outputFile)
@@ -230,7 +264,9 @@ class PdfViewer : Application() {
             true
         } catch (e: Exception) {
             e.printStackTrace()
-            showError("PDF の保存に失敗しました。")
+            Platform.runLater {
+                showError("PDF の保存に失敗しました。")
+            }
             false
         }
     }
