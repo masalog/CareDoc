@@ -14,3 +14,5 @@ fields:
   Long-term Care Level 3: {x: 291.66364, y: 503.3048, fontSize: 16}
   Long-term Care Level 4: {x: 310.85202, y: 503.3048, fontSize: 16}
   Long-term Care Level 5: {x: 330.04044, y: 503.3048, fontSize: 16}
+  Support Level 1: {x: 439.894, y: 500.42603, fontSize: 16}
+  Support Level 2: {x: 454.2853, y: 503.3048, fontSize: 16}
