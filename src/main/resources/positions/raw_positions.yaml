@@ -1,4 +1,9 @@
 fields:
+  "Insurance ID Number":
+    x: 441
+    y: 267
+    fontSize: 12
+
   name:
     x: 441
     y: 490
