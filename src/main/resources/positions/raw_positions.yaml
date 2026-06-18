@@ -104,9 +104,35 @@ fields:
     y: 706
     fontSize: 16
 
-  # -------------------------
-  # CommonData 追加項目
-  # -------------------------
+  startYear:
+    x: 520
+    y: 760
+    fontSize: 12
+
+  startMonth:
+    x: 618
+    y: 760
+    fontSize: 12
+
+  startDay:
+    x: 673
+    y: 760
+    fontSize: 12
+
+  endYear:
+    x: 800
+    y: 760
+    fontSize: 12
+
+  endMonth:
+    x: 900
+    y: 760
+    fontSize: 12
+
+  endDay:
+    x: 950
+    y: 760
+    fontSize: 12
 
   facilityName:
     x: 440
