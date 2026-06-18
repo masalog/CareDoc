@@ -4,6 +4,21 @@ fields:
     y: 267
     fontSize: 12
 
+  applyYear:
+    x: 882
+    y: 267
+    fontSize: 12
+
+  applyMonth:
+    x: 990
+    y: 267
+    fontSize: 12
+
+  applyDay:
+    x: 1047
+    y: 267
+    fontSize: 12
+
   name:
     x: 441
     y: 490
