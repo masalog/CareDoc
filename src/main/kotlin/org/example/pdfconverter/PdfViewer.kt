@@ -15,7 +15,6 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream
 import org.apache.pdfbox.pdmodel.font.PDType0Font
 import org.apache.pdfbox.rendering.PDFRenderer
 import java.io.File
-import java.io.IOException
 import java.io.InputStream
 
 class PdfViewer : Application() {
