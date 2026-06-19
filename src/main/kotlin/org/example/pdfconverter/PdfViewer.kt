@@ -174,7 +174,7 @@ class PdfViewer : Application() {
                 initialDirectory = home
             }
 
-            initialFileName = "output.pdf" // ✅ 追加
+            initialFileName = "output.pdf"
             extensionFilters.add(FileChooser.ExtensionFilter("PDF Files", "*.pdf"))
         }
 
@@ -192,9 +192,22 @@ class PdfViewer : Application() {
             println("コピー成功！")
         } catch (e: Exception) {
             e.printStackTrace()
+            showError(
+                "PDF の保存に失敗しました",
+                "ファイルを保存できませんでした。\n原因: ${e.message}"
+            )
         }
     }
 
+    private fun showError(title: String, message: String) {
+        Platform.runLater {
+            Alert(Alert.AlertType.ERROR).apply {
+                this.title = title
+                headerText = null
+                contentText = message
+            }.showAndWait()
+        }
+    }
 }
 
 fun main() {
