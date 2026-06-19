@@ -18,7 +18,7 @@ import java.io.File
 class PdfViewer : Application() {
 
     private lateinit var imageView: ImageView
-    private var currentPdfFile: File = File("edited.pdf")
+    private var currentPdfFile: File? = null
 
     private val pdfEditor = PdfEditor()
 
