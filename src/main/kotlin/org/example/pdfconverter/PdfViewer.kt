@@ -114,18 +114,22 @@ class PdfViewer : Application() {
             val templateStream = javaClass.getResourceAsStream("/templates/template.pdf")
                 ?: throw IllegalStateException("template.pdf が見つかりません")
 
-        val tempFile = File.createTempFile("template", ".pdf")
+            val tempFile = File.createTempFile("template", ".pdf").apply { deleteOnExit() }
 
-        templateStream.use { input ->
-            tempFile.outputStream().use { output ->
-                input.copyTo(output)
+            templateStream.use { input ->
+                tempFile.outputStream().use { output ->
+                    input.copyTo(output)
+                }
             }
+
+            println("テンプレート読込成功: ${tempFile.absolutePath} サイズ=${tempFile.length()} bytes")
+
+            currentPdfFile = tempFile
+            loadPdfAsync(tempFile)
+
+        } catch (e: Exception) {
+            showError("テンプレート読込エラー", "template.pdf を読み込めませんでした。\n${e.message}")
         }
-
-        println("テンプレート読込成功: ${tempFile.absolutePath} サイズ=${tempFile.length()} bytes")
-
-        currentPdfFile = tempFile
-        loadPdfAsync(tempFile)
     }
 
     private fun loadPdfAsync(file: File) {
