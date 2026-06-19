@@ -132,19 +132,32 @@ class PdfViewer : Application() {
         }
     }
 
+    // ============================================
+    // ▼ PDF レンダリング（直列化 & 最新のみ反映）
+    // ============================================
     private fun loadPdfAsync(file: File) {
         Thread {
             println("PDF読み込み開始: ${file.absolutePath}")
 
-            val doc = PDDocument.load(file)
-            val image = PDFRenderer(doc).renderImageWithDPI(0, 150f)
-            doc.close()
-
-            Platform.runLater {
-                println("PDF表示更新")
-                imageView.image = SwingFXUtils.toFXImage(image, null)
+            runCatching {
+                PDDocument.load(file).use { doc ->
+                    PDFRenderer(doc).renderImageWithDPI(0, 150f)
+                }
+            }.onSuccess { image ->
+                Platform.runLater {
+                    // 最新ジョブのみ反映
+                    if (seq == renderSeq) {
+                        println("PDF表示更新（seq=$seq）")
+                        imageView.image = SwingFXUtils.toFXImage(image, null)
+                    } else {
+                        println("古いジョブのため破棄（seq=$seq）")
+                    }
+                }
+            }.onFailure { e ->
+                e.printStackTrace()
+                showError("PDF 読み込みエラー", e.message ?: "不明なエラー")
             }
-        }.start()
+        }
     }
 
     private fun exportPdf(stage: Stage, file: File) {
