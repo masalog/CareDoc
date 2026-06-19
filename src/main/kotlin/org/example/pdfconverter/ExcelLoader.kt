@@ -4,6 +4,8 @@ import org.apache.poi.ss.usermodel.DataFormatter
 import org.apache.poi.ss.usermodel.Workbook
 import org.apache.poi.ss.usermodel.WorkbookFactory
 import java.io.File
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 // -------------------------
 // 個別データ
@@ -50,12 +52,32 @@ data class CommonData(
     val clinicPhone: String
 )
 
-// -------------------------
-// Excel ローダー本体
-// -------------------------
 object ExcelLoader {
 
     private val formatter = DataFormatter()
+
+    private val jpFormatter = DateTimeFormatter.ofPattern("yyyy/M/d")
+    private val usFormatter = DateTimeFormatter.ofPattern("M/d/yy")
+
+    // -------------------------
+    // ✅ 日付変換（安定版）
+    // -------------------------
+    private fun parseDate(text: String): Triple<Int?, Int?, Int?> {
+        if (text.isBlank()) return Triple(null, null, null)
+
+        return try {
+            val date = try {
+                LocalDate.parse(text, jpFormatter)
+            } catch (e: Exception) {
+                val d = LocalDate.parse(text, usFormatter)
+                val currentYear = LocalDate.now().year
+
+                if (d.year > currentYear + 10) {
+                    d.minusYears(100)
+                } else {
+                    d
+                }
+            }
 
             Triple(date.year, date.monthValue, date.dayOfMonth)
 
