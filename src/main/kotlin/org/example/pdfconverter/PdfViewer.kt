@@ -88,34 +88,21 @@ class PdfViewer : Application() {
         stage.title = "CareDoc"
         stage.show()
 
-        // 起動時にテンプレート表示
-        val template = extractTemplateToTempFile()
-        currentPdfFile = template
-        loadPdf(template)
+        val templateStream = javaClass.getResourceAsStream("/templates/template.pdf")
+            ?: error("template.pdf が見つかりません")
 
-        stage.setOnCloseRequest { pdf?.close() }
-    }
+        val tempFile = File.createTempFile("template", ".pdf")
 
-    // ======================
-    // ▼ リソース取得
-    // ======================
-    private fun getTemplateStream(): InputStream =
-        PdfViewer::class.java.getResourceAsStream("/templates/template.pdf")
-            ?: throw IllegalStateException("PDF が見つかりません")
-
-    private fun getFontStream(): InputStream =
-        PdfViewer::class.java.getResourceAsStream("/fonts/NotoSansJP-Regular.ttf")
-            ?: throw IllegalStateException("フォントが見つかりません")
-
-    // ======================
-    // ▼ テンプレート展開
-    // ======================
-    private fun extractTemplateToTempFile(): File {
-        val temp = File.createTempFile("template", ".pdf")
-        temp.outputStream().use { out ->
-            getTemplateStream().use { input -> input.copyTo(out) }
+        templateStream.use { input ->
+            tempFile.outputStream().use { output ->
+                input.copyTo(output)
+            }
         }
-        return temp
+
+        println("テンプレート読込成功: ${tempFile.absolutePath} サイズ=${tempFile.length()} bytes")
+
+        currentPdfFile = tempFile
+        loadPdfAsync(tempFile)
     }
 
     // ======================
