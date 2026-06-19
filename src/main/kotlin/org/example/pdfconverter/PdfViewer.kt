@@ -26,9 +26,10 @@ class PdfViewer : Application() {
 
         val root = BorderPane()
 
-        // ======================
-        // ▼ PDF表示エリア
-        // ======================
+        val title = Label("介護認定申請書 作成アプリ CareDoc")
+        title.style = "-fx-font-size: 18px; -fx-padding: 10px;"
+        root.top = title
+
         imageView = ImageView()
         val scrollPane = ScrollPane(imageView).apply {
             isPannable = true
