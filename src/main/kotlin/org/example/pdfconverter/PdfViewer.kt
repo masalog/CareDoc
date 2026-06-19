@@ -41,13 +41,8 @@ class PdfViewer : Application() {
 
         val applyDateInput = DateInputView()
 
-        // ★ 共通データ（複数行 → 今は 0 行目を使用）
-        val common = commonList.firstOrNull()
-            ?: throw IllegalStateException("共通シートにデータがありません")
-
-        if (members.isNotEmpty()) {
-            combo.items.addAll(members.map { it.name })
-        }
+        val (members, common) = ExcelLoader.loadAll()
+        combo.items.addAll(members.map { it.name })
 
         combo.setOnAction {
             val selected = combo.value
