@@ -44,16 +44,25 @@ class PdfViewer : Application() {
         val (members, common) = ExcelLoader.loadAll()
         combo.items.addAll(members.map { it.name })
 
-        combo.setOnAction {
+        fun updatePdf() {
             val selected = combo.value
-            if (selected == header) return@setOnAction
+            if (selected == header) return
 
-            val member = members.firstOrNull { it.name == selected }
-            if (member != null) {
-                val editedFile = editPdf(member, common)
-                currentPdfFile = editedFile
-                loadPdf(editedFile)
-            }
+            val member = members.firstOrNull { it.name == selected } ?: return
+            val (year, month, day) = applyDateInput.getDate()
+
+            val file = pdfEditor.editPdf(
+                member = member,
+                common = common,
+                applyYear = year,
+                applyMonth = month,
+                applyDay = day
+            )
+
+            println("PDF更新: ${file.absolutePath} サイズ=${file.length()} bytes")
+
+            currentPdfFile = file
+            loadPdfAsync(file)
         }
 
         val exportButton = Button("出力")
