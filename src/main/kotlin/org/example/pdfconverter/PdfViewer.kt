@@ -124,6 +124,10 @@ class PdfViewer : Application() {
     // ============================================
     // ▼ PDF レンダリング（直列化 & 最新のみ反映 & 古いPDF削除）
     // ============================================
+
+    // ▼ 現在表示中の PDF（FX スレッドのみでアクセス）
+    private var displayedPdfFile: File? = null
+
     private fun loadPdfAsync(file: File) {
         val seq = ++renderSeq
 
@@ -138,19 +142,32 @@ class PdfViewer : Application() {
                 Platform.runLater {
                     if (seq == renderSeq) {
 
-                        // ▼ 古い PDF を削除
-                        currentPdfFile?.takeIf { it.exists() && it != file }?.delete()
+                        // ▼ 前回の表示PDFを削除
+                        val old = displayedPdfFile
+                        imageView.image = SwingFXUtils.toFXImage(image, null)
+                        displayedPdfFile = file
 
-                        // ▼ 新しい PDF をセット
+                        old?.takeIf { it.exists() && it != file }?.delete()
+
+                        // ▼ 保存ボタン用の currentPdfFile は「表示された PDF」に更新
                         currentPdfFile = file
 
                         println("PDF表示更新（seq=$seq）")
-                        imageView.image = SwingFXUtils.toFXImage(image, null)
+                    } else {
+                        // ▼ 古いジョブの PDF は削除
+                        file.delete()
+                        println("古いジョブのため破棄・削除（seq=$seq）")
                     }
                 }
             }.onFailure { e ->
                 e.printStackTrace()
-                showError("PDF 読み込みエラー", e.message ?: "不明なエラー")
+
+                Platform.runLater {
+                    // ▼ 失敗した PDF は削除
+                    file.takeIf { it.exists() && it != displayedPdfFile }?.delete()
+
+                    showError("PDF 読み込みエラー", e.message ?: "不明なエラー")
+                }
             }
         }
     }
