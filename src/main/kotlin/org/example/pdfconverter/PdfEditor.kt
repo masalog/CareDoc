@@ -46,41 +46,18 @@ class PdfEditor {
                     }
                 }
 
-                // Excelデータ
-                val values = mapOf(
-                    "name" to member.name,
-                    "furigana" to member.furigana,
-                    "birthYear" to member.birthYear.toString(),
-                    "birthMonth" to member.birthMonth.toString(),
-                    "birthDay" to member.birthDay.toString(),
-                    "address" to member.address,
-                    "phone" to member.phone,
-                    "Insurance ID Number" to member.insuranceIdNumber,
-                    "facilityName" to common.facilityName,
-                    "facilityPhone" to common.facilityPhone,
-                    "institutionName" to common.institutionName,
-                    "institutionAddress" to common.institutionAddress,
-                    "agentName" to common.agentName,
-                    "agentPostal" to common.agentPostal,
-                    "agentAddress" to common.agentAddress,
-                    "agentPhone" to common.agentPhone,
-                    "doctorName" to common.doctorName,
-                    "clinicName" to common.clinicName,
-                    "clinicPostal" to common.clinicPostal,
-                    "clinicAddress" to common.clinicAddress,
-                    "clinicPhone" to common.clinicPhone
-                )
+                // 個別データ
+                drawText("Insurance ID Number", member.insuranceIdNumber)
+                drawText("name", member.name)
+                drawText("furigana", member.furigana)
 
-                for ((key, value) in values) {
-                    drawText(key, value)
-                }
+                member.birthYear?.let { drawText("birthYear", it.toString()) }
+                member.birthMonth?.let { drawText("birthMonth", it.toString()) }
+                member.birthDay?.let { drawText("birthDay", it.toString()) }
 
-                // 日付
-                drawDateParts("apply", dateInput, ::drawText)
-                drawDateParts("start", validPeriodInput.startDate, ::drawText)
-                drawDateParts("end", validPeriodInput.endDate, ::drawText)
+                drawText("address", member.address)
+                drawText("phone", member.phone)
 
-                // 性別
                 when (member.gender) {
                     "男" -> drawCircle("genderMale")
                     "女" -> drawCircle("genderFemale")
