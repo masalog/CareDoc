@@ -90,6 +90,21 @@ class PdfEditor {
                 member.endMonth?.let { drawText("endMonth", it.toString()) }
                 member.endDay?.let { drawText("endDay", it.toString()) }
 
+                // 共通データ
+                drawText("facilityName", common.facilityName)
+                drawText("facilityPhone", common.facilityPhone)
+                drawText("institutionName", common.institutionName)
+                drawText("institutionAddress", common.institutionAddress)
+                drawText("agentName", common.agentName)
+                drawText("agentPostal", common.agentPostal)
+                drawText("agentAddress", common.agentAddress)
+                drawText("agentPhone", common.agentPhone)
+                drawText("doctorName", common.doctorName)
+                drawText("clinicName", common.clinicName)
+                drawText("clinicPostal", common.clinicPostal)
+                drawText("clinicAddress", common.clinicAddress)
+                drawText("clinicPhone", common.clinicPhone)
+
                 drawCircle("isFacility")
                 drawCircle("agentCategory")
             }
