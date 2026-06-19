@@ -4,6 +4,7 @@ import javafx.geometry.Insets
 import javafx.scene.control.ComboBox
 import javafx.scene.layout.HBox
 import java.time.LocalDate
+import java.time.YearMonth
 
 class DateInputView {
 
@@ -44,12 +45,42 @@ class DateInputView {
     }
 
     // ============================
+    // ▼ 日数の再計算
+    // ============================
+    private fun refreshDayItems() {
+        val y = yearBox.value
+        val m = monthBox.value
+
+        val maxDay = if (y != null && m != null) {
+            YearMonth.of(y, m).lengthOfMonth()
+        } else {
+            31
+        }
+
+        val current = dayBox.value
+        dayBox.items.setAll((1..maxDay).toList())
+
+        // 不正な日付はクリア
+        if (current != null && current > maxDay) {
+            dayBox.value = null
+        }
+    }
+
+    // ============================
     // ▼ 変更イベント設定
     // ============================
     private fun setupListeners() {
-        yearBox.setOnAction { onChange?.invoke() }
-        monthBox.setOnAction { onChange?.invoke() }
-        dayBox.setOnAction { onChange?.invoke() }
+        yearBox.setOnAction {
+            refreshDayItems()
+            onChange?.invoke()
+        }
+        monthBox.setOnAction {
+            refreshDayItems()
+            onChange?.invoke()
+        }
+        dayBox.setOnAction {
+            onChange?.invoke()
+        }
     }
 
     // ============================
