@@ -11,11 +11,8 @@ import javafx.scene.layout.VBox
 import javafx.stage.FileChooser
 import javafx.stage.Stage
 import org.apache.pdfbox.pdmodel.PDDocument
-import org.apache.pdfbox.pdmodel.PDPageContentStream
-import org.apache.pdfbox.pdmodel.font.PDType0Font
 import org.apache.pdfbox.rendering.PDFRenderer
 import java.io.File
-import java.io.InputStream
 
 class PdfViewer : Application() {
 
