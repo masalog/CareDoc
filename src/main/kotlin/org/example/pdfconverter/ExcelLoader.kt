@@ -60,28 +60,35 @@ object ExcelLoader {
     private val usFormatter = DateTimeFormatter.ofPattern("M/d/yy")
 
     // -------------------------
-    // ✅ 日付変換（安定版）
+    // ✅ 日付変換（ログ付き安定版）
     // -------------------------
     private fun parseDate(text: String): Triple<Int?, Int?, Int?> {
-        if (text.isBlank()) return Triple(null, null, null)
+        val raw = text.trim()
+        if (raw.isBlank()) return Triple(null, null, null)
 
         return try {
             val date = try {
-                LocalDate.parse(text, jpFormatter)
-            } catch (e: Exception) {
-                val d = LocalDate.parse(text, usFormatter)
-                val currentYear = LocalDate.now().year
+                LocalDate.parse(raw, jpFormatter)
+            } catch (e1: Exception) {
+                try {
+                    val d = LocalDate.parse(raw, usFormatter)
+                    val currentYear = LocalDate.now().year
 
-                if (d.year > currentYear + 10) {
-                    d.minusYears(100)
-                } else {
-                    d
+                    if (d.year > currentYear + 10) {
+                        d.minusYears(100)
+                    } else {
+                        d
+                    }
+                } catch (e2: Exception) {
+                    System.err.println("Invalid date format in Excel (JP/US failed): '$raw'")
+                    throw e2
                 }
             }
 
             Triple(date.year, date.monthValue, date.dayOfMonth)
 
         } catch (e: Exception) {
+            System.err.println("Date parse error: '$raw' (${e.message})")
             Triple(null, null, null)
         }
     }
@@ -101,7 +108,7 @@ object ExcelLoader {
             val insuranceId = formatter.formatCellValue(row.getCell(0))
             val name = formatter.formatCellValue(row.getCell(1))
 
-            // ✅ 空行スキップ（重要）
+            // 空行スキップ
             if (name.isBlank()) continue
 
             val furigana = formatter.formatCellValue(row.getCell(2))
