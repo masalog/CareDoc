@@ -82,11 +82,10 @@ class PdfViewer : Application() {
             HBox(10.0, exportButton)
         ).apply { style = "-fx-padding: 15px;" }
 
-        // ======================
-        // ▼ ウィンドウ設定
-        // ======================
-        stage.scene = Scene(root, 800.0, 500.0)
-        stage.title = "PDF Viewer"
+        root.bottom = bottom
+
+        stage.scene = Scene(root, 900.0, 600.0)
+        stage.title = "CareDoc"
         stage.show()
 
         // 起動時にテンプレート表示
