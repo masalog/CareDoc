@@ -66,13 +66,14 @@ class PdfViewer : Application() {
         fun updatePdf() {
             val selected = combo.value
             if (selected == header) return
+            if (common == null) return
 
             val member = members.firstOrNull { it.name == selected } ?: return
             val (year, month, day) = applyDateInput.getDate()
 
             val file = pdfEditor.editPdf(
                 member = member,
-                common = common,
+                common = common!!,
                 applyYear = year,
                 applyMonth = month,
                 applyDay = day
