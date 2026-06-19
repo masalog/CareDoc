@@ -1,4 +1,24 @@
 fields:
+  "Insurance ID Number":
+    x: 441
+    y: 267
+    fontSize: 12
+
+  applyYear:
+    x: 882
+    y: 267
+    fontSize: 12
+
+  applyMonth:
+    x: 990
+    y: 267
+    fontSize: 12
+
+  applyDay:
+    x: 1047
+    y: 267
+    fontSize: 12
+
   name:
     x: 441
     y: 490
@@ -44,11 +64,6 @@ fields:
     y: 559
     fontSize: 12
 
-  "Insurance ID Number":
-    x: 441
-    y: 267
-    fontSize: 12
-
   "Long-term Care Level 1":
     x: 528
     y: 706
@@ -84,9 +99,35 @@ fields:
     y: 706
     fontSize: 16
 
-  # -------------------------
-  # CommonData 追加項目
-  # -------------------------
+  startYear:
+    x: 520
+    y: 760
+    fontSize: 12
+
+  startMonth:
+    x: 618
+    y: 760
+    fontSize: 12
+
+  startDay:
+    x: 673
+    y: 760
+    fontSize: 12
+
+  endYear:
+    x: 800
+    y: 760
+    fontSize: 12
+
+  endMonth:
+    x: 900
+    y: 760
+    fontSize: 12
+
+  endDay:
+    x: 950
+    y: 760
+    fontSize: 12
 
   facilityName:
     x: 440

@@ -1,4 +1,8 @@
 fields:
+  Insurance ID Number: {x: 211.55208, y: 713.93475, fontSize: 12}
+  applyYear: {x: 423.10416, y: 713.93475, fontSize: 12}
+  applyMonth: {x: 474.9128, y: 713.93475, fontSize: 12}
+  applyDay: {x: 502.2563, y: 713.93475, fontSize: 12}
   name: {x: 211.55208, y: 606.9405, fontSize: 16}
   furigana: {x: 201.95787, y: 637.1676, fontSize: 12}
   birthYear: {x: 423.10416, y: 617.97577, fontSize: 12}
@@ -8,7 +12,6 @@ fields:
   genderFemale: {x: 488.3447, y: 597.3446, fontSize: 16}
   address: {x: 191.88397, y: 573.83466, fontSize: 12}
   phone: {x: 431.73892, y: 573.83466, fontSize: 12}
-  Insurance ID Number: {x: 211.55208, y: 713.93475, fontSize: 12}
   Long-term Care Level 1: {x: 253.28683, y: 503.3048, fontSize: 16}
   Long-term Care Level 2: {x: 272.47525, y: 503.3048, fontSize: 16}
   Long-term Care Level 3: {x: 291.66364, y: 503.3048, fontSize: 16}
@@ -16,6 +19,12 @@ fields:
   Long-term Care Level 5: {x: 330.04044, y: 503.3048, fontSize: 16}
   Support Level 1: {x: 439.894, y: 500.42603, fontSize: 16}
   Support Level 2: {x: 454.2853, y: 503.3048, fontSize: 16}
+  startYear: {x: 249.44916, y: 477.39587, fontSize: 12}
+  startMonth: {x: 296.46072, y: 477.39587, fontSize: 12}
+  startDay: {x: 322.8448, y: 477.39587, fontSize: 12}
+  endYear: {x: 383.76794, y: 477.39587, fontSize: 12}
+  endMonth: {x: 431.73892, y: 477.39587, fontSize: 12}
+  endDay: {x: 455.72443, y: 477.39587, fontSize: 12}
   facilityName: {x: 211.07237, y: 525.85516, fontSize: 12}
   facilityPhone: {x: 431.73892, y: 522.0168, fontSize: 12}
   isFacility: {x: 103.137634, y: 326.2605, fontSize: 16}
