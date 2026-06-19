@@ -57,10 +57,16 @@ object ExcelLoader {
 
     private val formatter = DataFormatter()
 
-    // ============================================================
-    // 内部メソッド（Workbook を受け取る）
-    // ============================================================
+            Triple(date.year, date.monthValue, date.dayOfMonth)
 
+        } catch (e: Exception) {
+            Triple(null, null, null)
+        }
+    }
+
+    // -------------------------
+    // 個別データ
+    // -------------------------
     private fun loadMembers(workbook: Workbook): List<Member> {
         val sheet = workbook.getSheet("個別")
             ?: throw IllegalArgumentException("「個別」シートが見つかりません")
