@@ -11,8 +11,9 @@ class PdfEditor {
     fun editPdf(
         member: Member,
         common: CommonData,
-        dateInput: DateInputView,
-        validPeriodInput: ValidPeriodInputView
+        applyYear: Int?,
+        applyMonth: Int?,
+        applyDay: Int?
     ): File {
 
         val output = File("edited.pdf")
@@ -98,6 +99,15 @@ class PdfEditor {
                 }
                 careKey?.let { drawCircle(it) }
 
+                // 有効期間（Excel の値）
+                member.startYear?.let { drawText("startYear", it.toString()) }
+                member.startMonth?.let { drawText("startMonth", it.toString()) }
+                member.startDay?.let { drawText("startDay", it.toString()) }
+
+                member.endYear?.let { drawText("endYear", it.toString()) }
+                member.endMonth?.let { drawText("endMonth", it.toString()) }
+                member.endDay?.let { drawText("endDay", it.toString()) }
+
                 drawCircle("isFacility")
                 drawCircle("agentCategory")
             }
@@ -106,56 +116,6 @@ class PdfEditor {
         }
 
         return output
-    }
-
-    fun editPdfDateOnly(
-        dateInput: DateInputView,
-        validPeriodInput: ValidPeriodInputView
-    ): File {
-
-        val output = File("edited.pdf")
-        val layout = LayoutLoader.loadLayout()
-        val template = extractTemplate()
-
-        PDDocument.load(template).use { doc ->
-            val page = doc.getPage(0)
-            val font = PDType0Font.load(doc, getFont())
-
-            PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, true).use { c ->
-
-                fun drawText(k: String, v: String) {
-                    layout.fields[k]?.let {
-                        c.beginText()
-                        c.setFont(font, it.fontSize)
-                        c.newLineAtOffset(it.x, it.y)
-                        c.showText(v)
-                        c.endText()
-                    }
-                }
-
-                drawDateParts("apply", dateInput, ::drawText)
-                drawDateParts("start", validPeriodInput.startDate, ::drawText)
-                drawDateParts("end", validPeriodInput.endDate, ::drawText)
-            }
-
-            doc.save(output)
-        }
-
-        return output
-    }
-
-    private fun drawDateParts(
-        prefix: String,
-        dateInput: DateInputView,
-        drawText: (String, String) -> Unit
-    ) {
-        val y = dateInput.yearBox.value
-        val m = dateInput.monthBox.value
-        val d = dateInput.dayBox.value
-
-        if (y != null) drawText("${prefix}Year", y.toString())
-        if (m != null) drawText("${prefix}Month", m.toString())
-        if (d != null) drawText("${prefix}Day", d.toString())
     }
 
     private fun extractTemplate(): File {
