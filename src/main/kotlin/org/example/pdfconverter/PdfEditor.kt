@@ -76,6 +76,11 @@ class PdfEditor {
                 }
                 careKey?.let { drawCircle(it) }
 
+                // ▼ 申請日（UI から直接渡された値）
+                applyYear?.let { drawText("applyYear", it.toString()) }
+                applyMonth?.let { drawText("applyMonth", it.toString()) }
+                applyDay?.let { drawText("applyDay", it.toString()) }
+
                 // 有効期間（Excel の値）
                 member.startYear?.let { drawText("startYear", it.toString()) }
                 member.startMonth?.let { drawText("startMonth", it.toString()) }
