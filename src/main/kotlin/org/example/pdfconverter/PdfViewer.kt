@@ -20,7 +20,6 @@ class PdfViewer : Application() {
     private lateinit var imageView: ImageView
     private var currentPdfFile: File = File("edited.pdf")
 
-    // ★ PDF編集専用クラス
     private val pdfEditor = PdfEditor()
 
     override fun start(stage: Stage) {
@@ -36,9 +35,6 @@ class PdfViewer : Application() {
         }
         root.center = scrollPane
 
-        // ======================
-        // ▼ 下部 UI
-        // ======================
         val combo = ComboBox<String>()
         val header = "名前を選択してください"
         combo.items.add(header)
