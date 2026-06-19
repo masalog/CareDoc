@@ -136,7 +136,9 @@ class PdfViewer : Application() {
     // ▼ PDF レンダリング（直列化 & 最新のみ反映）
     // ============================================
     private fun loadPdfAsync(file: File) {
-        Thread {
+        val seq = ++renderSeq  // このジョブの番号
+
+        renderExecutor.submit {
             println("PDF読み込み開始: ${file.absolutePath}")
 
             runCatching {
