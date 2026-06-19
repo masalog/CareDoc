@@ -39,10 +39,7 @@ class PdfViewer : Application() {
         combo.prefWidth = 250.0
         combo.value = header
 
-        val dateInput = DateInputView()
-        val validPeriodInput = ValidPeriodInputView()
-
-        val (members, commonList) = ExcelLoader.loadAll()
+        val applyDateInput = DateInputView()
 
         // ★ 共通データ（複数行 → 今は 0 行目を使用）
         val common = commonList.firstOrNull()
