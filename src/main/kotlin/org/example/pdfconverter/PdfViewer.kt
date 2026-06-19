@@ -1,6 +1,7 @@
 package org.example.pdfconverter
 
 import javafx.application.Application
+import javafx.application.Platform
 import javafx.embed.swing.SwingFXUtils
 import javafx.scene.Scene
 import javafx.scene.control.*
@@ -199,82 +200,41 @@ class PdfViewer : Application() {
                         }
                     }
 
-                    fun drawCircle(key: String) {
-                        layout.fields[key]?.let { pos ->
-                            content.beginText()
-                            content.setFont(font, pos.fontSize)
-                            content.newLineAtOffset(pos.x, pos.y)
-                            content.showText("〇")
-                            content.endText()
-                        }
-                    }
+    private fun exportPdf(stage: Stage, file: File) {
 
-                    // ▼ 通常項目
-                    for ((key, value) in values) {
-                        if (key == "gender") continue
-                        drawText(key, value)
-                    }
-
-                    // ▼ 性別丸印
-                    when (member.gender) {
-                        "男" -> drawCircle("genderMale")
-                        "女" -> drawCircle("genderFemale")
-                    }
-
-                    // ▼ 要介護区分丸印
-                    val careKey = when (member.careLevel) {
-                        "要介護1" -> "Long-term Care Level 1"
-                        "要介護2" -> "Long-term Care Level 2"
-                        "要介護3" -> "Long-term Care Level 3"
-                        "要介護4" -> "Long-term Care Level 4"
-                        "要介護5" -> "Long-term Care Level 5"
-                        "要支援1" -> "Support Level 1"
-                        "要支援2" -> "Support Level 2"
-                        else -> null
-                    }
-                    careKey?.let { drawCircle(it) }
-
-                    // ▼ 無条件丸印
-                    drawCircle("isFacility")
-                    drawCircle("agentCategory")
-                }
-
-                document.save(outputFile)
-            }
-        }
-
-        return outputFile
-    }
-
-    // ======================
-    // ▼ PDF 出力処理
-    // ======================
-    private fun exportPdf(stage: Stage): Boolean {
+        println("=== exportPdf() 開始 ===")
+        println("FXスレッド？ = ${Platform.isFxApplicationThread()}")
+        println("stage.isShowing = ${stage.isShowing}")
 
         val chooser = FileChooser().apply {
-            title = "PDF を保存"
+            title = "保存先を選択"
+
+            val home = File(System.getProperty("user.home"))
+            if (home.exists()) {
+                initialDirectory = home
+            }
+
+            initialFileName = "output.pdf" // ✅ 追加
             extensionFilters.add(FileChooser.ExtensionFilter("PDF Files", "*.pdf"))
-            initialFileName = "output.pdf"
         }
 
-        val saveFile = chooser.showSaveDialog(stage) ?: return false
+        val saveFile = chooser.showSaveDialog(stage)
 
-        return try {
-            currentPdfFile.copyTo(saveFile, overwrite = true)
-            true
+        println("ユーザーが選んだ保存先 = $saveFile")
+
+        if (saveFile == null) {
+            println("保存キャンセル（または表示失敗）")
+            return
+        }
+
+        try {
+            file.copyTo(saveFile, overwrite = true)
+            println("コピー成功！")
         } catch (e: Exception) {
             e.printStackTrace()
-            showError("PDF の保存に失敗しました。")
-            false
         }
     }
 
-    private fun showError(message: String) {
-        Alert(Alert.AlertType.ERROR).apply {
-            title = "エラー"
-            contentText = message
-        }.showAndWait()
-    }
 }
 
 fun main() {
