@@ -12,6 +12,7 @@ import javafx.stage.Stage
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.rendering.PDFRenderer
 import java.io.File
+import java.util.concurrent.Executors
 
 class PdfViewer : Application() {
 
@@ -19,6 +20,12 @@ class PdfViewer : Application() {
     private var currentPdfFile: File? = null
 
     private val pdfEditor = PdfEditor()
+
+    // ▼ PDF レンダリングを直列化する Executor
+    private val renderExecutor = Executors.newSingleThreadExecutor()
+
+    // ▼ 最新ジョブのみ反映するためのシーケンス番号
+    @Volatile private var renderSeq: Long = 0
 
     override fun start(stage: Stage) {
 
@@ -41,8 +48,20 @@ class PdfViewer : Application() {
 
         val applyDateInput = DateInputView()
 
-        val (members, common) = ExcelLoader.loadAll()
-        combo.items.addAll(members.map { it.name })
+        // -----------------------------
+        // Excel 読み込み（例外を UI に通知）
+        // -----------------------------
+        var members: List<Member> = emptyList()
+        var common: CommonData? = null
+
+        try {
+            val result = ExcelLoader.loadAll()
+            members = result.first
+            common = result.second
+            combo.items.addAll(members.map { it.name })
+        } catch (e: Exception) {
+            showError("Excel 読み込みエラー", "members.xlsx を読み込めませんでした。\n${e.message}")
+        }
 
         fun updatePdf() {
             val selected = combo.value
@@ -88,8 +107,12 @@ class PdfViewer : Application() {
         stage.title = "CareDoc"
         stage.show()
 
-        val templateStream = javaClass.getResourceAsStream("/templates/template.pdf")
-            ?: error("template.pdf が見つかりません")
+        // -----------------------------
+        // テンプレート読み込み（例外を UI に通知）
+        // -----------------------------
+        try {
+            val templateStream = javaClass.getResourceAsStream("/templates/template.pdf")
+                ?: throw IllegalStateException("template.pdf が見つかりません")
 
         val tempFile = File.createTempFile("template", ".pdf")
 
