@@ -65,7 +65,10 @@ class PdfViewer : Application() {
             loadPdfAsync(file)
         }
 
-        val exportButton = Button("出力")
+        combo.setOnAction { updatePdf() }
+        applyDateInput.setOnChange { updatePdf() }
+
+        val exportButton = Button("保存").apply { prefWidth = 120.0 }
         exportButton.setOnAction {
             if (exportPdf(stage)) stage.close()
         }
