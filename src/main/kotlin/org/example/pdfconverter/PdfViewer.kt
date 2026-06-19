@@ -20,6 +20,9 @@ class PdfViewer : Application() {
     private lateinit var imageView: ImageView
     private var currentPdfFile: File = File("edited.pdf")
 
+    // ★ PDF編集専用クラス
+    private val pdfEditor = PdfEditor()
+
     override fun start(stage: Stage) {
 
         val root = BorderPane()
