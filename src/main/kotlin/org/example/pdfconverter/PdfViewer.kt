@@ -21,10 +21,7 @@ class PdfViewer : Application() {
 
     private val pdfEditor = PdfEditor()
 
-    // ▼ PDF レンダリングを直列化する Executor
     private val renderExecutor = Executors.newSingleThreadExecutor()
-
-    // ▼ 最新ジョブのみ反映するためのシーケンス番号
     @Volatile private var renderSeq: Long = 0
 
     override fun start(stage: Stage) {
@@ -48,9 +45,6 @@ class PdfViewer : Application() {
 
         val applyDateInput = DateInputView()
 
-        // -----------------------------
-        // Excel 読み込み（例外を UI に通知）
-        // -----------------------------
         var members: List<Member> = emptyList()
         var common: CommonData? = null
 
@@ -81,7 +75,6 @@ class PdfViewer : Application() {
 
             println("PDF更新: ${file.absolutePath} サイズ=${file.length()} bytes")
 
-            currentPdfFile = file
             loadPdfAsync(file)
         }
 
@@ -90,7 +83,6 @@ class PdfViewer : Application() {
 
         val exportButton = Button("保存").apply { prefWidth = 120.0 }
         exportButton.setOnAction {
-            println("=== 保存ボタン押下 ===")
             currentPdfFile?.let { exportPdf(stage, it) }
                 ?: println("currentPdfFile が null のため保存できません")
         }
@@ -108,14 +100,11 @@ class PdfViewer : Application() {
         stage.title = "CareDoc"
         stage.show()
 
-        // -----------------------------
-        // テンプレート読み込み（例外を UI に通知）
-        // -----------------------------
         try {
             val templateStream = javaClass.getResourceAsStream("/templates/template.pdf")
                 ?: throw IllegalStateException("template.pdf が見つかりません")
 
-            val tempFile = File.createTempFile("template", ".pdf").apply { deleteOnExit() }
+            val tempFile = File.createTempFile("template", ".pdf")
 
             templateStream.use { input ->
                 tempFile.outputStream().use { output ->
@@ -123,9 +112,8 @@ class PdfViewer : Application() {
                 }
             }
 
-            println("テンプレート読込成功: ${tempFile.absolutePath} サイズ=${tempFile.length()} bytes")
+            println("テンプレート読込成功: ${tempFile.absolutePath}")
 
-            currentPdfFile = tempFile
             loadPdfAsync(tempFile)
 
         } catch (e: Exception) {
@@ -134,10 +122,10 @@ class PdfViewer : Application() {
     }
 
     // ============================================
-    // ▼ PDF レンダリング（直列化 & 最新のみ反映）
+    // ▼ PDF レンダリング（直列化 & 最新のみ反映 & 古いPDF削除）
     // ============================================
     private fun loadPdfAsync(file: File) {
-        val seq = ++renderSeq  // このジョブの番号
+        val seq = ++renderSeq
 
         renderExecutor.submit {
             println("PDF読み込み開始: ${file.absolutePath}")
@@ -148,12 +136,16 @@ class PdfViewer : Application() {
                 }
             }.onSuccess { image ->
                 Platform.runLater {
-                    // 最新ジョブのみ反映
                     if (seq == renderSeq) {
+
+                        // ▼ 古い PDF を削除
+                        currentPdfFile?.takeIf { it.exists() && it != file }?.delete()
+
+                        // ▼ 新しい PDF をセット
+                        currentPdfFile = file
+
                         println("PDF表示更新（seq=$seq）")
                         imageView.image = SwingFXUtils.toFXImage(image, null)
-                    } else {
-                        println("古いジョブのため破棄（seq=$seq）")
                     }
                 }
             }.onFailure { e ->
@@ -164,41 +156,18 @@ class PdfViewer : Application() {
     }
 
     private fun exportPdf(stage: Stage, file: File) {
-
-        println("=== exportPdf() 開始 ===")
-        println("FXスレッド？ = ${Platform.isFxApplicationThread()}")
-        println("stage.isShowing = ${stage.isShowing}")
-
         val chooser = FileChooser().apply {
             title = "保存先を選択"
-
-            val home = File(System.getProperty("user.home"))
-            if (home.exists()) {
-                initialDirectory = home
-            }
-
             initialFileName = "output.pdf"
             extensionFilters.add(FileChooser.ExtensionFilter("PDF Files", "*.pdf"))
         }
 
-        val saveFile = chooser.showSaveDialog(stage)
-
-        println("ユーザーが選んだ保存先 = $saveFile")
-
-        if (saveFile == null) {
-            println("保存キャンセル（または表示失敗）")
-            return
-        }
+        val saveFile = chooser.showSaveDialog(stage) ?: return
 
         try {
             file.copyTo(saveFile, overwrite = true)
-            println("コピー成功！")
         } catch (e: Exception) {
-            e.printStackTrace()
-            showError(
-                "PDF の保存に失敗しました",
-                "ファイルを保存できませんでした。\n原因: ${e.message}"
-            )
+            showError("PDF の保存に失敗しました", "原因: ${e.message}")
         }
     }
 
