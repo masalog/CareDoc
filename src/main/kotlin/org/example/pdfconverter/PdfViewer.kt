@@ -44,7 +44,9 @@ class PdfViewer : Application() {
         combo.items.add(header)
         combo.value = header
 
-        // ★ 個別 + 共通データをまとめて読み込み
+        val dateInput = DateInputView()
+        val validPeriodInput = ValidPeriodInputView()
+
         val (members, commonList) = ExcelLoader.loadAll()
 
         // ★ 共通データ（複数行 → 今は 0 行目を使用）
