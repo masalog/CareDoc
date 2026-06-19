@@ -6,9 +6,7 @@ import javafx.embed.swing.SwingFXUtils
 import javafx.scene.Scene
 import javafx.scene.control.*
 import javafx.scene.image.ImageView
-import javafx.scene.layout.BorderPane
-import javafx.scene.layout.HBox
-import javafx.scene.layout.VBox
+import javafx.scene.layout.*
 import javafx.stage.FileChooser
 import javafx.stage.Stage
 import org.apache.pdfbox.pdmodel.PDDocument
@@ -31,14 +29,14 @@ class PdfViewer : Application() {
         root.top = title
 
         imageView = ImageView()
-        val scrollPane = ScrollPane(imageView).apply {
-            isPannable = true
-        }
+        val stack = StackPane(imageView)
+        val scrollPane = ScrollPane(stack).apply { isPannable = true }
         root.center = scrollPane
 
         val combo = ComboBox<String>()
         val header = "名前を選択してください"
         combo.items.add(header)
+        combo.prefWidth = 250.0
         combo.value = header
 
         val dateInput = DateInputView()
