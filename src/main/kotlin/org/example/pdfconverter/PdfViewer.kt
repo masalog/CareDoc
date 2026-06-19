@@ -75,7 +75,12 @@ class PdfViewer : Application() {
                 ?: println("currentPdfFile が null のため保存できません")
         }
 
-        root.bottom = HBox(10.0, combo, exportButton)
+        val bottom = VBox(
+            15.0,
+            HBox(10.0, Label("利用者"), combo),
+            HBox(10.0, Label("申請日"), applyDateInput.toHBox()),
+            HBox(10.0, exportButton)
+        ).apply { style = "-fx-padding: 15px;" }
 
         // ======================
         // ▼ ウィンドウ設定
