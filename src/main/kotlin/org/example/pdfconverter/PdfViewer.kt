@@ -70,7 +70,9 @@ class PdfViewer : Application() {
 
         val exportButton = Button("保存").apply { prefWidth = 120.0 }
         exportButton.setOnAction {
-            if (exportPdf(stage)) stage.close()
+            println("=== 保存ボタン押下 ===")
+            currentPdfFile?.let { exportPdf(stage, it) }
+                ?: println("currentPdfFile が null のため保存できません")
         }
 
         root.bottom = HBox(10.0, combo, exportButton)
