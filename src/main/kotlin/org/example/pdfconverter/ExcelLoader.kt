@@ -9,16 +9,26 @@ import java.io.File
 // 個別データ
 // -------------------------
 data class Member(
+    val insuranceIdNumber: String,
     val name: String,
     val furigana: String,
-    val birthYear: Int,
-    val birthMonth: Int,
-    val birthDay: Int,
+
+    val birthYear: Int?,
+    val birthMonth: Int?,
+    val birthDay: Int?,
+
     val gender: String,
     val address: String,
     val phone: String,
-    val insuranceIdNumber: String,
-    val careLevel: String
+    val careLevel: String,
+
+    val startYear: Int?,
+    val startMonth: Int?,
+    val startDay: Int?,
+
+    val endYear: Int?,
+    val endMonth: Int?,
+    val endDay: Int?
 )
 
 // -------------------------
@@ -55,28 +65,60 @@ object ExcelLoader {
         val sheet = workbook.getSheet("個別")
             ?: throw IllegalArgumentException("「個別」シートが見つかりません")
 
-        val members = mutableListOf<Member>()
+        val list = mutableListOf<Member>()
 
-        for (rowIndex in 1..sheet.lastRowNum) {
-            val row = sheet.getRow(rowIndex) ?: continue
+        for (i in 1..sheet.lastRowNum) {
+            val row = sheet.getRow(i) ?: continue
 
-            members.add(
+            val insuranceId = formatter.formatCellValue(row.getCell(0))
+            val name = formatter.formatCellValue(row.getCell(1))
+
+            // ✅ 空行スキップ（重要）
+            if (name.isBlank()) continue
+
+            val furigana = formatter.formatCellValue(row.getCell(2))
+
+            val (birthY, birthM, birthD) =
+                parseDate(formatter.formatCellValue(row.getCell(3)))
+
+            val gender = formatter.formatCellValue(row.getCell(4))
+            val address = formatter.formatCellValue(row.getCell(5))
+            val phone = formatter.formatCellValue(row.getCell(6))
+            val careLevel = formatter.formatCellValue(row.getCell(7))
+
+            val (startY, startM, startD) =
+                parseDate(formatter.formatCellValue(row.getCell(8)))
+
+            val (endY, endM, endD) =
+                parseDate(formatter.formatCellValue(row.getCell(9)))
+
+            list.add(
                 Member(
-                    name = formatter.formatCellValue(row.getCell(0)),
-                    furigana = formatter.formatCellValue(row.getCell(1)),
-                    birthYear = formatter.formatCellValue(row.getCell(2)).toIntOrNull() ?: 0,
-                    birthMonth = formatter.formatCellValue(row.getCell(3)).toIntOrNull() ?: 0,
-                    birthDay = formatter.formatCellValue(row.getCell(4)).toIntOrNull() ?: 0,
-                    gender = formatter.formatCellValue(row.getCell(5)),
-                    address = formatter.formatCellValue(row.getCell(6)),
-                    phone = formatter.formatCellValue(row.getCell(7)),
-                    insuranceIdNumber = formatter.formatCellValue(row.getCell(8)),
-                    careLevel = formatter.formatCellValue(row.getCell(9))
+                    insuranceIdNumber = insuranceId,
+                    name = name,
+                    furigana = furigana,
+
+                    birthYear = birthY,
+                    birthMonth = birthM,
+                    birthDay = birthD,
+
+                    gender = gender,
+                    address = address,
+                    phone = phone,
+                    careLevel = careLevel,
+
+                    startYear = startY,
+                    startMonth = startM,
+                    startDay = startD,
+
+                    endYear = endY,
+                    endMonth = endM,
+                    endDay = endD
                 )
             )
         }
 
-        return members
+        return list
     }
 
     private fun loadCommon(workbook: Workbook): List<CommonData> {
