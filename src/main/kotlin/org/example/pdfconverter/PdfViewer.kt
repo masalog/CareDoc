@@ -162,10 +162,12 @@ class PdfViewer : Application() {
             }.onFailure { e ->
                 e.printStackTrace()
 
-                // ▼ 失敗した PDF は削除
-                file.takeIf { it.exists() && it != displayedPdfFile }?.delete()
+                Platform.runLater {
+                    // ▼ 失敗した PDF は削除
+                    file.takeIf { it.exists() && it != displayedPdfFile }?.delete()
 
-                showError("PDF 読み込みエラー", e.message ?: "不明なエラー")
+                    showError("PDF 読み込みエラー", e.message ?: "不明なエラー")
+                }
             }
         }
     }
