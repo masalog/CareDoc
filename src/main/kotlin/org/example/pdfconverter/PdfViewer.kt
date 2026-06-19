@@ -105,91 +105,20 @@ class PdfViewer : Application() {
         loadPdfAsync(tempFile)
     }
 
-    // ======================
-    // ▼ PDF 読み込み
-    // ======================
-    private fun loadPdf(file: File) {
-        try {
-            pdf?.close()
+    private fun loadPdfAsync(file: File) {
+        Thread {
+            println("PDF読み込み開始: ${file.absolutePath}")
 
-            pdf = PDDocument.load(file)
-            val renderer = PDFRenderer(pdf)
-            val image = renderer.renderImageWithDPI(0, 150f)
+            val doc = PDDocument.load(file)
+            val image = PDFRenderer(doc).renderImageWithDPI(0, 150f)
+            doc.close()
 
-            imageView.image = SwingFXUtils.toFXImage(image, null)
-
-        } catch (e: IOException) {
-            e.printStackTrace()
-            showError("PDF の読み込みに失敗しました: ${e.message}")
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-            showError("予期しないエラーが発生しました: ${e.message}")
-        }
+            Platform.runLater {
+                println("PDF表示更新")
+                imageView.image = SwingFXUtils.toFXImage(image, null)
+            }
+        }.start()
     }
-
-
-    // ======================
-    // ▼ PDF 編集処理（Member + CommonData）
-    // ======================
-    private fun editPdf(member: Member, common: CommonData): File {
-
-        val outputFile = File("edited.pdf")
-        val layout = LayoutLoader.loadLayout()
-
-        // ▼ 個別 + 共通データ
-        val values =
-            mapOf(
-                "name" to member.name,
-                "furigana" to member.furigana,
-                "birthYear" to member.birthYear.toString(),
-                "birthMonth" to member.birthMonth.toString(),
-                "birthDay" to member.birthDay.toString(),
-                "gender" to member.gender,
-                "address" to member.address,
-                "phone" to member.phone,
-                "Insurance ID Number" to member.insuranceIdNumber
-            ) + mapOf(
-                "facilityName" to common.facilityName,
-                "facilityPhone" to common.facilityPhone,
-                "institutionName" to common.institutionName,
-                "institutionAddress" to common.institutionAddress,
-                "agentName" to common.agentName,
-                "agentPostal" to common.agentPostal,
-                "agentAddress" to common.agentAddress,
-                "agentPhone" to common.agentPhone,
-                "doctorName" to common.doctorName,
-                "clinicName" to common.clinicName,
-                "clinicPostal" to common.clinicPostal,
-                "clinicAddress" to common.clinicAddress,
-                "clinicPhone" to common.clinicPhone
-            )
-
-        getTemplateStream().use { input ->
-            PDDocument.load(input).use { document ->
-
-                val page = document.getPage(0)
-                val font = PDType0Font.load(document, getFontStream())
-
-                PDPageContentStream(
-                    document,
-                    page,
-                    PDPageContentStream.AppendMode.APPEND,
-                    true
-                ).use { content ->
-
-                    // ============================
-                    // ▼ editPdf() 内の共通関数
-                    // ============================
-                    fun drawText(key: String, value: String) {
-                        layout.fields[key]?.let { pos ->
-                            content.beginText()
-                            content.setFont(font, pos.fontSize)
-                            content.newLineAtOffset(pos.x, pos.y)
-                            content.showText(value)
-                            content.endText()
-                        }
-                    }
 
     private fun exportPdf(stage: Stage, file: File) {
 
