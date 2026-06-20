@@ -31,6 +31,9 @@ data class Member(
     val endYear: Int?,
     val endMonth: Int?,
     val endDay: Int?
+
+    val specificDisease: String?
+
 )
 
 // -------------------------
@@ -124,8 +127,7 @@ object ExcelLoader {
             val (startY, startM, startD) =
                 parseDate(formatter.formatCellValue(row.getCell(8)))
 
-            val (endY, endM, endD) =
-                parseDate(formatter.formatCellValue(row.getCell(9)))
+            val specificDisease = safeCell(row, 11).ifBlank { null }
 
             list.add(
                 Member(
@@ -149,6 +151,8 @@ object ExcelLoader {
                     endYear = endY,
                     endMonth = endM,
                     endDay = endD
+
+                    specificDisease = specificDisease
                 )
             )
         }

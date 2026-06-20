@@ -14,6 +14,7 @@ class PdfEditor {
         applyYear: Int?,
         applyMonth: Int?,
         applyDay: Int?
+        changeRequestReason: String?
     ): File {
 
         // ▼ 固定ファイルではなく一時ファイルを使用
@@ -106,6 +107,9 @@ class PdfEditor {
                     drawText("clinicPostal", common.clinicPostal)
                     drawText("clinicAddress", common.clinicAddress)
                     drawText("clinicPhone", common.clinicPhone)
+                        // 特定疾病
+                        drawText("specificDisease", member.specificDisease ?: "")
+
 
                     drawCircle("isFacility")
                     drawCircle("agentCategory")
