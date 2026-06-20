@@ -87,18 +87,13 @@ object ExcelLoader {
         return try {
             val date = try {
                 LocalDate.parse(raw, jpFormatter)
-            } catch (e1: Exception) {
-                try {
-                    val d = LocalDate.parse(raw, usFormatter)
-                    val currentYear = LocalDate.now().year
-                    if (d.year > currentYear + 10) d.minusYears(100) else d
-                } catch (e2: Exception) {
-                    System.err.println("Invalid date format in Excel: '$raw'")
-                    throw e2
-                }
+            } catch (_: Exception) {
+                val d = LocalDate.parse(raw, usFormatter)
+                val currentYear = LocalDate.now().year
+                if (d.year > currentYear + 10) d.minusYears(100) else d
             }
             Triple(date.year, date.monthValue, date.dayOfMonth)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             Triple(null, null, null)
         }
     }
