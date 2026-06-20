@@ -121,8 +121,8 @@ object ExcelLoader {
             val phone = safeCell(row, 6)
             val careLevel = safeCell(row, 7)
 
-            val (startY, startM, startD) =
-                parseDate(formatter.formatCellValue(row.getCell(8)))
+            val (startY, startM, startD) = parseDate(safeCell(row, 8))
+            val (endY, endM, endD) = parseDate(safeCell(row, 9))
             val (instY, instM, instD) = parseDate(safeCell(row, 10))
 
             val specificDisease = safeCell(row, 11).ifBlank { null }
@@ -173,23 +173,26 @@ object ExcelLoader {
             ?: throw IllegalArgumentException("「共通」シートにデータがありません")
 
         return CommonData(
-            facilityName = formatter.formatCellValue(row.getCell(0)),
-            facilityPhone = formatter.formatCellValue(row.getCell(1)),
-            institutionName = formatter.formatCellValue(row.getCell(2)),
-            institutionAddress = formatter.formatCellValue(row.getCell(3)),
-            agentName = formatter.formatCellValue(row.getCell(4)),
-            agentPostal = formatter.formatCellValue(row.getCell(5)),
-            agentAddress = formatter.formatCellValue(row.getCell(6)),
-            agentPhone = formatter.formatCellValue(row.getCell(7)),
-            doctorName = formatter.formatCellValue(row.getCell(8)),
-            clinicName = formatter.formatCellValue(row.getCell(9)),
-            clinicPostal = formatter.formatCellValue(row.getCell(10)),
-            clinicAddress = formatter.formatCellValue(row.getCell(11)),
-            clinicPhone = formatter.formatCellValue(row.getCell(12))
+            surveyAddress = safeCell(row, 0),
+            surveyPhone = safeCell(row, 1),
+
+            facilityName = safeCell(row, 2),
+            facilityPhone = safeCell(row, 3),
 
             institutionName = safeCell(row, 4),
             institutionAddress = safeCell(row, 5),
 
+            agentName = safeCell(row, 6),
+            agentPostal = safeCell(row, 7),
+            agentAddress = safeCell(row, 8),
+            agentPhone = safeCell(row, 9),
+
+            doctorName = safeCell(row, 10),
+
+            clinicName = safeCell(row, 11),
+            clinicPostal = safeCell(row, 12),
+            clinicAddress = safeCell(row, 13),
+            clinicPhone = safeCell(row, 14)
         )
     }
 
