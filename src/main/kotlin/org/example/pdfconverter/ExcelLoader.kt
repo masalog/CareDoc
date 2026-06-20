@@ -40,6 +40,8 @@ data class Member(
 // 共通データ
 // -------------------------
 data class CommonData(
+    val surveyAddress: String,
+    val surveyPhone: String,
     val facilityName: String,
     val facilityPhone: String,
     val institutionName: String,

@@ -110,6 +110,8 @@ class PdfEditor {
                         // 特定疾病
                         drawText("specificDisease", member.specificDisease ?: "")
 
+                        drawText("Survey Location Address", common.surveyAddress)
+                        drawText("Survey Location Phone", common.surveyPhone)
 
                     drawCircle("isFacility")
                     drawCircle("agentCategory")
