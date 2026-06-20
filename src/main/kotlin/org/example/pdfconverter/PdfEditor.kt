@@ -122,6 +122,9 @@ class PdfEditor {
                     drawCircle("agentCategory")
                 }
 
+                    applyYear?.let { drawText("applyYear", it.toString()) }
+                    applyMonth?.let { drawText("applyMonth", it.toString()) }
+                    applyDay?.let { drawText("applyDay", it.toString()) }
                 doc.save(output)
             }
         }
