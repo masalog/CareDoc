@@ -112,6 +112,11 @@ class PdfEditor {
 
                         drawText("Survey Location Address", common.surveyAddress)
                         drawText("Survey Location Phone", common.surveyPhone)
+                        // 入所日
+                        member.institutionYear?.let { drawText("institutionYear", it.toString()) }
+                        member.institutionMonth?.let { drawText("institutionMonth", it.toString()) }
+                        member.institutionDay?.let { drawText("institutionDay", it.toString()) }
+
 
                     drawCircle("isFacility")
                     drawCircle("agentCategory")

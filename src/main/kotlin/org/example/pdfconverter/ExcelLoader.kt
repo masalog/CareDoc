@@ -1,6 +1,7 @@
 package org.example.pdfconverter
 
 import org.apache.poi.ss.usermodel.DataFormatter
+import org.apache.poi.ss.usermodel.Row
 import org.apache.poi.ss.usermodel.Workbook
 import org.apache.poi.ss.usermodel.WorkbookFactory
 import java.io.File
@@ -30,7 +31,11 @@ data class Member(
 
     val endYear: Int?,
     val endMonth: Int?,
-    val endDay: Int?
+    val endDay: Int?,
+
+    val institutionYear: Int?,
+    val institutionMonth: Int?,
+    val institutionDay: Int?,
 
     val specificDisease: String?
 
@@ -78,22 +83,14 @@ object ExcelLoader {
                 try {
                     val d = LocalDate.parse(raw, usFormatter)
                     val currentYear = LocalDate.now().year
-
-                    if (d.year > currentYear + 10) {
-                        d.minusYears(100)
-                    } else {
-                        d
-                    }
+                    if (d.year > currentYear + 10) d.minusYears(100) else d
                 } catch (e2: Exception) {
-                    System.err.println("Invalid date format in Excel (JP/US failed): '$raw'")
+                    System.err.println("Invalid date format in Excel: '$raw'")
                     throw e2
                 }
             }
-
             Triple(date.year, date.monthValue, date.dayOfMonth)
-
         } catch (e: Exception) {
-            System.err.println("Date parse error: '$raw' (${e.message})")
             Triple(null, null, null)
         }
     }
@@ -110,24 +107,23 @@ object ExcelLoader {
         for (i in 1..sheet.lastRowNum) {
             val row = sheet.getRow(i) ?: continue
 
-            val insuranceId = formatter.formatCellValue(row.getCell(0))
-            val name = formatter.formatCellValue(row.getCell(1))
+            val insuranceId = safeCell(row, 0)
+            val name = safeCell(row, 1)
 
-            // 空行スキップ
             if (name.isBlank()) continue
 
-            val furigana = formatter.formatCellValue(row.getCell(2))
+            val furigana = safeCell(row, 2)
 
-            val (birthY, birthM, birthD) =
-                parseDate(formatter.formatCellValue(row.getCell(3)))
+            val (birthY, birthM, birthD) = parseDate(safeCell(row, 3))
 
-            val gender = formatter.formatCellValue(row.getCell(4))
-            val address = formatter.formatCellValue(row.getCell(5))
-            val phone = formatter.formatCellValue(row.getCell(6))
-            val careLevel = formatter.formatCellValue(row.getCell(7))
+            val gender = safeCell(row, 4)
+            val address = safeCell(row, 5)
+            val phone = safeCell(row, 6)
+            val careLevel = safeCell(row, 7)
 
             val (startY, startM, startD) =
                 parseDate(formatter.formatCellValue(row.getCell(8)))
+            val (instY, instM, instD) = parseDate(safeCell(row, 10))
 
             val specificDisease = safeCell(row, 11).ifBlank { null }
 
@@ -152,7 +148,11 @@ object ExcelLoader {
 
                     endYear = endY,
                     endMonth = endM,
-                    endDay = endD
+                    endDay = endD,
+
+                    institutionYear = instY,
+                    institutionMonth = instM,
+                    institutionDay = instD,
 
                     specificDisease = specificDisease
                 )
@@ -163,7 +163,7 @@ object ExcelLoader {
     }
 
     // -------------------------
-    // 共通データ（1件想定）
+    // 共通データ
     // -------------------------
     private fun loadCommon(workbook: Workbook): CommonData {
         val sheet = workbook.getSheet("共通")
@@ -186,6 +186,10 @@ object ExcelLoader {
             clinicPostal = formatter.formatCellValue(row.getCell(10)),
             clinicAddress = formatter.formatCellValue(row.getCell(11)),
             clinicPhone = formatter.formatCellValue(row.getCell(12))
+
+            institutionName = safeCell(row, 4),
+            institutionAddress = safeCell(row, 5),
+
         )
     }
 
