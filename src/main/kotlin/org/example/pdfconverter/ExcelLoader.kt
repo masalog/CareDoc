@@ -70,7 +70,15 @@ object ExcelLoader {
     private val usFormatter = DateTimeFormatter.ofPattern("M/d/yy")
 
     // -------------------------
-    // ✅ 日付変換（ログ付き安定版）
+    // 空白セルでもズレない安全な読み取り
+    // -------------------------
+    private fun safeCell(row: Row, index: Int): String {
+        val cell = row.getCell(index, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK)
+        return formatter.formatCellValue(cell).trim()
+    }
+
+    // -------------------------
+    // 日付変換
     // -------------------------
     private fun parseDate(text: String): Triple<Int?, Int?, Int?> {
         val raw = text.trim()
