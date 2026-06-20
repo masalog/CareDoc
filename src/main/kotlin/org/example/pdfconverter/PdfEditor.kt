@@ -31,11 +31,18 @@ class PdfEditor {
 
                     fun drawText(key: String, value: String) {
                         layout.fields[key]?.let {
-                            c.beginText()
-                            c.setFont(font, it.fontSize)
-                            c.newLineAtOffset(it.x, it.y)
-                            c.showText(value)
-                            c.endText()
+
+                            val lines = value.split("\n")
+
+                            lines.forEachIndexed { i, line ->
+                                if (line.isEmpty()) return@forEachIndexed
+
+                                c.beginText()
+                                c.setFont(font, it.fontSize)
+                                c.newLineAtOffset(it.x, it.y - i * (it.fontSize + 2))
+                                c.showText(line)
+                                c.endText()
+                            }
                         }
                     }
 
@@ -122,6 +129,13 @@ class PdfEditor {
                     applyYear?.let { drawText("applyYear", it.toString()) }
                     applyMonth?.let { drawText("applyMonth", it.toString()) }
                     applyDay?.let { drawText("applyDay", it.toString()) }
+
+
+                    println("reason raw = [$changeRequestReason]")
+                        drawText("Change Request Reason", changeRequestReason ?: "")
+
+                }
+
                 doc.save(output)
             }
         }
