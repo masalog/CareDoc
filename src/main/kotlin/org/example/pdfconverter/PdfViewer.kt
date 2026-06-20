@@ -43,6 +43,12 @@ class PdfViewer : Application() {
         combo.prefWidth = 250.0
         combo.value = header
 
+        val reasonArea = TextArea().apply {
+            promptText = "変更申請の理由を入力してください"
+            prefRowCount = 2
+            isWrapText = true
+        }
+
         val applyDateInput = DateInputView()
 
         var members: List<Member> = emptyList()
@@ -58,28 +64,45 @@ class PdfViewer : Application() {
         }
 
         fun updatePdf() {
+            println("🔥 updatePdf呼ばれた")
+
             val selected = combo.value
-            if (selected == header) return
+
             if (common == null) return
 
-            val member = members.firstOrNull { it.name == selected } ?: return
             val (year, month, day) = applyDateInput.getDate()
 
+            // ✅ ここがポイント
+            val member = if (selected == header) {
+                null   // 未選択
+            } else {
+                members.firstOrNull { it.name == selected }
+            }
+
             val file = pdfEditor.editPdf(
-                member = member,
+                member = member,   // ← null or Member
                 common = common!!,
                 applyYear = year,
                 applyMonth = month,
-                applyDay = day
+                applyDay = day,
+                changeRequestReason = reasonArea.text
             )
-
-            println("PDF更新: ${file.absolutePath} サイズ=${file.length()} bytes")
 
             loadPdfAsync(file)
         }
 
         combo.setOnAction { updatePdf() }
         applyDateInput.setOnChange { updatePdf() }
+
+
+        reasonArea.textProperty().addListener { _, _, new ->
+            println("Text changed: [$new]")
+
+            // ✅ commonが無いなら何もしない
+            if (common == null) return@addListener
+
+            updatePdf()
+        }
 
         val exportButton = Button("保存").apply { prefWidth = 120.0 }
         exportButton.setOnAction {
@@ -91,6 +114,7 @@ class PdfViewer : Application() {
             15.0,
             HBox(10.0, Label("利用者"), combo),
             HBox(10.0, Label("申請日"), applyDateInput.toHBox()),
+            HBox(10.0, Label("変更申請理由"), reasonArea),
             HBox(10.0, exportButton)
         ).apply { style = "-fx-padding: 15px;" }
 

@@ -64,6 +64,16 @@ fields:
     y: 559
     fontSize: 12
 
+  "Survey Location Address":
+    x: 400
+    y: 610
+    fontSize: 8
+
+  "Survey Location Phone":
+    x: 900
+    y: 610
+    fontSize: 12
+
   "Long-term Care Level 1":
     x: 528
     y: 706
@@ -129,6 +139,11 @@ fields:
     y: 760
     fontSize: 12
 
+  "Change Request Reason":
+    x: 390
+    y: 840
+    fontSize: 12
+
   facilityName:
     x: 440
     y: 659
@@ -151,6 +166,21 @@ fields:
 
   institutionAddress:
     x: 497
+    y: 927
+    fontSize: 8
+
+  institutionYear:
+    x: 725
+    y: 927
+    fontSize: 8
+
+  institutionMonth:
+    x: 805
+    y: 927
+    fontSize: 8
+
+  institutionDay:
+    x: 863
     y: 927
     fontSize: 8
 
@@ -202,4 +232,9 @@ fields:
   clinicPhone:
     x: 920
     y: 1339
+    fontSize: 12
+
+  specificDisease:
+    x: 497
+    y: 1407
     fontSize: 12

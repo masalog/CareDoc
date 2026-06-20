@@ -1,6 +1,7 @@
 package org.example.pdfconverter
 
 import org.apache.poi.ss.usermodel.DataFormatter
+import org.apache.poi.ss.usermodel.Row
 import org.apache.poi.ss.usermodel.Workbook
 import org.apache.poi.ss.usermodel.WorkbookFactory
 import java.io.File
@@ -30,13 +31,22 @@ data class Member(
 
     val endYear: Int?,
     val endMonth: Int?,
-    val endDay: Int?
+    val endDay: Int?,
+
+    val institutionYear: Int?,
+    val institutionMonth: Int?,
+    val institutionDay: Int?,
+
+    val specificDisease: String?
+
 )
 
 // -------------------------
 // 共通データ
 // -------------------------
 data class CommonData(
+    val surveyAddress: String,
+    val surveyPhone: String,
     val facilityName: String,
     val facilityPhone: String,
     val institutionName: String,
@@ -60,7 +70,15 @@ object ExcelLoader {
     private val usFormatter = DateTimeFormatter.ofPattern("M/d/yy")
 
     // -------------------------
-    // ✅ 日付変換（ログ付き安定版）
+    // 空白セルでもズレない安全な読み取り
+    // -------------------------
+    private fun safeCell(row: Row, index: Int): String {
+        val cell = row.getCell(index, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK)
+        return formatter.formatCellValue(cell).trim()
+    }
+
+    // -------------------------
+    // 日付変換
     // -------------------------
     private fun parseDate(text: String): Triple<Int?, Int?, Int?> {
         val raw = text.trim()
@@ -69,26 +87,13 @@ object ExcelLoader {
         return try {
             val date = try {
                 LocalDate.parse(raw, jpFormatter)
-            } catch (e1: Exception) {
-                try {
-                    val d = LocalDate.parse(raw, usFormatter)
-                    val currentYear = LocalDate.now().year
-
-                    if (d.year > currentYear + 10) {
-                        d.minusYears(100)
-                    } else {
-                        d
-                    }
-                } catch (e2: Exception) {
-                    System.err.println("Invalid date format in Excel (JP/US failed): '$raw'")
-                    throw e2
-                }
+            } catch (_: Exception) {
+                val d = LocalDate.parse(raw, usFormatter)
+                val currentYear = LocalDate.now().year
+                if (d.year > currentYear + 10) d.minusYears(100) else d
             }
-
             Triple(date.year, date.monthValue, date.dayOfMonth)
-
-        } catch (e: Exception) {
-            System.err.println("Date parse error: '$raw' (${e.message})")
+        } catch (_: Exception) {
             Triple(null, null, null)
         }
     }
@@ -105,27 +110,25 @@ object ExcelLoader {
         for (i in 1..sheet.lastRowNum) {
             val row = sheet.getRow(i) ?: continue
 
-            val insuranceId = formatter.formatCellValue(row.getCell(0))
-            val name = formatter.formatCellValue(row.getCell(1))
+            val insuranceId = safeCell(row, 0)
+            val name = safeCell(row, 1)
 
-            // 空行スキップ
             if (name.isBlank()) continue
 
-            val furigana = formatter.formatCellValue(row.getCell(2))
+            val furigana = safeCell(row, 2)
 
-            val (birthY, birthM, birthD) =
-                parseDate(formatter.formatCellValue(row.getCell(3)))
+            val (birthY, birthM, birthD) = parseDate(safeCell(row, 3))
 
-            val gender = formatter.formatCellValue(row.getCell(4))
-            val address = formatter.formatCellValue(row.getCell(5))
-            val phone = formatter.formatCellValue(row.getCell(6))
-            val careLevel = formatter.formatCellValue(row.getCell(7))
+            val gender = safeCell(row, 4)
+            val address = safeCell(row, 5)
+            val phone = safeCell(row, 6)
+            val careLevel = safeCell(row, 7)
 
-            val (startY, startM, startD) =
-                parseDate(formatter.formatCellValue(row.getCell(8)))
+            val (startY, startM, startD) = parseDate(safeCell(row, 8))
+            val (endY, endM, endD) = parseDate(safeCell(row, 9))
+            val (instY, instM, instD) = parseDate(safeCell(row, 10))
 
-            val (endY, endM, endD) =
-                parseDate(formatter.formatCellValue(row.getCell(9)))
+            val specificDisease = safeCell(row, 11).ifBlank { null }
 
             list.add(
                 Member(
@@ -148,7 +151,13 @@ object ExcelLoader {
 
                     endYear = endY,
                     endMonth = endM,
-                    endDay = endD
+                    endDay = endD,
+
+                    institutionYear = instY,
+                    institutionMonth = instM,
+                    institutionDay = instD,
+
+                    specificDisease = specificDisease
                 )
             )
         }
@@ -157,7 +166,7 @@ object ExcelLoader {
     }
 
     // -------------------------
-    // 共通データ（1件想定）
+    // 共通データ
     // -------------------------
     private fun loadCommon(workbook: Workbook): CommonData {
         val sheet = workbook.getSheet("共通")
@@ -167,19 +176,26 @@ object ExcelLoader {
             ?: throw IllegalArgumentException("「共通」シートにデータがありません")
 
         return CommonData(
-            facilityName = formatter.formatCellValue(row.getCell(0)),
-            facilityPhone = formatter.formatCellValue(row.getCell(1)),
-            institutionName = formatter.formatCellValue(row.getCell(2)),
-            institutionAddress = formatter.formatCellValue(row.getCell(3)),
-            agentName = formatter.formatCellValue(row.getCell(4)),
-            agentPostal = formatter.formatCellValue(row.getCell(5)),
-            agentAddress = formatter.formatCellValue(row.getCell(6)),
-            agentPhone = formatter.formatCellValue(row.getCell(7)),
-            doctorName = formatter.formatCellValue(row.getCell(8)),
-            clinicName = formatter.formatCellValue(row.getCell(9)),
-            clinicPostal = formatter.formatCellValue(row.getCell(10)),
-            clinicAddress = formatter.formatCellValue(row.getCell(11)),
-            clinicPhone = formatter.formatCellValue(row.getCell(12))
+            surveyAddress = safeCell(row, 0),
+            surveyPhone = safeCell(row, 1),
+
+            facilityName = safeCell(row, 2),
+            facilityPhone = safeCell(row, 3),
+
+            institutionName = safeCell(row, 4),
+            institutionAddress = safeCell(row, 5),
+
+            agentName = safeCell(row, 6),
+            agentPostal = safeCell(row, 7),
+            agentAddress = safeCell(row, 8),
+            agentPhone = safeCell(row, 9),
+
+            doctorName = safeCell(row, 10),
+
+            clinicName = safeCell(row, 11),
+            clinicPostal = safeCell(row, 12),
+            clinicAddress = safeCell(row, 13),
+            clinicPhone = safeCell(row, 14)
         )
     }
 
