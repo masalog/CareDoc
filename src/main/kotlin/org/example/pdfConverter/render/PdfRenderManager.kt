@@ -15,10 +15,7 @@ class PdfRenderManager : AutoCloseable {
     private val renderExecutor = Executors.newSingleThreadExecutor()
     private val jobManager = RenderJobManager()
     private val executor = RenderExecutor()
-
-    // ▼ 最新ジョブのみ反映するためのシーケンス番号
-    @Volatile
-    private var renderSeq: Long = 0
+    private val displayController = PdfDisplayController()
 
     // ▼ 現在表示中の PDF（FX スレッドのみでアクセス）
     private var displayedPdfFile: File? = null
@@ -48,20 +45,17 @@ class PdfRenderManager : AutoCloseable {
                         old?.takeIf { it.exists() && it != file }?.delete()
 
                         println("PDF表示更新（seq=$seq）")
-
-                        onSuccess(image, file)
-
+                        displayController.updateDisplay(image, file, onSuccess)
                     } else {
+                        println("古いジョブのため破棄・削除（seq=$seq）")
                         file.delete()
                         println("古いジョブのため破棄・削除（seq=$seq）")
                     }
                 }
             }.onFailure { e ->
                 e.printStackTrace()
-
                 Platform.runLater {
-                    file.takeIf { it.exists() && it != displayedPdfFile }?.delete()
-                    onError(e)
+                    displayController.handleError(file, null, onError, e)
                 }
             }
         }
