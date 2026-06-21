@@ -18,20 +18,37 @@ src/
     ├── kotlin/
     │   └── org/
     │       └── example/
-    │           └── pdfconverter/
-    │               ├── PdfViewer.kt
-    │               ├── YamlLoader.kt
-    │               ├── ExcelLoader.kt
+    │           └── pdfConverter/
     │               ├── Launcher.kt
-    │               └── utility/
-    │                   ├── PdfPositionConverter.kt
-    │                   └── PdfSizeChecker.kt
+    │               ├── model/
+    │               │   ├── CommonData.kt
+    │               │   ├── Member.kt
+    │               │   ├── PdfLayout.kt
+    │               │   └── FieldPosition.kt
+    │               ├── render/
+    │               │   └── PdfRenderManager.kt
+    │               ├── view/
+    │               │   └── PdfViewer.kt
+    │               ├── repository/
+    │               │   ├── PdfRepository.kt
+    │               │   ├── ExcelLoader.kt
+    │               │   └── YamlLoader.kt
+    │               ├── service/
+    │               │   └── PdfEditor.kt
+    │               ├── util/
+    │               │   ├── PdfPositionConverter.kt
+    │               │   └── PdfSizeChecker.kt
+    │               └── viewModel/
+    │                   ├── PdfUpdateViewModel.kt
+    │                   └── DateInputViewModel.kt
     └── resources/
         ├── fonts/
+        │   └── NotoSansJP-Regular.ttf
         ├── positions/
         │   ├── converted_positions.yaml
         │   └── raw_positions.yaml
         └── templates/
+            └── template.pdf
 ```
 
 ## 🛠 使用技術

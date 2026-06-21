@@ -1,16 +1,9 @@
-package org.example.pdfconverter
+package org.example.pdfConverter.repository
 
+import org.example.pdfConverter.view.PdfViewer
 import org.yaml.snakeyaml.Yaml
-
-data class FieldPosition(
-    val x: Float,
-    val y: Float,
-    val fontSize: Float
-)
-
-data class PdfLayout(
-    val fields: Map<String, FieldPosition>
-)
+import org.example.pdfConverter.model.FieldPosition
+import org.example.pdfConverter.model.PdfLayout
 
 object LayoutLoader {
 

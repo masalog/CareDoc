@@ -1,6 +1,7 @@
-package org.example.pdfconverter
+package org.example.pdfConverter
 
 import javafx.application.Application
+import org.example.pdfConverter.view.PdfViewer
 
 object Launcher {
     @JvmStatic

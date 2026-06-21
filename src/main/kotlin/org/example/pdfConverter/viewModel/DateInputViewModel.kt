@@ -1,4 +1,4 @@
-package org.example.pdfconverter
+package org.example.pdfConverter.viewModel
 
 import javafx.geometry.Insets
 import javafx.scene.control.ComboBox
@@ -6,7 +6,7 @@ import javafx.scene.layout.HBox
 import java.time.LocalDate
 import java.time.YearMonth
 
-class DateInputView {
+class DateInputViewModel {
 
     val yearBox = ComboBox<Int>()
     val monthBox = ComboBox<Int>()

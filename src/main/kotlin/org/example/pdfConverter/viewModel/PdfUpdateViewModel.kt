@@ -1,0 +1,91 @@
+package org.example.pdfConverter.viewModel
+
+import javafx.beans.property.SimpleObjectProperty
+import javafx.scene.image.Image
+import org.example.pdfConverter.model.CommonData
+import org.example.pdfConverter.model.Member
+import org.example.pdfConverter.render.PdfRenderManager
+import org.example.pdfConverter.repository.PdfRepository
+import org.example.pdfConverter.service.PdfEditor
+import java.io.File
+
+class PdfUpdateViewModel(
+    private val pdfEditor: PdfEditor,
+    private val pdfRepository: PdfRepository,
+    private val renderManager: PdfRenderManager
+) {
+
+    val currentImage = SimpleObjectProperty<Image>()
+    val currentPdfFile = SimpleObjectProperty<File?>()
+
+    /**
+     * PDF を編集して、レンダリングを依頼する
+     */
+    fun updatePdf(
+        member: Member?,
+        common: CommonData,
+        reason: String,
+        date: Triple<Int?, Int?, Int?>
+    ) {
+        val (year, month, day) = date
+
+        val file = pdfEditor.editPdf(
+            member = member,
+            common = common,
+            applyYear = year,
+            applyMonth = month,
+            applyDay = day,
+            changeRequestReason = reason
+        )
+
+        // ▼ 非同期レンダリングへ
+        loadPdfAsync(file)
+    }
+
+    /**
+     * 同期読み込み（必要なら残す）
+     */
+    fun loadPdf(file: File) {
+        currentPdfFile.set(file)
+        currentImage.set(pdfRepository.loadFirstPage(file))
+    }
+
+    /**
+     * PdfRenderManager に非同期レンダリングを依頼する
+     */
+    fun loadPdfAsync(file: File) {
+
+        // ▼ 前回の一時ファイルを削除（ViewModel が所有者）
+        currentPdfFile.get()
+            ?.takeIf { it.exists() && it != file }
+            ?.delete()
+
+        renderManager.loadPdfAsync(
+            file = file,
+            onSuccess = { image, newFile ->
+                currentImage.set(image)
+                currentPdfFile.set(newFile)
+            },
+            onError = { e ->
+                e.printStackTrace()
+
+                // ▼ 失敗したファイルも ViewModel が削除
+                file.takeIf { it.exists() && it != currentPdfFile.get() }?.delete()
+            }
+        )
+    }
+
+    fun dispose() {
+        // Executor の終了
+        renderManager.close()
+
+        // 最後に残った一時ファイルを削除
+        currentPdfFile.get()?.takeIf { it.exists() }?.delete()
+    }
+
+    fun exportPdfTo(target: File) {
+        val src = currentPdfFile.get() ?: return
+        src.copyTo(target, overwrite = true)
+    }
+
+}
