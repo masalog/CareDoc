@@ -1,4 +1,4 @@
-package org.example.pdfconverter.repository
+package org.example.pdfConverter.repository
 
 import javafx.embed.swing.SwingFXUtils
 import javafx.scene.image.Image

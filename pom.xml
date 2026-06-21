@@ -134,7 +134,7 @@
         <artifactId>javafx-maven-plugin</artifactId>
         <version>0.0.8</version>
         <configuration>
-          <mainClass>org.example.pdfconverter.Launcher</mainClass>
+          <mainClass>org.example.pdfConverter.Launcher</mainClass>
         </configuration>
       </plugin>
 

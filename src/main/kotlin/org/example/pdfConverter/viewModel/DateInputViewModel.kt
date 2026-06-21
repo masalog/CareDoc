@@ -1,4 +1,4 @@
-package org.example.pdfconverter.viewModel
+package org.example.pdfConverter.viewModel
 
 import javafx.geometry.Insets
 import javafx.scene.control.ComboBox

@@ -1,8 +1,8 @@
-package org.example.pdfconverter.render
+package org.example.pdfConverter.render
 
 import javafx.application.Platform
 import javafx.scene.image.Image
-import org.example.pdfconverter.repository.PdfRepository
+import org.example.pdfConverter.repository.PdfRepository
 import java.io.File
 import java.util.concurrent.Executors
 

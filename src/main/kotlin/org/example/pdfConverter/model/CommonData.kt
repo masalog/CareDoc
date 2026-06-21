@@ -1,4 +1,4 @@
-package org.example.pdfconverter.model
+package org.example.pdfConverter.model
 
 data class CommonData(
     val surveyAddress: String,

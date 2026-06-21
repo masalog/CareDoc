@@ -1,12 +1,12 @@
-package org.example.pdfconverter.viewModel
+package org.example.pdfConverter.viewModel
 
 import javafx.beans.property.SimpleObjectProperty
 import javafx.scene.image.Image
-import org.example.pdfconverter.model.CommonData
-import org.example.pdfconverter.model.Member
-import org.example.pdfconverter.render.PdfRenderManager
-import org.example.pdfconverter.repository.PdfRepository
-import org.example.pdfconverter.service.PdfEditor
+import org.example.pdfConverter.model.CommonData
+import org.example.pdfConverter.model.Member
+import org.example.pdfConverter.render.PdfRenderManager
+import org.example.pdfConverter.repository.PdfRepository
+import org.example.pdfConverter.service.PdfEditor
 import java.io.File
 
 class PdfUpdateViewModel(

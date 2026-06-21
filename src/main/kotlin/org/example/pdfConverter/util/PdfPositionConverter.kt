@@ -1,4 +1,4 @@
-package org.example.pdfconverter.util
+package org.example.pdfConverter.util
 
 import org.yaml.snakeyaml.Yaml
 import java.io.File

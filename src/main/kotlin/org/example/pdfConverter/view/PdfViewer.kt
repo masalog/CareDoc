@@ -1,4 +1,4 @@
-package org.example.pdfconverter.view
+package org.example.pdfConverter.view
 
 import javafx.application.Application
 import javafx.application.Platform
@@ -8,15 +8,15 @@ import javafx.scene.image.ImageView
 import javafx.scene.layout.*
 import javafx.stage.FileChooser
 import javafx.stage.Stage
-import org.example.pdfconverter.model.CommonData
-import org.example.pdfconverter.viewModel.DateInputViewModel
-import org.example.pdfconverter.repository.ExcelLoader
-import org.example.pdfconverter.model.Member
-import org.example.pdfconverter.service.PdfEditor
+import org.example.pdfConverter.model.CommonData
+import org.example.pdfConverter.viewModel.DateInputViewModel
+import org.example.pdfConverter.repository.ExcelLoader
+import org.example.pdfConverter.model.Member
+import org.example.pdfConverter.service.PdfEditor
 import java.io.File
-import org.example.pdfconverter.repository.PdfRepository
-import org.example.pdfconverter.viewModel.PdfUpdateViewModel
-import org.example.pdfconverter.render.PdfRenderManager
+import org.example.pdfConverter.repository.PdfRepository
+import org.example.pdfConverter.viewModel.PdfUpdateViewModel
+import org.example.pdfConverter.render.PdfRenderManager
 
 class PdfViewer : Application() {
 

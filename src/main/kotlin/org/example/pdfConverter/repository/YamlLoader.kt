@@ -1,9 +1,9 @@
-package org.example.pdfconverter.repository
+package org.example.pdfConverter.repository
 
-import org.example.pdfconverter.view.PdfViewer
+import org.example.pdfConverter.view.PdfViewer
 import org.yaml.snakeyaml.Yaml
-import org.example.pdfconverter.model.FieldPosition
-import org.example.pdfconverter.model.PdfLayout
+import org.example.pdfConverter.model.FieldPosition
+import org.example.pdfConverter.model.PdfLayout
 
 object LayoutLoader {
 

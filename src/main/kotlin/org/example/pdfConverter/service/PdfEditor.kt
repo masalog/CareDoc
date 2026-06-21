@@ -1,11 +1,11 @@
-package org.example.pdfconverter.service
+package org.example.pdfConverter.service
 
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.PDPageContentStream
 import org.apache.pdfbox.pdmodel.font.PDType0Font
-import org.example.pdfconverter.model.CommonData
-import org.example.pdfconverter.repository.LayoutLoader
-import org.example.pdfconverter.model.Member
+import org.example.pdfConverter.model.CommonData
+import org.example.pdfConverter.repository.LayoutLoader
+import org.example.pdfConverter.model.Member
 import java.io.File
 import java.io.InputStream
 
