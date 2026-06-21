@@ -54,6 +54,12 @@ class PdfUpdateViewModel(
      * PdfRenderManager に非同期レンダリングを依頼する
      */
     fun loadPdfAsync(file: File) {
+
+        // ▼ 前回の一時ファイルを削除（ViewModel が所有者）
+        currentPdfFile.get()
+            ?.takeIf { it.exists() && it != file }
+            ?.delete()
+
         renderManager.loadPdfAsync(
             file = file,
             onSuccess = { image, newFile ->
@@ -62,6 +68,9 @@ class PdfUpdateViewModel(
             },
             onError = { e ->
                 e.printStackTrace()
+
+                // ▼ 失敗したファイルも ViewModel が削除
+                file.takeIf { it.exists() && it != currentPdfFile.get() }?.delete()
             }
         )
     }
