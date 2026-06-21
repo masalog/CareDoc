@@ -6,7 +6,7 @@ import org.example.pdfConverter.repository.PdfRepository
 import java.io.File
 import java.util.concurrent.Executors
 
-class PdfRenderManager {
+class PdfRenderManager : AutoCloseable {
 
     // ▼ PDF 読み込み用 Repository
     private val pdfRepository = PdfRepository()
@@ -47,11 +47,9 @@ class PdfRenderManager {
 
                         println("PDF表示更新（seq=$seq）")
 
-                        // ▼ 呼び出し元（ViewModel）に通知
                         onSuccess(image, file)
 
                     } else {
-                        // ▼ 古いジョブの PDF は削除
                         file.delete()
                         println("古いジョブのため破棄・削除（seq=$seq）")
                     }
@@ -60,12 +58,17 @@ class PdfRenderManager {
                 e.printStackTrace()
 
                 Platform.runLater {
-                    // ▼ 失敗した PDF は削除
                     file.takeIf { it.exists() && it != displayedPdfFile }?.delete()
-
                     onError(e)
                 }
             }
         }
+    }
+
+    /**
+     * Executor の終了処理
+     */
+    override fun close() {
+        renderExecutor.shutdown()
     }
 }
