@@ -13,6 +13,7 @@ class PdfRenderManager : AutoCloseable {
 
     // ▼ 直列実行のための Executor
     private val renderExecutor = Executors.newSingleThreadExecutor()
+    private val jobManager = RenderJobManager()
 
     // ▼ 最新ジョブのみ反映するためのシーケンス番号
     @Volatile
@@ -29,7 +30,7 @@ class PdfRenderManager : AutoCloseable {
         onSuccess: (Image, File) -> Unit,
         onError: (Throwable) -> Unit
     ) {
-        val seq = ++renderSeq
+        val seq = jobManager.nextSeq()
 
         renderExecutor.submit {
             println("PDF読み込み開始: ${file.absolutePath}")
