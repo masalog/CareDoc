@@ -10,6 +10,7 @@ class PdfRepository {
 
     fun loadFirstPage(file: File, dpi: Float = 150f): Image {
         PDDocument.load(file).use { doc ->
+            require(doc.numberOfPages > 0) { "PDF にページがありません: ${file.absolutePath}" }
             val renderer = PDFRenderer(doc)
             val buffered = renderer.renderImageWithDPI(0, dpi)  // ← BufferedImage
             return SwingFXUtils.toFXImage(buffered, null)       // ← Image に変換
