@@ -133,6 +133,11 @@ class PdfViewer : Application() {
         stage.title = "CareDoc"
         stage.show()
 
+        // ▼ ここに追加（ViewModel の dispose を呼ぶ）
+        stage.setOnCloseRequest {
+            viewModel.dispose()
+        }
+
         // 起動時テンプレート読み込み
         try {
             val templateStream = javaClass.getResourceAsStream("/templates/template.pdf")
