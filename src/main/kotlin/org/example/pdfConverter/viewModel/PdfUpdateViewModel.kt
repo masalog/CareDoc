@@ -66,6 +66,14 @@ class PdfUpdateViewModel(
         )
     }
 
+    fun dispose() {
+        // Executor の終了
+        renderManager.close()
+
+        // 最後に残った一時ファイルを削除
+        currentPdfFile.get()?.takeIf { it.exists() }?.delete()
+    }
+
     fun exportPdfTo(target: File) {
         val src = currentPdfFile.get() ?: return
         src.copyTo(target, overwrite = true)
