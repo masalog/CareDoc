@@ -19,19 +19,16 @@ src/
     │   └── org/
     │       └── example/
     │           └── pdfConverter/
-    │               ├── launcher/
-    │               │   └── Launcher.kt
+    │               ├── Launcher.kt
     │               ├── model/
     │               │   ├── CommonData.kt
     │               │   ├── Member.kt
     │               │   ├── PdfLayout.kt
     │               │   └── FieldPosition.kt
     │               ├── render/
-    │               │   ├── PdfRenderManager.kt
-    │               │   └── PdfViewer/
-    │               │       ├── PdfViewer.kt
-    │               │       ├── PdfViewerRenderer.kt
-    │               │       └── PdfViewerState.kt
+    │               │   └── PdfRenderManager.kt
+    │               ├── view/
+    │               │   └── PdfViewer.kt
     │               ├── repository/
     │               │   ├── PdfRepository.kt
     │               │   ├── ExcelLoader.kt
@@ -43,7 +40,7 @@ src/
     │               │   └── PdfSizeChecker.kt
     │               └── viewModel/
     │                   ├── PdfUpdateViewModel.kt
-    │                   └── DataInputViewModel.kt
+    │                   └── DateInputViewModel.kt
     └── resources/
         ├── fonts/
         │   └── NotoSansJP-Regular.ttf
