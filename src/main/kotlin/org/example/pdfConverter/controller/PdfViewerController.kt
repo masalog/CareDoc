@@ -13,6 +13,7 @@ import org.example.pdfConverter.repository.PdfRepository
 import org.example.pdfConverter.render.PdfRenderManager
 import org.example.pdfConverter.service.PdfEditor
 import org.example.pdfConverter.service.PdfLoader
+import org.example.pdfConverter.view.PdfViewerViewFactory
 import org.example.pdfConverter.viewModel.DateInputViewModel
 import org.example.pdfConverter.viewModel.PdfUpdateViewModel
 
@@ -25,31 +26,27 @@ class PdfViewerController {
     private var common: CommonData? = null
 
     private val pdfLoader = PdfLoader()
+    private val uiFactory = PdfViewerViewFactory()
 
     fun createView(stage: Stage): BorderPane {
 
         val root = BorderPane()
 
-        // タイトル
-        val titleLabel = Label("介護認定申請書 作成アプリ CareDoc").apply {
-            style = "-fx-font-size: 18px; -fx-padding: 10px;"
-        }
+        // ▼ タイトル（Factory）
+        val titleLabel = uiFactory.createTitle()
         root.top = titleLabel
 
-        // PDF 表示エリア
+        // ▼ PDF 表示エリア（Factory）
         imageView = ImageView()
-        val scrollPane = ScrollPane(StackPane(imageView)).apply {
-            isPannable = true
-        }
+        val scrollPane = uiFactory.createPdfScrollPane(imageView)
         root.center = scrollPane
 
-        // ViewModel
+        // ▼ ViewModel
         viewModel = PdfUpdateViewModel(
             PdfEditor(),
             PdfRepository(),
             PdfRenderManager()
         )
-
         imageView.imageProperty().bind(viewModel.currentImage)
 
         // ▼ UI コンポーネント
@@ -66,6 +63,7 @@ class PdfViewerController {
         }
 
         val applyDateInput = DateInputViewModel()
+        val applyDateBox = applyDateInput.toHBox()
 
         // ▼ Excel 読み込み
         try {
@@ -119,20 +117,16 @@ class PdfViewerController {
             }
         }
 
-        // ▼ 下部 UI
-        val bottom = VBox(
-            15.0,
-            HBox(10.0, Label("利用者"), combo),
-            HBox(10.0, Label("申請日"), applyDateInput.toHBox()),
-            HBox(10.0, Label("変更申請理由"), reasonArea),
-            HBox(10.0, exportButton)
-        ).apply {
-            style = "-fx-padding: 15px;"
-        }
-
+        // ▼ 下部 UI（Factory）
+        val bottom = uiFactory.createBottomPanel(
+            combo = combo,
+            applyDateBox = applyDateBox,
+            reasonArea = reasonArea,
+            exportButton = exportButton
+        )
         root.bottom = bottom
 
-        // ▼ 起動時テンプレート読み込み（責務分離済み）
+        // ▼ 起動時テンプレート読み込み
         loadTemplatePdf()
 
         return root
