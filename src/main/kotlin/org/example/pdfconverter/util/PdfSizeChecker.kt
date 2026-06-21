@@ -1,4 +1,4 @@
-package org.example.pdfconverter.utility
+package org.example.pdfconverter.util
 
 import org.apache.pdfbox.pdmodel.PDDocument
 
