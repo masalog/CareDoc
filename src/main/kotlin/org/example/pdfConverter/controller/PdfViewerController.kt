@@ -8,14 +8,13 @@ import javafx.stage.FileChooser
 import javafx.stage.Stage
 import org.example.pdfConverter.model.CommonData
 import org.example.pdfConverter.model.Member
-import org.example.pdfConverter.repository.ExcelLoader
-import org.example.pdfConverter.repository.PdfRepository
-import org.example.pdfConverter.render.PdfRenderManager
-import org.example.pdfConverter.service.PdfEditor
-import org.example.pdfConverter.service.PdfLoader
+import org.example.pdfConverter.service.PdfViewerInitializer
 import org.example.pdfConverter.view.PdfViewerViewFactory
 import org.example.pdfConverter.viewModel.DateInputViewModel
 import org.example.pdfConverter.viewModel.PdfUpdateViewModel
+import org.example.pdfConverter.service.PdfEditor
+import org.example.pdfConverter.repository.PdfRepository
+import org.example.pdfConverter.render.PdfRenderManager
 
 class PdfViewerController {
 
@@ -25,21 +24,19 @@ class PdfViewerController {
     private var members: List<Member> = emptyList()
     private var common: CommonData? = null
 
-    private val pdfLoader = PdfLoader()
+    private val initializer = PdfViewerInitializer()
     private val uiFactory = PdfViewerViewFactory()
 
     fun createView(stage: Stage): BorderPane {
 
         val root = BorderPane()
 
-        // ▼ タイトル（Factory）
-        val titleLabel = uiFactory.createTitle()
-        root.top = titleLabel
+        // ▼ タイトル
+        root.top = uiFactory.createTitle()
 
-        // ▼ PDF 表示エリア（Factory）
+        // ▼ PDF 表示エリア
         imageView = ImageView()
-        val scrollPane = uiFactory.createPdfScrollPane(imageView)
-        root.center = scrollPane
+        root.center = uiFactory.createPdfScrollPane(imageView)
 
         // ▼ ViewModel
         viewModel = PdfUpdateViewModel(
@@ -49,12 +46,26 @@ class PdfViewerController {
         )
         imageView.imageProperty().bind(viewModel.currentImage)
 
+        // ▼ 初期データ読み込み（Excel + template.pdf）
+        val initialData = try {
+            initializer.loadInitialData()
+        } catch (e: Exception) {
+            showError("初期データ読込エラー", e.message ?: "")
+            return root
+        }
+
+        members = initialData.members
+        common = initialData.common
+        viewModel.loadPdf(initialData.templatePdf)
+
         // ▼ UI コンポーネント
-        val combo = ComboBox<String>()
-        val header = "名前を選択してください"
-        combo.items.add(header)
-        combo.value = header
-        combo.prefWidth = 250.0
+        val combo = ComboBox<String>().apply {
+            val header = "名前を選択してください"
+            items.add(header)
+            items.addAll(members.map { it.name })
+            value = header
+            prefWidth = 250.0
+        }
 
         val reasonArea = TextArea().apply {
             promptText = "変更申請の理由を入力してください"
@@ -65,25 +76,13 @@ class PdfViewerController {
         val applyDateInput = DateInputViewModel()
         val applyDateBox = applyDateInput.toHBox()
 
-        // ▼ Excel 読み込み
-        try {
-            val result = ExcelLoader.loadAll()
-            members = result.first
-            common = result.second
-            combo.items.addAll(members.map { it.name })
-        } catch (e: Exception) {
-            showError("Excel 読み込みエラー", "members.xlsx を読み込めませんでした。\n${e.message}")
-        }
-
         // ▼ PDF 更新処理
         fun updatePdf() {
             val loadedCommon = common ?: return
-            val member =
-                if (combo.value == header) null
-                else members.firstOrNull { it.name == combo.value }
+            val selectedMember = members.firstOrNull { it.name == combo.value }
 
             viewModel.updatePdf(
-                member = member,
+                member = selectedMember,
                 common = loadedCommon,
                 reason = reasonArea.text,
                 date = applyDateInput.getDate()
@@ -93,9 +92,7 @@ class PdfViewerController {
         // ▼ イベント
         combo.setOnAction { updatePdf() }
         applyDateInput.setOnChange { updatePdf() }
-        reasonArea.textProperty().addListener { _, _, _ ->
-            if (common != null) updatePdf()
-        }
+        reasonArea.textProperty().addListener { _, _, _ -> updatePdf() }
 
         // ▼ 保存ボタン
         val exportButton = Button("保存").apply {
@@ -117,28 +114,15 @@ class PdfViewerController {
             }
         }
 
-        // ▼ 下部 UI（Factory）
-        val bottom = uiFactory.createBottomPanel(
+        // ▼ 下部 UI
+        root.bottom = uiFactory.createBottomPanel(
             combo = combo,
             applyDateBox = applyDateBox,
             reasonArea = reasonArea,
             exportButton = exportButton
         )
-        root.bottom = bottom
-
-        // ▼ 起動時テンプレート読み込み
-        loadTemplatePdf()
 
         return root
-    }
-
-    private fun loadTemplatePdf() {
-        try {
-            val file = pdfLoader.loadTemplatePdf()
-            viewModel.loadPdf(file)
-        } catch (e: Exception) {
-            showError("テンプレート読込エラー", "template.pdf を読み込めませんでした。\n${e.message}")
-        }
     }
 
     fun dispose() {
