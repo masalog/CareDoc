@@ -1,4 +1,4 @@
-package org.example.pdfconverter
+package org.example.pdfconverter.repository
 
 import org.apache.poi.ss.usermodel.DataFormatter
 import org.apache.poi.ss.usermodel.Row
@@ -7,60 +7,8 @@ import org.apache.poi.ss.usermodel.WorkbookFactory
 import java.io.File
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-
-// -------------------------
-// 個別データ
-// -------------------------
-data class Member(
-    val insuranceIdNumber: String,
-    val name: String,
-    val furigana: String,
-
-    val birthYear: Int?,
-    val birthMonth: Int?,
-    val birthDay: Int?,
-
-    val gender: String,
-    val address: String,
-    val phone: String,
-    val careLevel: String,
-
-    val startYear: Int?,
-    val startMonth: Int?,
-    val startDay: Int?,
-
-    val endYear: Int?,
-    val endMonth: Int?,
-    val endDay: Int?,
-
-    val institutionYear: Int?,
-    val institutionMonth: Int?,
-    val institutionDay: Int?,
-
-    val specificDisease: String?
-
-)
-
-// -------------------------
-// 共通データ
-// -------------------------
-data class CommonData(
-    val surveyAddress: String,
-    val surveyPhone: String,
-    val facilityName: String,
-    val facilityPhone: String,
-    val institutionName: String,
-    val institutionAddress: String,
-    val agentName: String,
-    val agentPostal: String,
-    val agentAddress: String,
-    val agentPhone: String,
-    val doctorName: String,
-    val clinicName: String,
-    val clinicPostal: String,
-    val clinicAddress: String,
-    val clinicPhone: String
-)
+import org.example.pdfconverter.model.Member
+import org.example.pdfconverter.model.CommonData
 
 object ExcelLoader {
 
