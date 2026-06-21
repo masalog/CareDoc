@@ -12,9 +12,9 @@ import org.example.pdfConverter.repository.ExcelLoader
 import org.example.pdfConverter.repository.PdfRepository
 import org.example.pdfConverter.render.PdfRenderManager
 import org.example.pdfConverter.service.PdfEditor
+import org.example.pdfConverter.service.PdfLoader
 import org.example.pdfConverter.viewModel.DateInputViewModel
 import org.example.pdfConverter.viewModel.PdfUpdateViewModel
-import java.io.File
 
 class PdfViewerController {
 
@@ -23,6 +23,8 @@ class PdfViewerController {
 
     private var members: List<Member> = emptyList()
     private var common: CommonData? = null
+
+    private val pdfLoader = PdfLoader()
 
     fun createView(stage: Stage): BorderPane {
 
@@ -130,7 +132,7 @@ class PdfViewerController {
 
         root.bottom = bottom
 
-        // ▼ 起動時テンプレート読み込み
+        // ▼ 起動時テンプレート読み込み（責務分離済み）
         loadTemplatePdf()
 
         return root
@@ -138,19 +140,8 @@ class PdfViewerController {
 
     private fun loadTemplatePdf() {
         try {
-            val templateStream = javaClass.getResourceAsStream("/templates/template.pdf")
-                ?: throw IllegalStateException("template.pdf が見つかりません")
-
-            val tempFile = File.createTempFile("template", ".pdf")
-
-            templateStream.use { input ->
-                tempFile.outputStream().use { output ->
-                    input.copyTo(output)
-                }
-            }
-
-            viewModel.loadPdf(tempFile)
-
+            val file = pdfLoader.loadTemplatePdf()
+            viewModel.loadPdf(file)
         } catch (e: Exception) {
             showError("テンプレート読込エラー", "template.pdf を読み込めませんでした。\n${e.message}")
         }
