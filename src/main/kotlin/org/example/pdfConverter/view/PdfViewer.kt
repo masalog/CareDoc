@@ -76,13 +76,14 @@ class PdfViewer : Application() {
 
         // PDF 更新処理
         fun updatePdf() {
+            val loadedCommon = common ?: return
             val member =
                 if (combo.value == header) null
                 else members.firstOrNull { it.name == combo.value }
 
             viewModel.updatePdf(
                 member = member,
-                common = common!!,
+                common = loadedCommon,
                 reason = reasonArea.text,
                 date = applyDateInput.getDate()
             )
