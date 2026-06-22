@@ -1,10 +1,12 @@
 package org.example.pdfConverter.render
 
+import java.util.concurrent.atomic.AtomicLong
+
 class RenderJobManager {
-    @Volatile
-    private var seq: Long = 0
 
-    fun nextSeq(): Long = ++seq
+    private val seq = AtomicLong(0)
 
-    fun isLatest(jobSeq: Long): Boolean = jobSeq == seq
+    fun nextSeq(): Long = seq.incrementAndGet()
+
+    fun isLatest(jobSeq: Long): Boolean = jobSeq == seq.get()
 }
