@@ -1,11 +1,10 @@
 package org.example.pdfConverter.controller
 
-import javafx.application.Platform
-import javafx.scene.control.Alert
 import javafx.scene.layout.BorderPane
 import javafx.stage.Stage
 import org.example.pdfConverter.model.CommonData
 import org.example.pdfConverter.model.Member
+import org.example.pdfConverter.service.ErrorHandler
 import org.example.pdfConverter.service.PdfViewerInitializer
 import org.example.pdfConverter.view.PdfViewerView
 import org.example.pdfConverter.viewModel.PdfUpdateViewModel
@@ -13,7 +12,9 @@ import org.example.pdfConverter.service.PdfEditor
 import org.example.pdfConverter.repository.PdfRepository
 import org.example.pdfConverter.render.PdfRenderManager
 
-class PdfViewerController {
+class PdfViewerController(
+    private val errorHandler: ErrorHandler
+) {
 
     private var viewModel: PdfUpdateViewModel? = null
     private lateinit var view: PdfViewerView
@@ -29,7 +30,7 @@ class PdfViewerController {
         val initialData = try {
             initializer.loadInitialData()
         } catch (e: Exception) {
-            showError(e.message)
+            errorHandler.showError(e.message)
             return BorderPane()
         }
 
@@ -57,7 +58,8 @@ class PdfViewerController {
             viewModel = vm,
             members = members,
             common = common,
-            stage = stage
+            stage = stage,
+            errorHandler = errorHandler
         ).bind()
 
         return view.root
@@ -65,16 +67,5 @@ class PdfViewerController {
 
     fun dispose() {
         viewModel?.dispose()
-    }
-
-    // ▼ title を引数から外し、固定タイトルにする
-    private fun showError(message: String?) {
-        Platform.runLater {
-            Alert(Alert.AlertType.ERROR).apply {
-                this.title = "初期データ読込エラー"
-                headerText = null
-                contentText = message ?: "不明なエラーが発生しました"
-            }.showAndWait()
-        }
     }
 }

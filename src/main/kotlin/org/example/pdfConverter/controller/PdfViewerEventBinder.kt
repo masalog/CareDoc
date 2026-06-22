@@ -1,10 +1,10 @@
 package org.example.pdfConverter.controller
 
-import javafx.scene.control.Alert
 import javafx.stage.FileChooser
 import javafx.stage.Stage
 import org.example.pdfConverter.model.CommonData
 import org.example.pdfConverter.model.Member
+import org.example.pdfConverter.service.ErrorHandler
 import org.example.pdfConverter.view.PdfViewerView
 import org.example.pdfConverter.viewModel.PdfUpdateViewModel
 
@@ -13,7 +13,8 @@ class PdfViewerEventBinder(
     private val viewModel: PdfUpdateViewModel,
     private val members: List<Member>,
     private val common: CommonData?,
-    private val stage: Stage
+    private val stage: Stage,
+    private val errorHandler: ErrorHandler   // ★ 追加
 ) {
 
     fun bind() {
@@ -50,16 +51,8 @@ class PdfViewerEventBinder(
             try {
                 viewModel.exportPdfTo(saveFile)
             } catch (e: Exception) {
-                showError(e.message)
+                errorHandler.showError(e.message)   // ★ ここだけ
             }
         }
-    }
-
-    private fun showError(message: String?) {
-        Alert(Alert.AlertType.ERROR).apply {
-            this.title = "PDF の保存に失敗しました"
-            headerText = null
-            contentText = message ?: "不明なエラーが発生しました"
-        }.showAndWait()
     }
 }
