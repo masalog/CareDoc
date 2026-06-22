@@ -16,8 +16,8 @@ class PdfDisplayController {
         onSuccess(image, file)
     }
 
-    fun handleError(file: File, displayed: File?, onError: (Throwable) -> Unit, e: Throwable) {
-        file.takeIf { it.exists() && it != displayed }?.delete()
+    fun handleError(file: File, onError: (Throwable) -> Unit, e: Throwable) {
+        file.takeIf { it.exists() && it != displayedPdfFile }?.delete()
         onError(e)
     }
 }

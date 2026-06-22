@@ -37,7 +37,7 @@ class PdfRenderManager : AutoCloseable {
             }.onFailure { e ->
                 e.printStackTrace()
                 Platform.runLater {
-                    displayController.handleError(file, null, onError, e)
+                    displayController.handleError(file, onError, e)
                 }
             }
         }
