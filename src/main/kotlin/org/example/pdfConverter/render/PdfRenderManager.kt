@@ -10,7 +10,7 @@ class PdfRenderManager : AutoCloseable {
     private val pdfRepository = PdfRepository()
     private val jobManager = RenderJobManager()
     private val executor = RenderExecutor()
-    private val displayController = PdfDisplayController()
+    private val displayController = PdfDisplayManager()
 
     fun loadPdfAsync(
         file: File,
