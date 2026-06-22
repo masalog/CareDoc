@@ -1,6 +1,7 @@
 package org.example.pdfConverter.render
 
 import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 class RenderExecutor : AutoCloseable {
     private val executor = Executors.newSingleThreadExecutor()
@@ -10,6 +11,11 @@ class RenderExecutor : AutoCloseable {
     }
 
     override fun close() {
-        executor.shutdown()
+        executor.shutdownNow()
+        try {
+            executor.awaitTermination(2, TimeUnit.SECONDS)
+        } catch (_: InterruptedException) {
+            Thread.currentThread().interrupt()
+        }
     }
 }
