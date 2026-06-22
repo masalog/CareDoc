@@ -4,12 +4,15 @@ import javafx.application.Application
 import javafx.scene.Scene
 import javafx.stage.Stage
 import org.example.pdfConverter.controller.PdfViewerController
+import org.example.pdfConverter.service.ErrorHandlerImpl
 
 class PdfViewer : Application() {
 
     override fun start(stage: Stage) {
 
-        val controller = PdfViewerController()
+        val controller = PdfViewerController(
+            errorHandler = ErrorHandlerImpl()
+        )
         val root = controller.createView(stage)
 
         stage.scene = Scene(root, 900.0, 600.0)

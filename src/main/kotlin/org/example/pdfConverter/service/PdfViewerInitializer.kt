@@ -1,9 +1,7 @@
 package org.example.pdfConverter.service
 
-import org.example.pdfConverter.model.CommonData
-import org.example.pdfConverter.model.Member
+import org.example.pdfConverter.model.InitialData   // ← これを使う
 import org.example.pdfConverter.repository.ExcelLoader
-import java.io.File
 
 class PdfViewerInitializer(
     private val excelLoader: ExcelLoader = ExcelLoader,
@@ -21,9 +19,3 @@ class PdfViewerInitializer(
         )
     }
 }
-
-data class InitialData(
-    val members: List<Member>,
-    val common: CommonData,
-    val templatePdf: File
-)
