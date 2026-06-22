@@ -3,7 +3,7 @@ package org.example.pdfConverter.render
 import javafx.scene.image.Image
 import java.io.File
 
-class PdfDisplayController {
+class PdfDisplayManager {
 
     private var displayedPdfFile: File? = null
 
