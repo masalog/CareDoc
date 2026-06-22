@@ -10,6 +10,8 @@ class PdfLoader {
 
         val temp = File.createTempFile("template", ".pdf")
 
+        temp.deleteOnExit()
+
         stream.use { input ->
             temp.outputStream().use { output ->
                 input.copyTo(output)
