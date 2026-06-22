@@ -15,7 +15,7 @@ import org.example.pdfConverter.render.PdfRenderManager
 
 class PdfViewerController {
 
-    private lateinit var viewModel: PdfUpdateViewModel
+    private var viewModel: PdfUpdateViewModel? = null
     private lateinit var view: PdfViewerView
 
     private var members: List<Member> = emptyList()
@@ -37,23 +37,24 @@ class PdfViewerController {
         common = initialData.common
 
         // ▼ ViewModel
-        viewModel = PdfUpdateViewModel(
+        val vm = PdfUpdateViewModel(
             PdfEditor(),
             PdfRepository(),
             PdfRenderManager()
         )
+        viewModel = vm
 
         // ▼ View（UI構築はすべてこちら）
         view = PdfViewerView(members)
 
         // ▼ PDF 初期表示
-        viewModel.loadPdf(initialData.templatePdf)
-        view.imageView.imageProperty().bind(viewModel.currentImage)
+        vm.loadPdf(initialData.templatePdf)
+        view.imageView.imageProperty().bind(vm.currentImage)
 
         // ▼ イベント設定（EventBinder に委譲）
         PdfViewerEventBinder(
             view = view,
-            viewModel = viewModel,
+            viewModel = vm,
             members = members,
             common = common,
             stage = stage
@@ -63,7 +64,7 @@ class PdfViewerController {
     }
 
     fun dispose() {
-        viewModel.dispose()
+        viewModel?.dispose()
     }
 
     // ▼ title を引数から外し、固定タイトルにする
