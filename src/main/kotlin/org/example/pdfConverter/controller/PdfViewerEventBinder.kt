@@ -51,7 +51,7 @@ class PdfViewerEventBinder(
             try {
                 viewModel.exportPdfTo(saveFile)
             } catch (e: Exception) {
-                errorHandler.showError(e.message)   // ★ ここだけ
+                errorHandler.showError("PDF エクスポートエラー", e.message)
             }
         }
     }

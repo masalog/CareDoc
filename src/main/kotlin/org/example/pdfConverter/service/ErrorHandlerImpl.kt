@@ -4,10 +4,11 @@ import javafx.application.Platform
 import javafx.scene.control.Alert
 
 class ErrorHandlerImpl : ErrorHandler {
-    override fun showError(message: String?) {
+
+    override fun showError(title: String, message: String?) {
         Platform.runLater {
             Alert(Alert.AlertType.ERROR).apply {
-                title = "初期データ読込エラー"
+                this.title = title
                 headerText = null
                 contentText = message ?: "不明なエラーが発生しました"
             }.showAndWait()
