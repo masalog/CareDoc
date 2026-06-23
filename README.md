@@ -22,6 +22,7 @@ src/
     │               ├── Launcher.kt
     │               ├── controller/ 
     │               │   ├── PdfViewerController.kt
+    │               │   ├── PdfViewerControllerFactory.kt    
     │               │   └── PdfViewerEventBinder.kt
     │               ├── factory/ 
     │               │   └── PdfViewerFactory.kt        
@@ -51,19 +52,31 @@ src/
     │               │   └── PdfSizeChecker.kt
     │               ├── view/
     │               │   ├── PdfViewer.kt
+    │               │   ├── PdfViewerUI.kt
     │               │   ├── PdfViewerView.kt
     │               │   └── PdfViewerViewFactory.kt
     │               └── viewModel/
     │                   ├── PdfUpdateViewModel.kt
     │                   └── DateInputViewModel.kt
-    └── resources/
-        ├── fonts/
-        │   └── NotoSansJP-Regular.ttf
-        ├── positions/
-        │   ├── converted_positions.yaml
-        │   └── raw_positions.yaml
-        └── templates/
-            └── template.pdf
+    ├── resources/
+    │   ├── fonts/
+    │   │   └── NotoSansJP-Regular.ttf
+    │   ├── positions/
+    │   │   ├── converted_positions.yaml
+    │   │   └── raw_positions.yaml
+    │   └── templates/
+    │       └── template.pdf
+    test/
+    └── kotlin/
+        └── org/
+            └── example/
+                └── pdfConverter/
+                    ├── controller/ 
+                    │   ├── PdfViewerControllerTest.kt
+                    │   └── PdfViewerEventBinderTest.kt
+                    ├── testUtil/   
+                    │   └── TestData.kt
+                    └── util     
 ```
 
 ## 🛠 使用技術
@@ -77,7 +90,7 @@ src/
 3. 「出力」ボタンを押して PDF を出力
 
 ## 🔮 今後の予定
-- プルダウンメニューの追加
+- テストコードの追加
 
 ## 📄 テンプレート
 - 入力用PDF:`template.pdf`
