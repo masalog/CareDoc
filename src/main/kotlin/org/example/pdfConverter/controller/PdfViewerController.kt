@@ -34,7 +34,7 @@ class PdfViewerController(
         val initialData = try {
             initializer.loadInitialData()
         } catch (e: Exception) {
-            errorHandler.showError("初期データ読込エラー", e.message)
+            errorHandler.showError("初期データ読込エラー", e)
             return BorderPane()
         }
 

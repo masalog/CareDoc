@@ -1,5 +1,6 @@
 package org.example.pdfConverter.controller
 
+import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.types.shouldBeInstanceOf
 import org.mockito.kotlin.*
@@ -127,7 +128,10 @@ class PdfViewerControllerTest : BehaviorSpec({
                 whenever(initializer.loadInitialData())
                     .thenThrow(RuntimeException("読み込み失敗"))
 
-                controller.createView(stage)
+                // ★ 例外が外に漏れないように必ず囲む
+                shouldNotThrowAny {
+                    controller.createView(stage)
+                }
 
                 verify(errorHandler).showError(
                     eq("初期データ読込エラー"),
