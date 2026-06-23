@@ -5,16 +5,16 @@ import javafx.stage.Stage
 import org.example.pdfConverter.model.CommonData
 import org.example.pdfConverter.model.Member
 import org.example.pdfConverter.service.ErrorHandler
-import org.example.pdfConverter.view.PdfViewerView
+import org.example.pdfConverter.view.PdfViewerUI
 import org.example.pdfConverter.viewModel.PdfUpdateViewModel
 
 class PdfViewerEventBinder(
-    private val view: PdfViewerView,
+    private val view: PdfViewerUI,
     private val viewModel: PdfUpdateViewModel,
     private val members: List<Member>,
     private val common: CommonData?,
     private val stage: Stage,
-    private val errorHandler: ErrorHandler   // ★ 追加
+    private val errorHandler: ErrorHandler
 ) {
 
     fun bind() {
@@ -23,21 +23,21 @@ class PdfViewerEventBinder(
             val loadedCommon = common ?: return
 
             val selectedMember =
-                members.firstOrNull { it.name == view.combo.value }
+                members.firstOrNull { it.name == view.getSelectedName() }
 
             viewModel.updatePdf(
                 member = selectedMember,
                 common = loadedCommon,
-                reason = view.reasonArea.text,
-                date = view.applyDateInput.getDate()
+                reason = view.getReason(),
+                date = view.getDate()
             )
         }
 
-        view.combo.setOnAction { updatePdf() }
-        view.applyDateInput.setOnChange { updatePdf() }
-        view.reasonArea.textProperty().addListener { _, _, _ -> updatePdf() }
+        view.setOnNameChanged { updatePdf() }
+        view.setOnDateChanged { updatePdf() }
+        view.setOnReasonChanged { updatePdf() }
 
-        view.exportButton.setOnAction {
+        view.setOnExportClicked {
             val chooser = FileChooser().apply {
                 title = "保存先を選択"
                 initialFileName = "output.pdf"
@@ -46,7 +46,7 @@ class PdfViewerEventBinder(
                 )
             }
 
-            val saveFile = chooser.showSaveDialog(stage) ?: return@setOnAction
+            val saveFile = chooser.showSaveDialog(stage) ?: return@setOnExportClicked
 
             try {
                 viewModel.exportPdfTo(saveFile)
