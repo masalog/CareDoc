@@ -10,7 +10,7 @@ import org.example.pdfConverter.factory.PdfViewerFactory
 import org.example.pdfConverter.model.*
 import org.example.pdfConverter.service.ErrorHandler
 import org.example.pdfConverter.service.PdfViewerInitializer
-import org.example.pdfConverter.testutil.TestData
+import org.example.pdfConverter.testUtil.TestData
 import org.example.pdfConverter.view.PdfViewerView
 import org.example.pdfConverter.viewModel.PdfUpdateViewModel
 

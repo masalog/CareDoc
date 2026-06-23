@@ -4,7 +4,7 @@ import io.kotest.core.spec.style.BehaviorSpec
 import org.example.pdfConverter.service.ErrorHandler
 import org.example.pdfConverter.view.PdfViewerUI
 import org.example.pdfConverter.viewModel.PdfUpdateViewModel
-import org.example.pdfConverter.testutil.TestData
+import org.example.pdfConverter.testUtil.TestData
 import org.mockito.kotlin.*
 
 class PdfViewerEventBinderTest : BehaviorSpec({

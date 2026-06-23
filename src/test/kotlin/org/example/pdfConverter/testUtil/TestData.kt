@@ -1,4 +1,4 @@
-package org.example.pdfConverter.testutil
+package org.example.pdfConverter.testUtil
 
 import org.example.pdfConverter.model.*
 import java.io.File
