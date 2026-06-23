@@ -1,6 +1,5 @@
 package org.example.pdfConverter.controller
 
-import javafx.stage.Stage
 import org.example.pdfConverter.factory.PdfViewerFactory
 import org.example.pdfConverter.service.ErrorHandler
 import org.example.pdfConverter.service.PdfViewerInitializer
