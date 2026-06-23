@@ -34,24 +34,33 @@ class PdfViewerController(
         val initialData = try {
             initializer.loadInitialData()
         } catch (e: Exception) {
-            errorHandler.showError("初期データ読込エラー", e)
+            errorHandler.showError("初期データ読込エラー", e.message)
             return BorderPane()
         }
 
-        // ✅ View / ViewModel 生成
-        val (vm, v) = factory.create(initialData)
+        val (vm, v) = try {
+            factory.create(initialData)
+            } catch (e: Exception) {
+            errorHandler.showError("画面生成エラー", e.message)
+            return BorderPane()
+            }
+
         viewModel = vm
         view = v
 
-        // ✅ イベントバインド
-        binder(
-            view,
-            vm,
-            initialData.members,
-            initialData.common,
-            stage,
-            errorHandler
-        )
+        try {
+            binder(
+                view,
+                vm,
+                initialData.members,
+                initialData.common,
+                stage,
+                errorHandler
+                        )
+            } catch (e: Exception) {
+            errorHandler.showError("イベント初期化エラー", e.message)
+            return BorderPane()
+            }
 
         return view.root
     }
