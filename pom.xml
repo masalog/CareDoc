@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
 
@@ -9,6 +10,9 @@
   <artifactId>PdfConverter</artifactId>
   <version>1.0-SNAPSHOT</version>
 
+  <!-- ========================= -->
+  <!-- バージョン -->
+  <!-- ========================= -->
   <properties>
     <kotlin.version>2.1.20</kotlin.version>
     <javafx.version>21.0.3</javafx.version>
@@ -16,20 +20,35 @@
     <maven.compiler.target>21</maven.compiler.target>
   </properties>
 
-  <repositories>
-    <repository>
-      <id>central</id>
-      <url>https://repo.maven.apache.org/maven2</url>
-    </repository>
-  </repositories>
+  <!-- ========================= -->
+  <!-- Kotest BOM -->
+  <!-- ========================= -->
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.kotest</groupId>
+        <artifactId>kotest-bom</artifactId>
+        <version>5.9.1</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <dependencies>
 
-    <!-- PDFBox -->
+    <!-- Kotlin -->
     <dependency>
-      <groupId>org.apache.pdfbox</groupId>
-      <artifactId>pdfbox</artifactId>
-      <version>2.0.30</version>
+      <groupId>org.jetbrains.kotlin</groupId>
+      <artifactId>kotlin-stdlib</artifactId>
+      <version>${kotlin.version}</version>
+    </dependency>
+
+    <!-- ★ MockKで重要 -->
+    <dependency>
+      <groupId>org.jetbrains.kotlin</groupId>
+      <artifactId>kotlin-reflect</artifactId>
+      <version>${kotlin.version}</version>
     </dependency>
 
     <!-- JavaFX -->
@@ -51,13 +70,14 @@
       <version>${javafx.version}</version>
     </dependency>
 
-    <!-- Kotlin -->
+    <!-- PDF -->
     <dependency>
-      <groupId>org.jetbrains.kotlin</groupId>
-      <artifactId>kotlin-stdlib</artifactId>
-      <version>${kotlin.version}</version>
+      <groupId>org.apache.pdfbox</groupId>
+      <artifactId>pdfbox</artifactId>
+      <version>2.0.30</version>
     </dependency>
 
+    <!-- POI -->
     <dependency>
       <groupId>org.apache.poi</groupId>
       <artifactId>poi</artifactId>
@@ -70,22 +90,61 @@
       <version>5.5.1</version>
     </dependency>
 
+    <!-- YAML -->
     <dependency>
       <groupId>org.yaml</groupId>
       <artifactId>snakeyaml</artifactId>
       <version>2.2</version>
     </dependency>
 
+    <!-- ========================= -->
+    <!-- テスト -->
+    <!-- ========================= -->
+
+    <!-- Kotest -->
+    <dependency>
+      <groupId>io.kotest</groupId>
+      <artifactId>kotest-runner-junit5</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>io.kotest</groupId>
+      <artifactId>kotest-assertions-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Mockito-Kotlin -->
+    <dependency>
+      <groupId>org.mockito.kotlin</groupId>
+      <artifactId>mockito-kotlin</artifactId>
+      <version>5.2.1</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Mockito Inline（final クラスもモック可能にする） -->
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-inline</artifactId>
+      <version>5.2.0</version>
+      <scope>test</scope>
+    </dependency>
+
+
   </dependencies>
 
+  <!-- ========================= -->
+  <!-- build -->
+  <!-- ========================= -->
   <build>
 
-    <!-- ✅ Kotlin用のソース指定（重要） -->
+    <!-- ★ これだけでOK（指定不要でも可） -->
     <sourceDirectory>src/main/kotlin</sourceDirectory>
+    <testSourceDirectory>src/test/kotlin</testSourceDirectory>
 
     <plugins>
 
-      <!-- ✅ Kotlinコンパイル（これが核心） -->
+      <!-- Kotlin -->
       <plugin>
         <groupId>org.jetbrains.kotlin</groupId>
         <artifactId>kotlin-maven-plugin</artifactId>
@@ -94,11 +153,19 @@
         <executions>
           <execution>
             <id>compile</id>
-            <phase>compile</phase>
             <goals>
               <goal>compile</goal>
             </goals>
+            <configuration>
+              <jvmTarget>21</jvmTarget>
+            </configuration>
+          </execution>
 
+          <execution>
+            <id>test-compile</id>
+            <goals>
+              <goal>test-compile</goal>
+            </goals>
             <configuration>
               <jvmTarget>21</jvmTarget>
             </configuration>
@@ -106,39 +173,32 @@
         </executions>
       </plugin>
 
-      <!-- ✅ Javaコンパイラ（順序調整） -->
+      <!-- Java -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.11.0</version>
-
-        <executions>
-          <execution>
-            <id>default-compile</id>
-            <phase>none</phase>
-          </execution>
-
-          <execution>
-            <id>java-compile</id>
-            <phase>compile</phase>
-            <goals>
-              <goal>compile</goal>
-            </goals>
-          </execution>
-        </executions>
+        <configuration>
+          <source>21</source>
+          <target>21</target>
+        </configuration>
       </plugin>
 
-      <!-- ✅ JavaFX -->
+      <!-- JUnit5 / Kotest -->
       <plugin>
-        <groupId>org.openjfx</groupId>
-        <artifactId>javafx-maven-plugin</artifactId>
-        <version>0.0.8</version>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.2.5</version>
         <configuration>
-          <mainClass>org.example.pdfConverter.Launcher</mainClass>
+          <useModulePath>false</useModulePath>
+          <includes>
+            <include>**/*Test.kt</include>
+          </includes>
         </configuration>
       </plugin>
 
     </plugins>
+
   </build>
 
 </project>
