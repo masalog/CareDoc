@@ -11,13 +11,18 @@ import org.example.pdfConverter.viewModel.DateInputViewModel
 
 class PdfViewerView(
     members: List<Member>
-) {
+) : PdfViewerUI {
+
+    // ------------------------------------------------------------
+    //  UI コンポーネント（外に出さない！）
+    // ------------------------------------------------------------
+    private val combo = ComboBox<String>()
+    private val reasonArea = TextArea()
+    private val applyDateInput = DateInputViewModel()
+    private val exportButton = Button("保存")
+
     val imageView = ImageView()
-    val combo = ComboBox<String>()
-    val reasonArea = TextArea()
-    val applyDateInput = DateInputViewModel()
     val applyDateBox: HBox = applyDateInput.toHBox()
-    val exportButton = Button("保存")
 
     val root: BorderPane
 
@@ -44,6 +49,44 @@ class PdfViewerView(
                 reasonArea,
                 exportButton
             )
+        }
+    }
+
+    // ------------------------------------------------------------
+    // PdfViewerUI 実装（ここだけ外とつながる）
+    // ------------------------------------------------------------
+
+    override fun getSelectedName(): String? {
+        return combo.value
+    }
+
+    override fun getReason(): String {
+        return reasonArea.text
+    }
+
+    override fun getDate(): Triple<Int?, Int?, Int?> {
+        return applyDateInput.getDate()
+    }
+
+    override fun setOnNameChanged(handler: () -> Unit) {
+        combo.setOnAction { handler() }
+    }
+
+    override fun setOnReasonChanged(handler: () -> Unit) {
+        reasonArea.textProperty().addListener { _, _, _ ->
+            handler()
+        }
+    }
+
+    override fun setOnDateChanged(handler: () -> Unit) {
+        applyDateInput.setOnChange {
+            handler()
+        }
+    }
+
+    override fun setOnExportClicked(handler: () -> Unit) {
+        exportButton.setOnAction {
+            handler()
         }
     }
 }
