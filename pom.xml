@@ -23,6 +23,19 @@
     </repository>
   </repositories>
 
+  <!-- Kotest の BOM（バージョン管理を一元化） -->
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.kotest</groupId>
+        <artifactId>kotest-bom</artifactId>
+        <version>5.9.1</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <dependencies>
 
     <!-- PDFBox -->
@@ -58,6 +71,7 @@
       <version>${kotlin.version}</version>
     </dependency>
 
+    <!-- Apache POI -->
     <dependency>
       <groupId>org.apache.poi</groupId>
       <artifactId>poi</artifactId>
@@ -70,22 +84,42 @@
       <version>5.5.1</version>
     </dependency>
 
+    <!-- SnakeYAML -->
     <dependency>
       <groupId>org.yaml</groupId>
       <artifactId>snakeyaml</artifactId>
       <version>2.2</version>
     </dependency>
 
+    <!-- Kotest（BOM により version 指定不要） -->
+    <dependency>
+      <groupId>io.kotest</groupId>
+      <artifactId>kotest-runner-junit5</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>io.kotest</groupId>
+      <artifactId>kotest-assertions-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>io.kotest</groupId>
+      <artifactId>kotest-property</artifactId>
+      <scope>test</scope>
+    </dependency>
+
   </dependencies>
 
   <build>
 
-    <!-- ✅ Kotlin用のソース指定（重要） -->
+    <!-- Kotlin ソースディレクトリ -->
     <sourceDirectory>src/main/kotlin</sourceDirectory>
 
     <plugins>
 
-      <!-- ✅ Kotlinコンパイル（これが核心） -->
+      <!-- Kotlin コンパイル -->
       <plugin>
         <groupId>org.jetbrains.kotlin</groupId>
         <artifactId>kotlin-maven-plugin</artifactId>
@@ -98,7 +132,6 @@
             <goals>
               <goal>compile</goal>
             </goals>
-
             <configuration>
               <jvmTarget>21</jvmTarget>
             </configuration>
@@ -106,7 +139,7 @@
         </executions>
       </plugin>
 
-      <!-- ✅ Javaコンパイラ（順序調整） -->
+      <!-- Java コンパイル -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -128,13 +161,23 @@
         </executions>
       </plugin>
 
-      <!-- ✅ JavaFX -->
+      <!-- JavaFX -->
       <plugin>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-maven-plugin</artifactId>
         <version>0.0.8</version>
         <configuration>
           <mainClass>org.example.pdfConverter.Launcher</mainClass>
+        </configuration>
+      </plugin>
+
+      <!-- JUnit5（Kotest の実行に必須） -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.2.5</version>
+        <configuration>
+          <useModulePath>false</useModulePath>
         </configuration>
       </plugin>
 
