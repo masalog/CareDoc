@@ -2,17 +2,27 @@ package org.example.pdfConverter.controller
 
 import javafx.scene.layout.BorderPane
 import javafx.stage.Stage
+import org.example.pdfConverter.factory.PdfViewerFactory
+import org.example.pdfConverter.model.CommonData
+import org.example.pdfConverter.model.Member
 import org.example.pdfConverter.service.ErrorHandler
 import org.example.pdfConverter.service.PdfViewerInitializer
 import org.example.pdfConverter.view.PdfViewerView
 import org.example.pdfConverter.viewModel.PdfUpdateViewModel
-import org.example.pdfConverter.factory.PdfViewerFactory
 
 
 class PdfViewerController(
     private val errorHandler: ErrorHandler,
-    private val initializer: PdfViewerInitializer = PdfViewerInitializer(),
-    private val factory: PdfViewerFactory = PdfViewerFactory()
+    private val initializer: PdfViewerInitializer,
+    private val factory: PdfViewerFactory,
+    private val binder: (
+        view: PdfViewerView,
+        viewModel: PdfUpdateViewModel,
+        members: List<Member>,
+        common: CommonData?,
+        stage: Stage,
+        errorHandler: ErrorHandler
+    ) -> Unit
 ) {
 
     private var viewModel: PdfUpdateViewModel? = null
@@ -20,24 +30,28 @@ class PdfViewerController(
 
     fun createView(stage: Stage): BorderPane {
 
-        val initialData = runCatching { initializer.loadInitialData() }
-            .getOrElse {
-                errorHandler.showError("初期データ読込エラー", it.message)
-                return BorderPane()
-            }
+        // ✅ 例外はここで完全に吸収
+        val initialData = try {
+            initializer.loadInitialData()
+        } catch (e: Exception) {
+            errorHandler.showError("初期データ読込エラー", e.message)
+            return BorderPane()
+        }
 
+        // ✅ View / ViewModel 生成
         val (vm, v) = factory.create(initialData)
         viewModel = vm
         view = v
 
-        PdfViewerEventBinder(
-            view = view,
-            viewModel = vm,
-            members = initialData.members,
-            common = initialData.common,
-            stage = stage,
-            errorHandler = errorHandler
-        ).bind()
+        // ✅ イベントバインド
+        binder(
+            view,
+            vm,
+            initialData.members,
+            initialData.common,
+            stage,
+            errorHandler
+        )
 
         return view.root
     }
