@@ -38,29 +38,20 @@ class PdfViewerController(
             return BorderPane()
         }
 
-        val (vm, v) = try {
-            factory.create(initialData)
-            } catch (e: Exception) {
-            errorHandler.showError("画面生成エラー", e.message)
-            return BorderPane()
-            }
-
+        // ✅ View / ViewModel 生成
+        val (vm, v) = factory.create(initialData)
         viewModel = vm
         view = v
 
-        try {
-            binder(
-                view,
-                vm,
-                initialData.members,
-                initialData.common,
-                stage,
-                errorHandler
-                        )
-            } catch (e: Exception) {
-            errorHandler.showError("イベント初期化エラー", e.message)
-            return BorderPane()
-            }
+        // ✅ イベントバインド
+        binder(
+            view,
+            vm,
+            initialData.members,
+            initialData.common,
+            stage,
+            errorHandler
+        )
 
         return view.root
     }
