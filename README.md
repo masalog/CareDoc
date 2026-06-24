@@ -100,6 +100,29 @@ src/
 - PDF座標YAML:`converted_positions.yaml`
 - データストアExcel:`members.xlsx`
 
+## 🏗 ビルド方法
+
+※ 以下のコマンドはプロジェクトのルートディレクトリ（プロジェクト直下フォルダ）で実行します
+
+jpackage `
+  --type app-image `
+--input target `
+  --main-jar PdfConverter-1.0.0.jar `
+--main-class org.example.pdfConverter.Launcher `
+  --name CareDoc `
+--runtime-image "$env:JAVA_HOME"
+
+### 実行
+cd CareDoc
+.\CareDoc.exe
+
+### 配布
+CareDoc フォルダに members.xlsx を配置し、プロジェクトルートで以下を実行します：
+
+Compress-Archive CareDoc CareDoc.zip
+
+※ 事前に JAVA_HOME の設定が必要です
+
 ## 🧑‍💻 留意点
 本テンプレートは、東京都中央区が公開している介護認定申請書の様式を参考に、学習目的で作成したものです。
 正式な手続きの際には、中央区が提供する最新の書式をご使用くださいますようお願いいたします。
