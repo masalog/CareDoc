@@ -8,7 +8,8 @@
 
   <groupId>org.example</groupId>
   <artifactId>PdfConverter</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0.0</version>
+  <name>CareDoc</name>
 
   <!-- ========================= -->
   <!-- バージョン -->
@@ -18,6 +19,7 @@
     <javafx.version>21.0.3</javafx.version>
     <maven.compiler.source>21</maven.compiler.source>
     <maven.compiler.target>21</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
   <!-- ========================= -->
@@ -35,6 +37,9 @@
     </dependencies>
   </dependencyManagement>
 
+  <!-- ========================= -->
+  <!-- dependencies -->
+  <!-- ========================= -->
   <dependencies>
 
     <!-- Kotlin -->
@@ -44,7 +49,7 @@
       <version>${kotlin.version}</version>
     </dependency>
 
-    <!-- ★ MockKで重要 -->
+    <!-- Kotlin reflect -->
     <dependency>
       <groupId>org.jetbrains.kotlin</groupId>
       <artifactId>kotlin-reflect</artifactId>
@@ -57,13 +62,11 @@
       <artifactId>javafx-controls</artifactId>
       <version>${javafx.version}</version>
     </dependency>
-
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-fxml</artifactId>
       <version>${javafx.version}</version>
     </dependency>
-
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-swing</artifactId>
@@ -83,7 +86,6 @@
       <artifactId>poi</artifactId>
       <version>5.5.1</version>
     </dependency>
-
     <dependency>
       <groupId>org.apache.poi</groupId>
       <artifactId>poi-ooxml</artifactId>
@@ -97,39 +99,29 @@
       <version>2.2</version>
     </dependency>
 
-    <!-- ========================= -->
-    <!-- テスト -->
-    <!-- ========================= -->
-
-    <!-- Kotest -->
+    <!-- Test -->
     <dependency>
       <groupId>io.kotest</groupId>
       <artifactId>kotest-runner-junit5</artifactId>
       <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>io.kotest</groupId>
       <artifactId>kotest-assertions-core</artifactId>
       <scope>test</scope>
     </dependency>
-
-    <!-- Mockito-Kotlin -->
     <dependency>
       <groupId>org.mockito.kotlin</groupId>
       <artifactId>mockito-kotlin</artifactId>
       <version>5.2.1</version>
       <scope>test</scope>
     </dependency>
-
-    <!-- Mockito Inline（final クラスもモック可能にする） -->
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-inline</artifactId>
       <version>5.2.0</version>
       <scope>test</scope>
     </dependency>
-
 
   </dependencies>
 
@@ -138,7 +130,6 @@
   <!-- ========================= -->
   <build>
 
-    <!-- ★ これだけでOK（指定不要でも可） -->
     <sourceDirectory>src/main/kotlin</sourceDirectory>
     <testSourceDirectory>src/test/kotlin</testSourceDirectory>
 
@@ -149,23 +140,17 @@
         <groupId>org.jetbrains.kotlin</groupId>
         <artifactId>kotlin-maven-plugin</artifactId>
         <version>${kotlin.version}</version>
-
         <executions>
           <execution>
             <id>compile</id>
-            <goals>
-              <goal>compile</goal>
-            </goals>
+            <goals><goal>compile</goal></goals>
             <configuration>
               <jvmTarget>21</jvmTarget>
             </configuration>
           </execution>
-
           <execution>
             <id>test-compile</id>
-            <goals>
-              <goal>test-compile</goal>
-            </goals>
+            <goals><goal>test-compile</goal></goals>
             <configuration>
               <jvmTarget>21</jvmTarget>
             </configuration>
@@ -184,7 +169,7 @@
         </configuration>
       </plugin>
 
-      <!-- JUnit5 / Kotest -->
+      <!-- テスト -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
@@ -197,8 +182,48 @@
         </configuration>
       </plugin>
 
-    </plugins>
+      <!-- ★ fat JAR 作成（修正版） -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.5.0</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
 
+              <createDependencyReducedPom>false</createDependencyReducedPom>
+
+              <!-- ★ 署名ファイルを除外（POI / XMLBeans の衝突防止） -->
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
+                  </excludes>
+                </filter>
+              </filters>
+
+              <!-- ★ ServiceLoader を正しくまとめる（POI の Factory が壊れない） -->
+              <transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <mainClass>org.example.pdfConverter.Launcher</mainClass>
+                </transformer>
+
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+              </transformers>
+
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+    </plugins>
   </build>
 
 </project>
