@@ -57,20 +57,33 @@
     </dependency>
 
     <!-- JavaFX -->
+    <!-- JavaFX (Windows) -->
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
       <version>${javafx.version}</version>
+      <classifier>win</classifier>
     </dependency>
+
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-fxml</artifactId>
       <version>${javafx.version}</version>
+      <classifier>win</classifier>
     </dependency>
+
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-graphics</artifactId>
+      <version>${javafx.version}</version>
+      <classifier>win</classifier>
+    </dependency>
+
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-swing</artifactId>
       <version>${javafx.version}</version>
+      <classifier>win</classifier>
     </dependency>
 
     <!-- PDF -->
@@ -182,42 +195,21 @@
         </configuration>
       </plugin>
 
-      <!-- ★ fat JAR 作成（修正版） -->
+      <!-- 依存ライブラリを target/lib にコピー -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-shade-plugin</artifactId>
-        <version>3.5.0</version>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>3.6.0</version>
         <executions>
           <execution>
+            <id>copy-dependencies</id>
             <phase>package</phase>
             <goals>
-              <goal>shade</goal>
+              <goal>copy-dependencies</goal>
             </goals>
             <configuration>
-
-              <createDependencyReducedPom>false</createDependencyReducedPom>
-
-              <!-- ★ 署名ファイルを除外（POI / XMLBeans の衝突防止） -->
-              <filters>
-                <filter>
-                  <artifact>*:*</artifact>
-                  <excludes>
-                    <exclude>META-INF/*.SF</exclude>
-                    <exclude>META-INF/*.DSA</exclude>
-                    <exclude>META-INF/*.RSA</exclude>
-                  </excludes>
-                </filter>
-              </filters>
-
-              <!-- ★ ServiceLoader を正しくまとめる（POI の Factory が壊れない） -->
-              <transformers>
-                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <mainClass>org.example.pdfConverter.Launcher</mainClass>
-                </transformer>
-
-                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
-              </transformers>
-
+              <outputDirectory>${project.build.directory}/lib</outputDirectory>
+              <includeScope>compile</includeScope>
             </configuration>
           </execution>
         </executions>

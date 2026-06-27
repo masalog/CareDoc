@@ -99,7 +99,9 @@ src/
 8. members.xlsx の「共通」シートを通じて、担当者のデータを編集可能
 
 ## 🔮 今後の予定
-- テストコードを追加して、正式リリースを目指します
+- PDF 読み込みの高速化
+- 入力バリデーション
+- テストコードの追加
 
 ## 📄 テンプレート
 - 入力PDF:`template.pdf`
@@ -110,11 +112,21 @@ src/
 - データストアExcel:`members.xlsx`
 
 ## 🏗 ビルド方法
-※ 以下のコマンドはプロジェクトのルートディレクトリ（プロジェクト直下フォルダ）で実行します  
-※ JAVA_HOME には、事前に Java21 JDK の設定が必要です
+※ 以下のコマンドはプロジェクトのルートディレクトリ（プロジェクト直下フォルダ）で実行  
+※ JAVA_HOME には、Java21 JDK のパス設定が必要です
+※ JavaFXのHPより、Java21 の Windows x86_64 に対応した jmods をインストールして配置
 
 ```powershell
 mvn clean package
+
+jlink `
+  --module-path "$env:JAVA_HOME\jmods;C:\javafx-jmods-21" `
+  --add-modules java.base,java.desktop,java.logging,java.xml,javafx.base,javafx.graphics,javafx.controls,javafx.fxml,javafx.swing `
+  --strip-debug `
+  --compress=2 `
+  --no-header-files `
+  --no-man-pages `
+  --output runtime
 
 jpackage `
   --type app-image `
@@ -122,7 +134,7 @@ jpackage `
   --main-jar PdfConverter-1.0.0.jar `
   --main-class org.example.pdfConverter.Launcher `
   --name CareDoc `
-  --runtime-image "$env:JAVA_HOME"
+  --runtime-image runtime
 ```
 
 ### 実行
