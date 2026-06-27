@@ -50,6 +50,15 @@ class PdfPositionConverter(
 // ▼ YAML 読み込み（fontSize 付き）
 // ==============================
 fun loadRawLayout(path: String): RawLayout {
+    // --- 拡張子ホワイトリストチェック ---
+    val allowedExtensions = setOf("yaml", "yml")
+    val ext = File(path).extension.lowercase()
+
+    if (ext !in allowedExtensions) {
+        throw IllegalArgumentException("サポートされていないファイル拡張子です: $ext")
+    }
+
+    // --- YAML 読み込み ---
     val yaml = Yaml()
     val input = File(path).inputStream()
 
