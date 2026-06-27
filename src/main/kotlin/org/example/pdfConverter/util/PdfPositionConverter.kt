@@ -123,7 +123,7 @@ fun main() {
         imageHeight = 1755
     )
 
-    val raw = loadRawLayout("src/main/resources/positions/raw_positions.yaml")
+    val raw = loadRawLayout("raw_positions.yaml")
 
     val converted = convertLayout(raw, converter)
 
