@@ -2,19 +2,12 @@ package org.example.pdfConverter.util
 
 import org.yaml.snakeyaml.Yaml
 import java.io.File
+import org.example.pdfConverter.model.PdfLayout
+import org.example.pdfConverter.model.FieldPosition
 
 // ==============================
 // ▼ データクラス
 // ==============================
-data class RawFieldPosition(
-    val x: Int,
-    val y: Int,
-    val fontSize: Int
-)
-
-data class RawLayout(
-    val fields: Map<String, RawFieldPosition>
-)
 
 data class ConvertedFieldPosition(
     val x: Float,
@@ -49,7 +42,7 @@ class PdfPositionConverter(
 // ==============================
 // ▼ YAML 読み込み（fontSize 付き）
 // ==============================
-fun loadRawLayout(path: String): RawLayout {
+fun loadRawLayout(path: String): PdfLayout {
     // --- 拡張子ホワイトリストチェック ---
     val allowedExtensions = setOf("yaml", "yml")
     val ext = File(path).extension.lowercase()
@@ -58,34 +51,25 @@ fun loadRawLayout(path: String): RawLayout {
         throw IllegalArgumentException("サポートされていないファイル拡張子です: $ext")
     }
 
-    // --- YAML 読み込み ---
+    // --- YAML をデータクラスに直接マッピング ---
     val yaml = Yaml()
     val input = File(path).inputStream()
 
-    val map = yaml.load<Map<String, Any>>(input)
-
-    val fields = (map["fields"] as Map<String, Map<String, Any>>).mapValues { (_, v) ->
-        RawFieldPosition(
-            x = (v["x"] as Number).toInt(),
-            y = (v["y"] as Number).toInt(),
-            fontSize = (v["fontSize"] as Number).toInt()
-        )
-    }
-
-    return RawLayout(fields)
+    return yaml.loadAs(input, PdfLayout::class.java)
+        ?: throw IllegalArgumentException("YAML の読み込みに失敗しました")
 }
 
 // ==============================
 // ▼ 座標変換（fontSize はそのままコピー）
 // ==============================
-fun convertLayout(raw: RawLayout, converter: PdfPositionConverter): ConvertedLayout {
+fun convertLayout(raw: PdfLayout, converter: PdfPositionConverter): ConvertedLayout {
 
-    val converted = raw.fields.mapValues { (_, pos) ->
-        val (pdfX, pdfY) = converter.toPdfPoint(pos.x, pos.y)
+    val converted = raw.fields.mapValues { (_, pos: FieldPosition) ->
+        val (pdfX, pdfY) = converter.toPdfPoint(pos.x.toInt(), pos.y.toInt())
         ConvertedFieldPosition(
             x = pdfX,
             y = pdfY,
-            fontSize = pos.fontSize
+            fontSize = pos.fontSize.toInt()
         )
     }
 

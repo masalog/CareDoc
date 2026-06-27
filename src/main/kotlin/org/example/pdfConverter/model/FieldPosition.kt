@@ -1,7 +1,7 @@
 package org.example.pdfConverter.model
 
 data class FieldPosition(
-    val x: Float,
-    val y: Float,
-    val fontSize: Float
+    var x: Float = 0f,
+    var y: Float = 0f,
+    var fontSize: Float = 0f
 )
