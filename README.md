@@ -114,7 +114,7 @@ src/
 ## 🏗 ビルド方法
 ※ 以下のコマンドはプロジェクトのルートディレクトリ（プロジェクト直下フォルダ）で実行  
 ※ JAVA_HOME には、Java21 JDK のパス設定が必要です
-※ JavaFXのHPより、Java21 のWidows x86 に対応した jmods をインストールして配置
+※ JavaFXのHPより、Java21 の Windows x86_64 に対応した jmods をインストールして配置
 
 ```powershell
 mvn clean package
