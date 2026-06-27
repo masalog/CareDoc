@@ -24,7 +24,6 @@ data class Member(
 
     val institutionYear: Int?,
     val institutionMonth: Int?,
-    val institutionDay: Int?,
+    val institutionDay: Int?
 
-    val specificDisease: String?
 )

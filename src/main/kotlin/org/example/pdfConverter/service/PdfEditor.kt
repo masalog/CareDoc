@@ -104,9 +104,6 @@ class PdfEditor {
                         member.institutionMonth?.let { drawText("institutionMonth", it.toString()) }
                         member.institutionDay?.let { drawText("institutionDay", it.toString()) }
 
-                        // 特定疾病
-                        drawText("specificDisease", member.specificDisease ?: "")
-
                         // 共通データ
                         drawText("Survey Location Address", common.surveyAddress)
                         drawText("Survey Location Phone", common.surveyPhone)

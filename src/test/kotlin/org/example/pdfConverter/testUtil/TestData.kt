@@ -24,8 +24,7 @@ object TestData {
         endDay = null,
         institutionYear = null,
         institutionMonth = null,
-        institutionDay = null,
-        specificDisease = "なし"
+        institutionDay = null
     )
 
     val memberSato = memberYamada.copy(

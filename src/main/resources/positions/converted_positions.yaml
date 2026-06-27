@@ -46,4 +46,3 @@ fields:
   clinicPostal: {x: 227.86221, y: 211.10974, fontSize: 8}
   clinicAddress: {x: 227.86221, y: 199.59467, fontSize: 8}
   clinicPhone: {x: 441.33313, y: 199.59467, fontSize: 12}
-  specificDisease: {x: 238.41583, y: 166.96861, fontSize: 12}

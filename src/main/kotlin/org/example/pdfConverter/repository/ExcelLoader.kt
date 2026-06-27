@@ -76,8 +76,6 @@ object ExcelLoader {
             val (endY, endM, endD) = parseDate(safeCell(row, 9))
             val (instY, instM, instD) = parseDate(safeCell(row, 10))
 
-            val specificDisease = safeCell(row, 11).ifBlank { null }
-
             list.add(
                 Member(
                     insuranceIdNumber = insuranceId,
@@ -103,9 +101,8 @@ object ExcelLoader {
 
                     institutionYear = instY,
                     institutionMonth = instM,
-                    institutionDay = instD,
+                    institutionDay = instD
 
-                    specificDisease = specificDisease
                 )
             )
         }

@@ -233,8 +233,3 @@ fields:
     x: 920
     y: 1339
     fontSize: 12
-
-  specificDisease:
-    x: 497
-    y: 1407
-    fontSize: 12
