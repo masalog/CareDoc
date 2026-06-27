@@ -4,6 +4,7 @@ import org.yaml.snakeyaml.Yaml
 import java.io.File
 import org.example.pdfConverter.model.PdfLayout
 import org.example.pdfConverter.model.FieldPosition
+import java.nio.file.Files
 
 // ==============================
 // ▼ データクラス
@@ -43,15 +44,15 @@ class PdfPositionConverter(
 // ▼ YAML 読み込み（fontSize 付き）
 // ==============================
 fun loadRawLayout(path: String): PdfLayout {
-    // --- パスの安全性チェック ---
-    if (path.contains("..")) {
-        throw IllegalArgumentException("相対パスは許可されていません: $path")
-    }
 
-    val file = File(path).canonicalFile
+    // --- 許可する基準ディレクトリ ---
     val baseDir = File("src/main/resources/positions").canonicalFile
 
-    if (!file.path.startsWith(baseDir.path)) {
+    // --- 入力パスを baseDir 起点で解決（これが最重要） ---
+    val file = File(baseDir, path).canonicalFile
+
+    // --- baseDir 配下にあるかチェック（パストラバーサル対策） ---
+    if (!file.path.startsWith(baseDir.path + File.separator)) {
         throw IllegalArgumentException("許可されていないディレクトリへのアクセスです: $path")
     }
 
@@ -63,12 +64,18 @@ fun loadRawLayout(path: String): PdfLayout {
         throw IllegalArgumentException("サポートされていないファイル拡張子です: $ext")
     }
 
+    // --- MIME タイプチェック（より厳密） ---
+    val mime = Files.probeContentType(file.toPath())
+    if (mime != "application/x-yaml" && mime != "text/yaml" && mime != "text/plain") {
+        throw IllegalArgumentException("MIME タイプが不正です: $mime")
+    }
+
     // --- YAML 読み込み ---
     val yaml = Yaml()
-    val input = file.inputStream()
-
-    return yaml.loadAs(input, PdfLayout::class.java)
-        ?: throw IllegalArgumentException("YAML の読み込みに失敗しました")
+    file.inputStream().use { input ->
+        return yaml.loadAs(input, PdfLayout::class.java)
+            ?: throw IllegalArgumentException("YAML の読み込みに失敗しました")
+    }
 }
 
 // ==============================
