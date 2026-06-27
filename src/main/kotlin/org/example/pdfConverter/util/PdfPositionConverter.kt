@@ -64,18 +64,13 @@ fun loadRawLayout(path: String): PdfLayout {
         throw IllegalArgumentException("サポートされていないファイル拡張子です: $ext")
     }
 
-    // --- MIME タイプチェック（より厳密） ---
-    val mime = Files.probeContentType(file.toPath())
-    if (mime != "application/x-yaml" && mime != "text/yaml" && mime != "text/plain") {
-        throw IllegalArgumentException("MIME タイプが不正です: $mime")
-    }
-
     // --- YAML 読み込み ---
     val yaml = Yaml()
-    file.inputStream().use { input ->
-        return yaml.loadAs(input, PdfLayout::class.java)
+    return file.inputStream().use { input ->
+        yaml.loadAs(input, PdfLayout::class.java)
             ?: throw IllegalArgumentException("YAML の読み込みに失敗しました")
     }
+
 }
 
 // ==============================
