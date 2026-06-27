@@ -8,19 +8,19 @@ fields:
   birthYear: {x: 423.10416, y: 617.97577, fontSize: 12}
   birthMonth: {x: 474.9128, y: 617.97577, fontSize: 12}
   birthDay: {x: 502.2563, y: 617.97577, fontSize: 12}
-  genderMale: {x: 437.01575, y: 598.784, fontSize: 16}
+  genderMale: {x: 434.13748, y: 597.3446, fontSize: 16}
   genderFemale: {x: 488.3447, y: 597.3446, fontSize: 16}
   address: {x: 191.88397, y: 573.83466, fontSize: 12}
   phone: {x: 431.73892, y: 573.83466, fontSize: 12}
   Survey Location Address: {x: 191.88397, y: 549.3651, fontSize: 8}
   Survey Location Phone: {x: 431.73892, y: 549.3651, fontSize: 12}
-  Long-term Care Level 1: {x: 253.28683, y: 503.3048, fontSize: 16}
-  Long-term Care Level 2: {x: 272.47525, y: 503.3048, fontSize: 16}
-  Long-term Care Level 3: {x: 291.66364, y: 503.3048, fontSize: 16}
-  Long-term Care Level 4: {x: 310.85202, y: 503.3048, fontSize: 16}
-  Long-term Care Level 5: {x: 330.04044, y: 503.3048, fontSize: 16}
+  Long-term Care Level 1: {x: 250.88829, y: 500.42603, fontSize: 16}
+  Long-term Care Level 2: {x: 269.11728, y: 500.42603, fontSize: 16}
+  Long-term Care Level 3: {x: 287.34625, y: 500.42603, fontSize: 16}
+  Long-term Care Level 4: {x: 305.57523, y: 500.42603, fontSize: 16}
+  Long-term Care Level 5: {x: 323.8042, y: 500.42603, fontSize: 16}
   Support Level 1: {x: 439.894, y: 500.42603, fontSize: 16}
-  Support Level 2: {x: 454.2853, y: 503.3048, fontSize: 16}
+  Support Level 2: {x: 458.123, y: 500.42603, fontSize: 16}
   startYear: {x: 249.44916, y: 477.39587, fontSize: 12}
   startMonth: {x: 296.46072, y: 477.39587, fontSize: 12}
   startDay: {x: 322.8448, y: 477.39587, fontSize: 12}
