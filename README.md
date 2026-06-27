@@ -112,11 +112,21 @@ src/
 - データストアExcel:`members.xlsx`
 
 ## 🏗 ビルド方法
-※ 以下のコマンドはプロジェクトのルートディレクトリ（プロジェクト直下フォルダ）で実行します  
-※ JAVA_HOME には、事前に Java21 JDK の設定が必要です
+※ 以下のコマンドはプロジェクトのルートディレクトリ（プロジェクト直下フォルダ）で実行  
+※ JAVA_HOME には、Java21 JDK のパス設定が必要です
+※ JavaFXのHPより、Java21 のWidows x86 に対応した jmods をインストールして配置
 
 ```powershell
 mvn clean package
+
+jlink `
+  --module-path "$env:JAVA_HOME\jmods;C:\javafx-jmods-21" `
+  --add-modules java.base,java.desktop,java.logging,java.xml,javafx.base,javafx.graphics,javafx.controls,javafx.fxml,javafx.swing `
+  --strip-debug `
+  --compress=2 `
+  --no-header-files `
+  --no-man-pages `
+  --output runtime
 
 jpackage `
   --type app-image `
