@@ -24,7 +24,7 @@ class DateInputViewModel {
 
     private fun setupYearBox() {
         val currentYear = LocalDate.now().year
-        yearBox.items.addAll((1900..currentYear).reversed())
+        yearBox.items.setAll(listOf(currentYear, currentYear + 1))
 
         yearBox.promptText = "年"
         yearBox.prefWidth = 80.0
