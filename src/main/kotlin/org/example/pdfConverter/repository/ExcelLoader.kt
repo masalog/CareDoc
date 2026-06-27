@@ -152,10 +152,31 @@ object ExcelLoader {
 
         val file = File(filePath)
 
+        // --- 拡張子チェック（ホワイトリスト） ---
+        val allowedExtensions = setOf("xlsx", "xls")
+        val ext = file.extension.lowercase()
+
+        if (ext !in allowedExtensions) {
+            throw IllegalArgumentException("不正なファイル形式です: .$ext は許可されていません")
+        }
+
+        // --- MIME タイプチェック（推奨） ---
+        val mime = java.nio.file.Files.probeContentType(file.toPath())
+        val allowedMime = setOf(
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "application/vnd.ms-excel"
+        )
+
+        if (mime !in allowedMime) {
+            throw IllegalArgumentException("不正な MIME タイプです: $mime")
+        }
+
+        // --- Excel 読み込み ---
         WorkbookFactory.create(file).use { workbook ->
             val members = loadMembers(workbook)
             val common = loadCommon(workbook)
             return members to common
         }
     }
+
 }
