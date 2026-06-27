@@ -57,20 +57,33 @@
     </dependency>
 
     <!-- JavaFX -->
+    <!-- JavaFX (Windows) -->
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
       <version>${javafx.version}</version>
+      <classifier>win</classifier>
     </dependency>
+
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-fxml</artifactId>
       <version>${javafx.version}</version>
+      <classifier>win</classifier>
     </dependency>
+
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-graphics</artifactId>
+      <version>${javafx.version}</version>
+      <classifier>win</classifier>
+    </dependency>
+
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-swing</artifactId>
       <version>${javafx.version}</version>
+      <classifier>win</classifier>
     </dependency>
 
     <!-- PDF -->
@@ -182,7 +195,7 @@
         </configuration>
       </plugin>
 
-      <!-- ★ 依存ライブラリを target/lib にコピー（JavaFX 同梱の要） -->
+      <!-- 依存ライブラリを target/lib にコピー -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
