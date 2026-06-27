@@ -134,7 +134,7 @@ jpackage `
   --main-jar PdfConverter-1.0.0.jar `
   --main-class org.example.pdfConverter.Launcher `
   --name CareDoc `
-  --runtime-image "$env:JAVA_HOME"
+  --runtime-image runtime
 ```
 
 ### 実行
