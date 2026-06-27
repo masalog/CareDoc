@@ -43,17 +43,29 @@ class PdfPositionConverter(
 // ▼ YAML 読み込み（fontSize 付き）
 // ==============================
 fun loadRawLayout(path: String): PdfLayout {
+    // --- パスの安全性チェック ---
+    if (path.contains("..")) {
+        throw IllegalArgumentException("相対パスは許可されていません: $path")
+    }
+
+    val file = File(path).canonicalFile
+    val baseDir = File("src/main/resources/positions").canonicalFile
+
+    if (!file.path.startsWith(baseDir.path)) {
+        throw IllegalArgumentException("許可されていないディレクトリへのアクセスです: $path")
+    }
+
     // --- 拡張子ホワイトリストチェック ---
     val allowedExtensions = setOf("yaml", "yml")
-    val ext = File(path).extension.lowercase()
+    val ext = file.extension.lowercase()
 
     if (ext !in allowedExtensions) {
         throw IllegalArgumentException("サポートされていないファイル拡張子です: $ext")
     }
 
-    // --- YAML をデータクラスに直接マッピング ---
+    // --- YAML 読み込み ---
     val yaml = Yaml()
-    val input = File(path).inputStream()
+    val input = file.inputStream()
 
     return yaml.loadAs(input, PdfLayout::class.java)
         ?: throw IllegalArgumentException("YAML の読み込みに失敗しました")
