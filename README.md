@@ -1,15 +1,15 @@
 # CareDoc
 
-CareDoc は、介護保険の「要介護認定・要支援認定 申請書」をプルダウンメニューから作成するための<br>
-デスクトップアプリです。  
-Kotlin + JavaFX + PDFBox を使用し、PDF テンプレートに自動入力します。
+CareDoc は、介護保険の「要介護認定・要支援認定 申請書」を Excel 上のデータから<br>
+PDF に転記して作成するためのデスクトップアプリです。  
+技術は、Kotlin + JavaFX + PDFBox を使用しています。
 
 ## ✨ 主な機能
-- 必要な入力項目をプルダウンから選択
-- Excel シートに保存されたデータを画面に表示
-- デスクトップアプリとして配布が可能
-- PDF を編集してダウンロードできる
-- Windows / macOS 対応
+- プルダウンから名前を選択すると、申請書を作成
+- Excel シートに保存されたデータを PDF 画面に転記
+- Excel シートをデータベースの代わりとして使用可
+- デスクトップアプリとしてZip配布が可能
+- Windows 11 対応
 
 ## 📂 プロジェクト構成図
 ```text
@@ -79,30 +79,39 @@ src/
                     └── util     
 ```
 
-## 🛠 使用技術
-- Kotlin / JavaFX
-- Maven
-- PDFBox
+## 🛠 主要技術
+- Kotlin
+- Java 21
+- JavaFX
+- Apache PDFBox 2.0.30
+- Apache Poi 5.5.1
+- IntelliJ IDEA Communitiy Edition 2026.1.3
+- Maven 4.0.0
 
 ## 🚀 使い方
-1. CareDoc を起動すると、申請書作成画面が表示
-2. 「名前を選択してください」ボタンを押して、画面に印刷文字を表示
-3. 「出力」ボタンを押して PDF を出力
+1. リリースページから、本アプリのベータ版をダウンロード 
+2. 展開して、CareDoc.exe をダブルクリックすると、申請書作成画面が表示
+3.「名前を選択してください」ボタンを押して、印刷文字を表示
+4.「申請年月日」ボタンから指定
+5. 必要があれば、「変更更新理由」を入力
+6.「保存」ボタンを押して PDF を取得
+7. members.xlsx の「個別」シートを通じて、利用者のデータを編集可能
+8. members.xlsx の「共通」シートを通じて、担当者のデータを編集可能
 
 ## 🔮 今後の予定
-- テストコードの追加
+- テストコードを追加して、正式リリースを目指します
 
 ## 📄 テンプレート
-- 入力用PDF:`template.pdf`
-- 編集用PDF:`edited.pdf`
-- 出力用PDF:`output.pdf`
-- 画像座標YAML:`raw_positions.yaml`
-- PDF座標YAML:`converted_positions.yaml`
+- 入力PDF:`template.pdf`
+- 編集PDF:`edited.pdf`
+- 出力PDF:`output.pdf`
+- 変換前座標YAML:`raw_positions.yaml`
+- 変換後座標YAML:`converted_positions.yaml`
 - データストアExcel:`members.xlsx`
 
 ## 🏗 ビルド方法
 ※ 以下のコマンドはプロジェクトのルートディレクトリ（プロジェクト直下フォルダ）で実行します  
-※ 事前に JAVA_HOME の設定が必要です
+※ JAVA_HOME には、事前に Java21 JDK の設定が必要です
 
 ```powershell
 mvn clean package
@@ -132,8 +141,7 @@ cd ..
 Compress-Archive CareDoc CareDoc.zip -Force
 ```
 
-
 ## 🧑‍💻 留意点
-本テンプレートは、東京都中央区が公開している介護認定申請書の様式を参考に、学習目的で作成したものです。
+本テンプレートは、東京都中央区が公開している介護認定申請書の様式を参考に作成したものです。
 正式な手続きの際には、中央区が提供する最新の書式をご使用くださいますようお願いいたします。
 なお、本書類の利用により生じた損害等について、作成者は一切の責任を負いません。

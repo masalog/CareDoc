@@ -2,19 +2,12 @@ package org.example.pdfConverter.util
 
 import org.yaml.snakeyaml.Yaml
 import java.io.File
+import org.example.pdfConverter.model.PdfLayout
+import org.example.pdfConverter.model.FieldPosition
 
 // ==============================
 // ▼ データクラス
 // ==============================
-data class RawFieldPosition(
-    val x: Int,
-    val y: Int,
-    val fontSize: Int
-)
-
-data class RawLayout(
-    val fields: Map<String, RawFieldPosition>
-)
 
 data class ConvertedFieldPosition(
     val x: Float,
@@ -49,34 +42,47 @@ class PdfPositionConverter(
 // ==============================
 // ▼ YAML 読み込み（fontSize 付き）
 // ==============================
-fun loadRawLayout(path: String): RawLayout {
-    val yaml = Yaml()
-    val input = File(path).inputStream()
+fun loadRawLayout(path: String): PdfLayout {
 
-    val map = yaml.load<Map<String, Any>>(input)
+    // --- 許可する基準ディレクトリ ---
+    val baseDir = File("src/main/resources/positions").canonicalFile
 
-    val fields = (map["fields"] as Map<String, Map<String, Any>>).mapValues { (_, v) ->
-        RawFieldPosition(
-            x = (v["x"] as Number).toInt(),
-            y = (v["y"] as Number).toInt(),
-            fontSize = (v["fontSize"] as Number).toInt()
-        )
+    // --- 入力パスを baseDir 起点で解決（これが最重要） ---
+    val file = File(baseDir, path).canonicalFile
+
+    // --- baseDir 配下にあるかチェック（パストラバーサル対策） ---
+    if (file != baseDir && !file.path.startsWith(baseDir.path + File.separator)) {
+        throw IllegalArgumentException("許可されていないディレクトリへのアクセスです: $path")
     }
 
-    return RawLayout(fields)
+    // --- 拡張子ホワイトリストチェック ---
+    val allowedExtensions = setOf("yaml", "yml")
+    val ext = file.extension.lowercase()
+
+    if (ext !in allowedExtensions) {
+        throw IllegalArgumentException("サポートされていないファイル拡張子です: $ext")
+    }
+
+    // --- YAML 読み込み ---
+    val yaml = Yaml()
+    return file.inputStream().use { input ->
+        yaml.loadAs(input, PdfLayout::class.java)
+            ?: throw IllegalArgumentException("YAML の読み込みに失敗しました")
+    }
+
 }
 
 // ==============================
 // ▼ 座標変換（fontSize はそのままコピー）
 // ==============================
-fun convertLayout(raw: RawLayout, converter: PdfPositionConverter): ConvertedLayout {
+fun convertLayout(raw: PdfLayout, converter: PdfPositionConverter): ConvertedLayout {
 
-    val converted = raw.fields.mapValues { (_, pos) ->
-        val (pdfX, pdfY) = converter.toPdfPoint(pos.x, pos.y)
+    val converted = raw.fields.mapValues { (_, pos: FieldPosition) ->
+        val (pdfX, pdfY) = converter.toPdfPoint(pos.x.toInt(), pos.y.toInt())
         ConvertedFieldPosition(
             x = pdfX,
             y = pdfY,
-            fontSize = pos.fontSize
+            fontSize = pos.fontSize.toInt()
         )
     }
 
@@ -116,7 +122,7 @@ fun main() {
         imageHeight = 1755
     )
 
-    val raw = loadRawLayout("src/main/resources/positions/raw_positions.yaml")
+    val raw = loadRawLayout("raw_positions.yaml")
 
     val converted = convertLayout(raw, converter)
 

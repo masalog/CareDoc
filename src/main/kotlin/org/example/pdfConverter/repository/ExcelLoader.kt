@@ -76,8 +76,6 @@ object ExcelLoader {
             val (endY, endM, endD) = parseDate(safeCell(row, 9))
             val (instY, instM, instD) = parseDate(safeCell(row, 10))
 
-            val specificDisease = safeCell(row, 11).ifBlank { null }
-
             list.add(
                 Member(
                     insuranceIdNumber = insuranceId,
@@ -103,9 +101,8 @@ object ExcelLoader {
 
                     institutionYear = instY,
                     institutionMonth = instM,
-                    institutionDay = instD,
+                    institutionDay = instD
 
-                    specificDisease = specificDisease
                 )
             )
         }
@@ -155,10 +152,25 @@ object ExcelLoader {
 
         val file = File(filePath)
 
+        // --- ファイル存在チェック ---
+        if (!file.exists()) {
+            throw IllegalArgumentException("ファイルが存在しません: $filePath")
+        }
+
+        // --- 拡張子チェック（ホワイトリスト） ---
+        val allowedExtensions = setOf("xlsx", "xls")
+        val ext = file.extension.lowercase()
+
+        if (ext !in allowedExtensions) {
+            throw IllegalArgumentException("不正なファイル形式です: .$ext は許可されていません")
+        }
+
+        // --- Excel 読み込み ---
         WorkbookFactory.create(file).use { workbook ->
             val members = loadMembers(workbook)
             val common = loadCommon(workbook)
             return members to common
         }
     }
+
 }
