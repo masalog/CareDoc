@@ -52,7 +52,7 @@ fun loadRawLayout(path: String): PdfLayout {
     val file = File(baseDir, path).canonicalFile
 
     // --- baseDir 配下にあるかチェック（パストラバーサル対策） ---
-    if (!file.path.startsWith(baseDir.path + File.separator)) {
+    if (file != baseDir && !file.path.startsWith(baseDir.path + File.separator)) {
         throw IllegalArgumentException("許可されていないディレクトリへのアクセスです: $path")
     }
 
