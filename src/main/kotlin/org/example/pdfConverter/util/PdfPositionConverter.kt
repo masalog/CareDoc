@@ -4,7 +4,6 @@ import org.yaml.snakeyaml.Yaml
 import java.io.File
 import org.example.pdfConverter.model.PdfLayout
 import org.example.pdfConverter.model.FieldPosition
-import java.nio.file.Files
 
 // ==============================
 // ▼ データクラス
